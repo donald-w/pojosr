@@ -17,4 +17,12 @@
         </license>
     </licenses>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+    </dependencies>
+
 </project>
