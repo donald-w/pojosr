@@ -578,8 +578,6 @@ public class ServiceRegistry
      *
      * @param bundle The bundle acquiring the service.
      * @param ref The service reference of the acquired service.
-     * @param svcObj The service object of the acquired service.
-     *
      */
     private UsageCount addUsageCount(Bundle bundle, ServiceReference ref)
     {
