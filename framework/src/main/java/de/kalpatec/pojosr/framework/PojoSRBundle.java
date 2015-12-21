@@ -54,6 +54,9 @@ import de.kalpatec.pojosr.framework.felix.framework.ServiceRegistry;
 import de.kalpatec.pojosr.framework.felix.framework.util.EventDispatcher;
 import de.kalpatec.pojosr.framework.felix.framework.util.MapToDictionary;
 import de.kalpatec.pojosr.framework.felix.framework.util.StringMap;
+import org.osgi.resource.Capability;
+import org.osgi.resource.Requirement;
+import org.osgi.resource.Wire;
 
 class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision
 {
@@ -602,6 +605,31 @@ class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision
                 return result;
             }
 
+            @Override
+            public List<Capability> getResourceCapabilities(String s) {
+                return null; // TODO: implement this / donald
+            }
+
+            @Override
+            public List<Requirement> getResourceRequirements(String s) {
+                return null; // TODO: implement this / donald
+            }
+
+            @Override
+            public List<Wire> getProvidedResourceWires(String s) {
+                return null; // TODO: implement this / donald
+            }
+
+            @Override
+            public List<Wire> getRequiredResourceWires(String s) {
+                return null; // TODO: implement this / donald
+            }
+
+            @Override
+            public BundleRevision getResource() {
+                return null; // TODO: implement this / donald
+            }
+
             public boolean isInUse()
             {
                 return true;
@@ -652,5 +680,17 @@ class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision
                 return result;
             }
         };
+    }
+
+    @Override
+    public List<Capability> getCapabilities(String s) {
+        // // TODO: 21/12/2015 Upgraded to Java 7 / OSGi 5
+        return null;
+    }
+
+    @Override
+    public List<Requirement> getRequirements(String s) {
+        // // TODO: 21/12/2015 Upgraded to Java 7 / OSGi 5
+        return null;
     }
 }

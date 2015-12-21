@@ -314,6 +314,11 @@ class ServiceRegistrationImpl implements ServiceRegistration
             return m_map;
         }
 
+        @Override
+        public BundleRevision getResource() {
+            return null; // TODO donald
+        }
+
         public List<String> getUses()
         {
             return Collections.EMPTY_LIST;
