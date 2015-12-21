@@ -137,11 +137,11 @@ public class ClasspathScanner
 						String value = new String(bytes, last, (current - last), "UTF-8");
 						if (key == null)
 						{
-							throw new Exception("Manifst error: Missing attribute name - " + value);
+							throw new Exception("Manifest error: Missing attribute name - " + value);
 						}
 						else if (headers.put(key, value) != null)
 						{
-							throw new Exception("Manifst error: Duplicate attribute name - " + key);
+							throw new Exception("Manifest error: Duplicate attribute name - " + key);
 						}
 						last = current;
 						key = null;
