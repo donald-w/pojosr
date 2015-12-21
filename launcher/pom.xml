@@ -38,6 +38,12 @@
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.gogo.command</artifactId>
             <version>0.12.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>org.apache.felix.bundlerepository</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
