@@ -120,6 +120,7 @@
                         <Include-Resource>
                             META-INF/LICENSE=LICENSE,META-INF/NOTICE=NOTICE,META-INF/DEPENDENCIES=DEPENDENCIES
                         </Include-Resource>
+                        <!--suppress PackageAccessibility -->
                         <Main-Class>de.kalpatec.pojosr.framework.PojoSR</Main-Class>
                     </instructions>
                 </configuration>
