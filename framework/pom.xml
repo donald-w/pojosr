@@ -38,6 +38,10 @@
         </license>
     </licenses>
 
+    <properties>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+    </properties>
+
     <developers>
         <developer>
             <id>karlpauls</id>
