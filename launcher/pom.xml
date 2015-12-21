@@ -57,6 +57,10 @@
                 <configuration>
                     <mainClass>de.kalpatec.pojosr.framework.PojoSR</mainClass>
                     <systemProperties>
+                        <!--<systemProperty>-->
+                            <!--<key>de.kalpatec.pojosr.framework.events.sync</key>-->
+                            <!--<value>true</value>-->
+                        <!--</systemProperty>-->
                     </systemProperties>
                 </configuration>
             </plugin>
