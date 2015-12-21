@@ -23,7 +23,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>bundle</packaging>
-    <name>Pojo Service Registry</name>
+    <name>Pojo Service Registry (base)</name>
     <groupId>com.googlecode.pojosr</groupId>
     <artifactId>de.kalpatec.pojosr.framework.bare</artifactId>
     <version>0.0.1-SNAPSHOT</version>
