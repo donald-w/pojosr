@@ -81,6 +81,10 @@ public class PojoSR implements PojoServiceRegistry
         headers.put(Constants.BUNDLE_MANIFESTVERSION, "2");
 		headers.put(Constants.BUNDLE_VENDOR, "kalpatec");
         bundleConfig = new HashMap(config);
+
+        // we must be bundle 1, as bundle 0 should be osgi.core
+        int pojoSRBundleId = 1;
+
         final Bundle b = new PojoSRBundle(new Revision()
         {
 
@@ -103,7 +107,7 @@ public class PojoSR implements PojoServiceRegistry
                 return getClass().getClassLoader().getResource(entryName);
             }
         }, headers, new Version(0, 0, 1), "file:pojosr", m_reg, m_dispatcher,
-                null, 0, "de.kalpatec.pojosr.framework", m_bundles, getClass()
+                null, pojoSRBundleId, "de.kalpatec.pojosr.framework", m_bundles, getClass()
                         .getClassLoader(), bundleConfig)
         {
         	@Override
@@ -383,11 +387,16 @@ public class PojoSR implements PojoServiceRegistry
                         || !m_symbolicNameToBundle.containsKey( sym ))
                 {
                     // TODO: framework - support multiple versions
+
+                    // special for osgi.core as it must be bundle id 0
+                    boolean core = "osgi.core".equals(sym);
+                    int id = core ? 0 : m_bundles.size();
+
                     Bundle bundle = new PojoSRBundle(r, bundleHeaders,
                             osgiVersion, desc.getUrl().toExternalForm(), m_reg,
                             m_dispatcher,
                             bundleHeaders.get(Constants.BUNDLE_ACTIVATOR),
-                            m_bundles.size(),
+                            id,
                             sym,
                             m_bundles, desc.getClassLoader(), bundleConfig);
                     if (sym != null)
@@ -400,7 +409,7 @@ public class PojoSR implements PojoServiceRegistry
             }
 
 
-        for (long i = 1; i < m_bundles.size(); i++)
+        for (long i = 0; i < m_bundles.size(); i++)
         {
             try
             {
