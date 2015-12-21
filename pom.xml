@@ -25,7 +25,6 @@
     </scm>
 
     <modules>
-        <module>a_saxactivator</module>
         <module>framework</module>
         <module>framework-bare</module>
     </modules>
