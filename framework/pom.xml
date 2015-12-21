@@ -84,9 +84,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <configuration>
-                    <tagBase>https://pojosr.googlecode.com/svn/tags</tagBase>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
