@@ -4,10 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.donaldw.pojosr</groupId>
-    <artifactId>project</artifactId>
+    <artifactId>launcher</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
-    <name>PojoSR</name>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>PojoSR :: Launcher</name>
     <url>https://github.com/donald-w/pojosr</url>
 
     <licenses>
@@ -18,16 +18,5 @@
         </license>
     </licenses>
 
-    <scm>
-        <url>https://github.com/donald-w/pojosr</url>
-        <connection>scm:git:https://github.com/donald-w/pojosr.git</connection>
-        <developerConnection>scm:git:https://github.com/donald-w/pojosr.git</developerConnection>
-    </scm>
-
-    <modules>
-        <module>framework</module>
-        <module>framework-bare</module>
-        <module>launcher</module>
-    </modules>
 
 </project>

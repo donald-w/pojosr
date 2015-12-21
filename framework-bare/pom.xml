@@ -23,9 +23,9 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <packaging>bundle</packaging>
-    <name>Pojo Service Registry (base)</name>
-    <groupId>com.googlecode.pojosr</groupId>
-    <artifactId>de.kalpatec.pojosr.framework.bare</artifactId>
+    <name>PojoSR :: Framework (bare)</name>
+    <groupId>com.donaldw.pojosr</groupId>
+    <artifactId>framework-bare</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <description>A service registry that enables OSGi style service registry programs without using an OSGi framework
         (This version doesn't embed OSGi api).
@@ -47,8 +47,8 @@
     </developers>
     <dependencies>
         <dependency>
-            <groupId>com.googlecode.pojosr</groupId>
-            <artifactId>de.kalpatec.pojosr.framework</artifactId>
+            <groupId>com.donaldw.pojosr</groupId>
+            <artifactId>framework</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
