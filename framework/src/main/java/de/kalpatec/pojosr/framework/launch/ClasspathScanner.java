@@ -30,9 +30,13 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 
 import de.kalpatec.pojosr.framework.felix.framework.util.MapToDictionary;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ClasspathScanner
 {
+	private static final Logger logger = LoggerFactory.getLogger(ClasspathScanner.class);
+
     public List<BundleDescriptor> scanForBundles() throws Exception
     {
         return scanForBundles(null, null);
@@ -52,6 +56,7 @@ public class ClasspathScanner
     public List<BundleDescriptor> scanForBundles(String filterString, ClassLoader loader)
         throws Exception
     {
+        logger.info("Starting classpath scan");
         Filter filter = (filterString != null) ? FrameworkUtil
                 .createFilter(filterString) : null;
 
@@ -167,6 +172,7 @@ public class ClasspathScanner
                 }
             }
         }
+        logger.info("Found {} bundles", bundles.size());
         return bundles;
     }
 

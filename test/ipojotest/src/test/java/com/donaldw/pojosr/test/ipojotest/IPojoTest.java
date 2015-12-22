@@ -17,11 +17,11 @@ import java.util.ServiceLoader;
 /**
  * @author donald-w
  */
-public class IPojoTestTest {
-    private Logger logger = LoggerFactory.getLogger(IPojoTestTest.class);
+public class IPojoTest {
+    private Logger logger = LoggerFactory.getLogger(IPojoTest.class);
 
     public static void main(String[] args) throws Exception {
-        IPojoTestTest test = new IPojoTestTest();
+        IPojoTest test = new IPojoTest();
         test.testLaunch();
     }
 

@@ -59,6 +59,8 @@ import org.slf4j.LoggerFactory;
 
 public class PojoSR implements PojoServiceRegistry
 {
+    private static final Logger logger = LoggerFactory.getLogger(PojoSR.class);
+
     private final BundleContext m_context;
     private final ServiceRegistry m_reg = new ServiceRegistry(
             new ServiceRegistry.ServiceRegistryCallbacks()
@@ -77,6 +79,8 @@ public class PojoSR implements PojoServiceRegistry
     private final Map bundleConfig;
     public PojoSR(Map config) throws Exception
     {
+        logger.info("Initialising PojoSR");
+
         final Map<String, String> headers = new HashMap<String, String>();
         headers.put(Constants.BUNDLE_SYMBOLICNAME,
                 "de.kalpatec.pojosr.framework");
@@ -333,6 +337,7 @@ public class PojoSR implements PojoServiceRegistry
 
         if (scan != null)
         {
+            logger.info("Starting bundles");
             startBundles(scan);
 		}
     }
@@ -417,10 +422,12 @@ public class PojoSR implements PojoServiceRegistry
             }
 
 
+        logger.info("Will start {} bundles", m_bundles.size());
         for (long i = 0; i < m_bundles.size(); i++)
         {
             try
             {
+                logger.info("Starting {}: {} ", m_bundles.get(i).getBundleId(), m_bundles.get(i).getLocation());
                 m_bundles.get(i).start();
             }
             catch (Throwable e)
