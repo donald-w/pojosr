@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import de.kalpatec.pojosr.framework.services.LogServiceImpl;
+import de.kalpatec.pojosr.framework.services.*;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -42,10 +42,10 @@ import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
+import org.osgi.framework.startlevel.BundleStartLevel;
+import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.service.log.LogService;
-import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
-import org.osgi.service.packageadmin.RequiredBundle;
 import org.osgi.service.startlevel.StartLevel;
 
 import de.kalpatec.pojosr.framework.felix.framework.ServiceRegistry;
@@ -61,7 +61,8 @@ public class PojoSR implements PojoServiceRegistry
 {
     private static final Logger logger = LoggerFactory.getLogger(PojoSR.class);
 
-    private final BundleContext m_context;
+    // TODO Fix this having been made public
+    public final BundleContext m_context;
     private final ServiceRegistry m_reg = new ServiceRegistry(
             new ServiceRegistry.ServiceRegistryCallbacks()
             {
@@ -73,9 +74,11 @@ public class PojoSR implements PojoServiceRegistry
                 }
             });
 
-    private final EventDispatcher m_dispatcher = new EventDispatcher(m_reg);
+    // TODO Fix this having been made public
+    public final EventDispatcher m_dispatcher = new EventDispatcher(m_reg);
     private final Map<Long, Bundle> m_bundles =new HashMap<Long, Bundle>();
-    private final Map<String, Bundle> m_symbolicNameToBundle = new HashMap<String, Bundle>();
+    // TODO Fix this having been made public
+    public final Map<String, Bundle> m_symbolicNameToBundle = new HashMap<>();
     private final Map bundleConfig;
     public PojoSR(Map config) throws Exception
     {
@@ -200,135 +203,12 @@ public class PojoSR implements PojoServiceRegistry
         };
         m_symbolicNameToBundle.put(b.getSymbolicName(), b);
         b.start();
-        b.getBundleContext().registerService(StartLevel.class.getName(),
-                new StartLevel()
-                {
 
-                    public void setStartLevel(int startlevel)
-                    {
-                        // TODO Auto-generated method stub
-
-                    }
-
-                    public void setInitialBundleStartLevel(int startlevel)
-                    {
-                        // TODO Auto-generated method stub
-
-                    }
-
-                    public void setBundleStartLevel(Bundle bundle,
-                            int startlevel)
-                    {
-                        // TODO Auto-generated method stub
-
-                    }
-
-                    public boolean isBundlePersistentlyStarted(Bundle bundle)
-                    {
-                        // TODO Auto-generated method stub
-                        return true;
-                    }
-
-                    public boolean isBundleActivationPolicyUsed(Bundle bundle)
-                    {
-                        // TODO Auto-generated method stub
-                        return false;
-                    }
-
-                    public int getStartLevel()
-                    {
-                        // TODO Auto-generated method stub
-                        return 1;
-                    }
-
-                    public int getInitialBundleStartLevel()
-                    {
-                        // TODO Auto-generated method stub
-                        return 1;
-                    }
-
-                    public int getBundleStartLevel(Bundle bundle)
-                    {
-                        // TODO Auto-generated method stub
-                        return 1;
-                    }
-                }, null);
-
-        b.getBundleContext().registerService(PackageAdmin.class.getName(),
-                new PackageAdmin()
-                {
-
-                    public boolean resolveBundles(Bundle[] bundles)
-                    {
-                        // TODO Auto-generated method stub
-                        return true;
-                    }
-
-                    public void refreshPackages(Bundle[] bundles)
-                    {
-                        m_dispatcher.fireFrameworkEvent(new FrameworkEvent(
-                                FrameworkEvent.PACKAGES_REFRESHED, b, null));
-                    }
-
-                    public RequiredBundle[] getRequiredBundles(
-                            String symbolicName)
-                    {
-                        return null;
-                    }
-
-                    public Bundle[] getHosts(Bundle bundle)
-                    {
-                        // TODO Auto-generated method stub
-                        return null;
-                    }
-
-                    public Bundle[] getFragments(Bundle bundle)
-                    {
-                        // TODO Auto-generated method stub
-                        return null;
-                    }
-
-                    public ExportedPackage[] getExportedPackages(String name)
-                    {
-                        // TODO Auto-generated method stub
-                        return null;
-                    }
-
-                    public ExportedPackage[] getExportedPackages(Bundle bundle)
-                    {
-                        // TODO Auto-generated method stub
-                        return null;
-                    }
-
-                    public ExportedPackage getExportedPackage(String name)
-                    {
-                        // TODO Auto-generated method stub
-                        return null;
-                    }
-
-                    public Bundle[] getBundles(String symbolicName,
-                            String versionRange)
-                    {
-					    Bundle result = m_symbolicNameToBundle.get((symbolicName != null) ? symbolicName.trim() : symbolicName);
-						if (result != null) {
-							return new Bundle[] {result};
-						}
-						return null;
-                    }
-
-                    public int getBundleType(Bundle bundle)
-                    {
-                        return 0;
-                    }
-
-                    public Bundle getBundle(Class clazz)
-                    {
-                        return m_context.getBundle();
-                    }
-                }, null);
-
-        b.getBundleContext().registerService(LogService.class.getName(), new LogServiceImpl()
-, null);
+        b.getBundleContext().registerService(StartLevel.class.getName(), new StartLevelImpl(), null);
+        b.getBundleContext().registerService(PackageAdmin.class.getName(),new PackageAdminImpl(this, b), null);
+        b.getBundleContext().registerService(BundleStartLevel.class.getName(), new BundleStartLevelImpl(), null);
+        b.getBundleContext().registerService(FrameworkStartLevel.class.getName(), new FrameworkStartLevelImpl(), null);
+        b.getBundleContext().registerService(LogService.class.getName(), new LogServiceImpl(), null);
 
         m_context = b.getBundleContext();
 
@@ -531,4 +411,5 @@ public class PojoSR implements PojoServiceRegistry
     {
         return m_context.ungetService(reference);
     }
+
 }
