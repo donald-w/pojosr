@@ -312,8 +312,7 @@ public class PojoSR implements PojoServiceRegistry
             }
             catch (Throwable e)
             {
-                System.out.println("Unable to start bundle: " + i);
-                e.printStackTrace();
+                logger.error("Unable to start bundle: " + i, e);
             }
         }
 
