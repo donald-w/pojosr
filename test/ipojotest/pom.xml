@@ -70,6 +70,15 @@
         </dependency>
 
         <dependency>
+            <groupId>com.donaldw.pojosr.test.bundles</groupId>
+            <artifactId>diagnostic</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
+
+
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>

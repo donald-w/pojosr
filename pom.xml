@@ -46,6 +46,7 @@
         <module>test/bundles/bundle1</module>
         <module>test/bundles/bundle2</module>
         <module>test/bundles/bundle3</module>
+        <module>test/bundles/diagnostic</module>
         <module>test/bundles/ipojocanary</module>
         <module>test/integration</module>
         <module>test/ipojotest</module>
