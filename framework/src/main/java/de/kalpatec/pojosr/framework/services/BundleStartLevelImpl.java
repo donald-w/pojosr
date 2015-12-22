@@ -4,7 +4,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.startlevel.BundleStartLevel;
 
 /**
- * @author donaldw
+ * @author donald-w
  */
 public class BundleStartLevelImpl implements BundleStartLevel {
     @Override

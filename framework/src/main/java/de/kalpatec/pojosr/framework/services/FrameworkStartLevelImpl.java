@@ -5,7 +5,7 @@ import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 
 /**
- * @author donaldw
+ * @author donald-w
  */
 public class FrameworkStartLevelImpl implements FrameworkStartLevel {
     @Override

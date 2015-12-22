@@ -4,7 +4,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.service.startlevel.StartLevel;
 
 /**
- * @author donaldw
+ * @author donald-w
  */
 public class StartLevelImpl implements StartLevel {
 

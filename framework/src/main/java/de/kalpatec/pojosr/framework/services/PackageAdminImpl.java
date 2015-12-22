@@ -8,7 +8,7 @@ import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.packageadmin.RequiredBundle;
 
 /**
- * @author donaldw
+ * @author donald-w
  */
 public class PackageAdminImpl implements PackageAdmin {
 
