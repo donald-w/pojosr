@@ -38,6 +38,7 @@ public class IPojoTest {
 
         Assert.assertTrue(bundles.length > 0);
 
+        logger.debug("Sleeping for a bit");
         Thread.sleep(2000);
 
         DiagnosticUtils.dumpBundles(logger,registry.getBundleContext());
