@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import de.kalpatec.pojosr.framework.services.LogServiceImpl;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -41,6 +42,7 @@ import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.Version;
+import org.osgi.service.log.LogService;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.packageadmin.RequiredBundle;
@@ -52,6 +54,8 @@ import de.kalpatec.pojosr.framework.launch.BundleDescriptor;
 import de.kalpatec.pojosr.framework.launch.ClasspathScanner;
 import de.kalpatec.pojosr.framework.launch.PojoServiceRegistry;
 import de.kalpatec.pojosr.framework.launch.PojoServiceRegistryFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PojoSR implements PojoServiceRegistry
 {
@@ -318,6 +322,10 @@ public class PojoSR implements PojoServiceRegistry
                         return m_context.getBundle();
                     }
                 }, null);
+
+        b.getBundleContext().registerService(LogService.class.getName(), new LogServiceImpl()
+, null);
+
         m_context = b.getBundleContext();
 
         List<BundleDescriptor> scan = (List<BundleDescriptor>) config
