@@ -16,6 +16,12 @@ import java.util.ServiceLoader;
  */
 public class IPojoTestTest {
 
+    public static void main(String[] args) throws Exception {
+        IPojoTestTest test = new IPojoTestTest();
+
+        test.testLaunch();
+    }
+
     @Test
     public void testLaunch() throws Exception {
         Map config = new HashMap();
