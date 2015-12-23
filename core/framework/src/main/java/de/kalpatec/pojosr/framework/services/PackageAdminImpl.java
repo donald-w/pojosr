@@ -6,11 +6,14 @@ import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.packageadmin.ExportedPackage;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.packageadmin.RequiredBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author donald-w
  */
 public class PackageAdminImpl implements PackageAdmin {
+    private static final Logger logger = LoggerFactory.getLogger(PackageAdminImpl.class);
 
     private final Bundle b;
     private PojoSR pojoSR;

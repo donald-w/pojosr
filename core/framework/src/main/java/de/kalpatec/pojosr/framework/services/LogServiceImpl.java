@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
  * @author donald-w
  */
 public class LogServiceImpl implements LogService {
-
     private Logger logger = LoggerFactory.getLogger(LogService.class);
 
     @Override

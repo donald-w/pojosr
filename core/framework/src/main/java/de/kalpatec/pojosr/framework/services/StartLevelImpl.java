@@ -2,11 +2,14 @@ package de.kalpatec.pojosr.framework.services;
 
 import org.osgi.framework.Bundle;
 import org.osgi.service.startlevel.StartLevel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author donald-w
  */
 public class StartLevelImpl implements StartLevel {
+    private static final Logger logger = LoggerFactory.getLogger(StartLevelImpl.class);
 
     public void setBundleStartLevel(Bundle bundle,
                                     int startlevel) {
