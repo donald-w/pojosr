@@ -41,7 +41,7 @@
     </scm>
 
     <modules>
-        <module>framework</module>
+        <module>core/framework</module>
         <module>core/felix-guts</module>
         <module>launcher</module>
         <module>test/bundles/bundle1</module>
