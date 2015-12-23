@@ -32,6 +32,7 @@ public class ClasspathScanner {
         return scanForBundles(null, null);
     }
 
+    @SuppressWarnings("unused")
     public List<BundleDescriptor> scanForBundles(ClassLoader loader) throws Exception {
         return scanForBundles(null, loader);
     }
@@ -41,8 +42,7 @@ public class ClasspathScanner {
         return scanForBundles(filterString, null);
     }
 
-    public List<BundleDescriptor> scanForBundles(String filterString, ClassLoader loader)
-            throws Exception {
+    public List<BundleDescriptor> scanForBundles(String filterString, ClassLoader loader) throws Exception {
         logger.info("Starting classpath scan");
         Filter filter = (filterString != null) ? FrameworkUtil.createFilter(filterString) : null;
 
@@ -56,8 +56,7 @@ public class ClasspathScanner {
             Map<String, String> headers = getHeaders(manifestURL);
 
             if ((filter == null) || filter.match(new MapToDictionary(headers))) {
-                bundles.add(new BundleDescriptor(loader, getParentURL(manifestURL),
-                        headers));
+                bundles.add(new BundleDescriptor(loader, getParentURL(manifestURL), headers));
             }
         }
         logger.info("Found {} bundles", bundles.size());
