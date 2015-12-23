@@ -20,6 +20,7 @@ import org.osgi.framework.*;
 import java.util.Dictionary;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public interface PojoServiceRegistry {
     BundleContext getBundleContext();
 
@@ -32,14 +33,11 @@ public interface PojoServiceRegistry {
 
     void removeServiceListener(ServiceListener listener);
 
-    ServiceRegistration registerService(String[] clazzes,
-                                        Object service, @SuppressWarnings("rawtypes") Dictionary properties);
+    ServiceRegistration registerService(String[] clazzes, Object service, @SuppressWarnings("rawtypes") Dictionary properties);
 
-    ServiceRegistration registerService(String clazz, Object service,
-                                        @SuppressWarnings("rawtypes") Dictionary properties);
+    ServiceRegistration registerService(String clazz, Object service, @SuppressWarnings("rawtypes") Dictionary properties);
 
-    ServiceReference[] getServiceReferences(String clazz, String filter)
-            throws InvalidSyntaxException;
+    ServiceReference[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException;
 
     ServiceReference getServiceReference(String clazz);
 
