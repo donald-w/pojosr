@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework.felix.framework;
+package com.donaldw.pojosr.felix.framework;
 
-import de.kalpatec.pojosr.framework.felix.framework.capabilityset.CapabilitySet;
-import de.kalpatec.pojosr.framework.felix.framework.capabilityset.SimpleFilter;
+import com.donaldw.pojosr.felix.framework.capabilityset.CapabilitySet;
+import com.donaldw.pojosr.felix.framework.capabilityset.SimpleFilter;
 import org.osgi.framework.*;
 import org.osgi.framework.wiring.BundleCapability;
 

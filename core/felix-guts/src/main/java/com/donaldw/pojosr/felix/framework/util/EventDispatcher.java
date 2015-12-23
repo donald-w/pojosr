@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework.felix.framework.util;
+package com.donaldw.pojosr.felix.framework.util;
 
-import de.kalpatec.pojosr.framework.felix.framework.ServiceRegistry;
+import com.donaldw.pojosr.felix.framework.ServiceRegistry;
 import org.osgi.framework.*;
 import org.osgi.framework.hooks.service.ListenerHook;
 import org.osgi.framework.launch.Framework;

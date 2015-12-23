@@ -15,7 +15,7 @@
  */
 package de.kalpatec.pojosr.framework;
 
-import de.kalpatec.pojosr.framework.felix.framework.capabilityset.SimpleFilter;
+import com.donaldw.pojosr.felix.framework.capabilityset.SimpleFilter;
 
 import java.net.MalformedURLException;
 import java.net.URL;

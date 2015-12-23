@@ -13,26 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework.felix.framework.util;
+package com.donaldw.pojosr.felix.framework.capabilityset;
 
-import java.util.Comparator;
+public class Attribute {
+    private final String m_name;
+    private final Object m_value;
+    private final boolean m_isMandatory;
 
-public class StringComparator implements Comparator {
-    private final boolean m_isCaseSensitive;
-
-    public StringComparator(boolean b) {
-        m_isCaseSensitive = b;
+    public Attribute(String name, Object value, boolean isMandatory) {
+        m_name = name;
+        m_value = value;
+        m_isMandatory = isMandatory;
     }
 
-    public int compare(Object o1, Object o2) {
-        if (m_isCaseSensitive) {
-            return o1.toString().compareTo(o2.toString());
-        } else {
-            return o1.toString().compareToIgnoreCase(o2.toString());
-        }
+    public String getName() {
+        return m_name;
     }
 
-    public boolean isCaseSensitive() {
-        return m_isCaseSensitive;
+    public Object getValue() {
+        return m_value;
+    }
+
+    public boolean isMandatory() {
+        return m_isMandatory;
+    }
+
+    public String toString() {
+        return m_name + "=" + m_value;
     }
 }

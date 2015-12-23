@@ -15,8 +15,8 @@
  */
 package de.kalpatec.pojosr.framework;
 
-import de.kalpatec.pojosr.framework.felix.framework.ServiceRegistry;
-import de.kalpatec.pojosr.framework.felix.framework.util.EventDispatcher;
+import com.donaldw.pojosr.felix.framework.ServiceRegistry;
+import com.donaldw.pojosr.felix.framework.util.EventDispatcher;
 import de.kalpatec.pojosr.framework.launch.BundleDescriptor;
 import de.kalpatec.pojosr.framework.launch.ClasspathScanner;
 import de.kalpatec.pojosr.framework.launch.PojoServiceRegistry;

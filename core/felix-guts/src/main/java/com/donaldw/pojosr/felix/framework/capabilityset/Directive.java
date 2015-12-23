@@ -13,18 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework.felix.framework.capabilityset;
+package com.donaldw.pojosr.felix.framework.capabilityset;
 
-import java.util.List;
+public class Directive {
+    private final String m_name;
+    private final Object m_value;
 
-public interface Requirement {
-    String getNamespace();
+    public Directive(String name, Object value) {
+        m_name = name;
+        m_value = value;
+    }
 
-    SimpleFilter getFilter();
+    public String getName() {
+        return m_name;
+    }
 
-    boolean isOptional();
+    public Object getValue() {
+        return m_value;
+    }
 
-    Directive getDirective(String name);
-
-    List<Directive> getDirectives();
+    public String toString() {
+        return m_name + "=" + m_value;
+    }
 }

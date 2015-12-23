@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework.felix.framework.capabilityset;
+package com.donaldw.pojosr.felix.framework.capabilityset;
 
 import java.util.List;
 

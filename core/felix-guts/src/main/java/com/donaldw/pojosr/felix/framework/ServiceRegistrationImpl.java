@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework.felix.framework;
+package com.donaldw.pojosr.felix.framework;
 
-import de.kalpatec.pojosr.framework.felix.framework.util.MapToDictionary;
-import de.kalpatec.pojosr.framework.felix.framework.util.StringMap;
-import de.kalpatec.pojosr.framework.felix.framework.util.Util;
+import com.donaldw.pojosr.felix.framework.util.Util;
+import com.donaldw.pojosr.felix.framework.util.MapToDictionary;
+import com.donaldw.pojosr.felix.framework.util.StringMap;
 import org.osgi.framework.*;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRevision;

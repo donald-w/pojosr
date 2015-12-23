@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework.felix.framework.util;
+package com.donaldw.pojosr.felix.framework.util;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
