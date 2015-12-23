@@ -20,45 +20,34 @@ import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 
-class URLRevision extends Revision
-{
+class URLRevision extends Revision {
     private final URL m_url;
     private final long m_lastModified;
 
-    public URLRevision(URL url, long lastModified)
-    {
+    public URLRevision(URL url, long lastModified) {
         m_url = url;
-        if (lastModified > 0)
-        {
+        if (lastModified > 0) {
             m_lastModified = lastModified;
-        }
-        else
-        {
+        } else {
             m_lastModified = System.currentTimeMillis();
         }
     }
 
     @Override
-    public long getLastModified()
-    {
+    public long getLastModified() {
         return m_lastModified;
     }
 
-    public Enumeration getEntries()
-    {
+    public Enumeration getEntries() {
         return new Properties().elements();
     }
 
     @Override
-    public URL getEntry(String entryName)
-    {
+    public URL getEntry(String entryName) {
         // TODO Auto-generated method stub
-        try
-        {
+        try {
             return new URL(m_url, entryName);
-        }
-        catch (MalformedURLException e)
-        {
+        } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return null;

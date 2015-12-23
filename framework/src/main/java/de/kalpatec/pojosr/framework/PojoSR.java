@@ -15,73 +15,50 @@
  */
 package de.kalpatec.pojosr.framework;
 
-import java.io.File;
-import java.net.JarURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import de.kalpatec.pojosr.framework.services.*;
-import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.BundleEvent;
-import org.osgi.framework.BundleException;
-import org.osgi.framework.Constants;
-import org.osgi.framework.Filter;
-import org.osgi.framework.FrameworkEvent;
-import org.osgi.framework.FrameworkUtil;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceEvent;
-import org.osgi.framework.ServiceListener;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
-import org.osgi.framework.Version;
-import org.osgi.framework.startlevel.BundleStartLevel;
-import org.osgi.framework.startlevel.FrameworkStartLevel;
-import org.osgi.service.log.LogService;
-import org.osgi.service.packageadmin.PackageAdmin;
-import org.osgi.service.startlevel.StartLevel;
-
 import de.kalpatec.pojosr.framework.felix.framework.ServiceRegistry;
 import de.kalpatec.pojosr.framework.felix.framework.util.EventDispatcher;
 import de.kalpatec.pojosr.framework.launch.BundleDescriptor;
 import de.kalpatec.pojosr.framework.launch.ClasspathScanner;
 import de.kalpatec.pojosr.framework.launch.PojoServiceRegistry;
 import de.kalpatec.pojosr.framework.launch.PojoServiceRegistryFactory;
+import de.kalpatec.pojosr.framework.services.*;
+import org.osgi.framework.*;
+import org.osgi.framework.startlevel.BundleStartLevel;
+import org.osgi.framework.startlevel.FrameworkStartLevel;
+import org.osgi.service.log.LogService;
+import org.osgi.service.packageadmin.PackageAdmin;
+import org.osgi.service.startlevel.StartLevel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PojoSR implements PojoServiceRegistry
-{
+import java.io.File;
+import java.net.JarURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.util.*;
+
+public class PojoSR implements PojoServiceRegistry {
     private static final Logger logger = LoggerFactory.getLogger(PojoSR.class);
 
     // TODO Fix this having been made public
     public final BundleContext m_context;
+    // TODO Fix this having been made public
+    public final Map<String, Bundle> m_symbolicNameToBundle = new HashMap<>();
     private final ServiceRegistry m_reg = new ServiceRegistry(
-            new ServiceRegistry.ServiceRegistryCallbacks()
-            {
+            new ServiceRegistry.ServiceRegistryCallbacks() {
 
                 public void serviceChanged(ServiceEvent event,
-                        Dictionary oldProps)
-                {
+                                           Dictionary oldProps) {
                     m_dispatcher.fireServiceEvent(event, oldProps, null);
                 }
             });
-
     // TODO Fix this having been made public
     public final EventDispatcher m_dispatcher = new EventDispatcher(m_reg);
-    private final Map<Long, Bundle> m_bundles =new HashMap<Long, Bundle>();
-    // TODO Fix this having been made public
-    public final Map<String, Bundle> m_symbolicNameToBundle = new HashMap<>();
+    private final Map<Long, Bundle> m_bundles = new HashMap<Long, Bundle>();
     private final Map bundleConfig;
-    public PojoSR(Map config) throws Exception
-    {
+
+    public PojoSR(Map config) throws Exception {
         logger.info("Initialising PojoSR");
 
         final Map<String, String> headers = new HashMap<String, String>();
@@ -90,62 +67,53 @@ public class PojoSR implements PojoServiceRegistry
         headers.put(Constants.BUNDLE_VERSION, "0.0.1-SNAPSHOT");
         headers.put(Constants.BUNDLE_NAME, "System Bundle");
         headers.put(Constants.BUNDLE_MANIFESTVERSION, "2");
-		headers.put(Constants.BUNDLE_VENDOR, "kalpatec");
+        headers.put(Constants.BUNDLE_VENDOR, "kalpatec");
         bundleConfig = new HashMap(config);
 
         // we must be bundle 1, as bundle 0 should be osgi.core
         int pojoSRBundleId = 1;
 
-        final Bundle b = new PojoSRBundle(new Revision()
-        {
+        final Bundle b = new PojoSRBundle(new Revision() {
 
             @Override
-            public long getLastModified()
-            {
+            public long getLastModified() {
                 // TODO Auto-generated method stub
                 return System.currentTimeMillis();
             }
 
             @Override
-            public Enumeration getEntries()
-            {
+            public Enumeration getEntries() {
                 return new Properties().elements();
             }
 
             @Override
-            public URL getEntry(String entryName)
-            {
+            public URL getEntry(String entryName) {
                 return getClass().getClassLoader().getResource(entryName);
             }
         }, headers, new Version(0, 0, 1), "file:pojosr", m_reg, m_dispatcher,
                 null, pojoSRBundleId, "de.kalpatec.pojosr.framework", m_bundles, getClass()
-                        .getClassLoader(), bundleConfig)
-        {
-        	@Override
-        	public synchronized void start() throws BundleException {
-        		if (m_state != Bundle.RESOLVED) {
-        			return;
-        		}
-        		m_dispatcher.startDispatching();
-        		m_state = Bundle.STARTING;
+                .getClassLoader(), bundleConfig) {
+            @Override
+            public synchronized void start() throws BundleException {
+                if (m_state != Bundle.RESOLVED) {
+                    return;
+                }
+                m_dispatcher.startDispatching();
+                m_state = Bundle.STARTING;
 
                 m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STARTING,
                         this));
                 m_context = new PojoSRBundleContext(this, m_reg, m_dispatcher,
-                                m_bundles, bundleConfig);
+                        m_bundles, bundleConfig);
                 int i = 0;
                 for (Bundle b : m_bundles.values()) {
-                	i++;
-                	try
-                    {
-                        if (b != this)
-                        {
+                    i++;
+                    try {
+                        if (b != this) {
                             b.start();
                         }
-                    }
-                    catch (Throwable t)
-                    {
-                    	logger.error("Unable to start bundle: " + i, t);
+                    } catch (Throwable t) {
+                        logger.error("Unable to start bundle: " + i, t);
                     }
                 }
                 m_state = Bundle.ACTIVE;
@@ -153,58 +121,53 @@ public class PojoSR implements PojoServiceRegistry
                         this));
 
                 m_dispatcher.fireFrameworkEvent(new FrameworkEvent(FrameworkEvent.STARTED, this, null));
-        		super.start();
-        	};
+                super.start();
+            }
+
+            ;
+
             @Override
-            public synchronized void stop() throws BundleException
-            {
-            	if ((m_state == Bundle.STOPPING) || m_state == Bundle.RESOLVED) {
-            		return;
+            public synchronized void stop() throws BundleException {
+                if ((m_state == Bundle.STOPPING) || m_state == Bundle.RESOLVED) {
+                    return;
 
-            	}
-            	else if (m_state != Bundle.ACTIVE) {
-            		throw new BundleException("Can't stop pojosr because it is not ACTIVE");
-            	}
-            	final Bundle systemBundle = this;
-            	Runnable r = new Runnable() {
+                } else if (m_state != Bundle.ACTIVE) {
+                    throw new BundleException("Can't stop pojosr because it is not ACTIVE");
+                }
+                final Bundle systemBundle = this;
+                Runnable r = new Runnable() {
 
-					public void run() {
-		                m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STOPPING,
-		                		systemBundle));
-		                for (Bundle b : m_bundles.values())
-		                {
-		                    try
-		                    {
-		                        if (b != systemBundle)
-		                        {
-		                            b.stop();
-		                        }
-		                    }
-		                    catch (Throwable t)
-		                    {
-		                        t.printStackTrace();
-		                    }
-		                }
-		                m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STOPPED,
-		                		systemBundle));
-		                m_state = Bundle.RESOLVED;
-		                m_dispatcher.stopDispatching();
-					}
-				};
-				m_state = Bundle.STOPPING;
-				if ("true".equalsIgnoreCase(System.getProperty("de.kalpatec.pojosr.framework.events.sync"))) {
-					r.run();
-				}
-				else {
-					new Thread(r).start();
-				}
+                    public void run() {
+                        m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STOPPING,
+                                systemBundle));
+                        for (Bundle b : m_bundles.values()) {
+                            try {
+                                if (b != systemBundle) {
+                                    b.stop();
+                                }
+                            } catch (Throwable t) {
+                                t.printStackTrace();
+                            }
+                        }
+                        m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STOPPED,
+                                systemBundle));
+                        m_state = Bundle.RESOLVED;
+                        m_dispatcher.stopDispatching();
+                    }
+                };
+                m_state = Bundle.STOPPING;
+                if ("true".equalsIgnoreCase(System.getProperty("de.kalpatec.pojosr.framework.events.sync"))) {
+                    r.run();
+                } else {
+                    new Thread(r).start();
+                }
             }
         };
         m_symbolicNameToBundle.put(b.getSymbolicName(), b);
         b.start();
 
         b.getBundleContext().registerService(StartLevel.class.getName(), new StartLevelImpl(), null);
-        b.getBundleContext().registerService(PackageAdmin.class.getName(),new PackageAdminImpl(this, b), null);
+        b.getBundleContext().registerService(PackageAdmin.class.getName(), new PackageAdminImpl(this, b), null);
         b.getBundleContext().registerService(BundleStartLevel.class.getName(), new BundleStartLevelImpl(), null);
         b.getBundleContext().registerService(FrameworkStartLevel.class.getName(), new FrameworkStartLevelImpl(), null);
         b.getBundleContext().registerService(LogService.class.getName(), new LogServiceImpl(), null);
@@ -214,124 +177,26 @@ public class PojoSR implements PojoServiceRegistry
         List<BundleDescriptor> scan = (List<BundleDescriptor>) config
                 .get(PojoServiceRegistryFactory.BUNDLE_DESCRIPTORS);
 
-        if (scan != null)
-        {
+        if (scan != null) {
             logger.info("Starting bundles");
             startBundles(scan);
-		}
+        }
     }
 
-	public void startBundles(List<BundleDescriptor> scan) throws Exception {
-	 for (BundleDescriptor desc : scan)
-            {
-                URL u = new URL(desc.getUrl().toExternalForm()
-                        + "META-INF/MANIFEST.MF");
-                Revision r;
-                if (u.toExternalForm().startsWith("file:"))
-                {
-                    File root = new File(URLDecoder.decode(desc.getUrl()
-                            .getFile(), "UTF-8"));
-                    u = root.toURL();
-                    r = new DirRevision(root);
+    public static void main(String[] args) throws Exception {
+        Filter filter = null;
+        Class main = null;
+        for (int i = 0; (args != null) && (i < args.length) && (i < 2); i++) {
+            try {
+                filter = FrameworkUtil.createFilter(args[i]);
+            } catch (InvalidSyntaxException ie) {
+                try {
+                    main = PojoSR.class.getClassLoader().loadClass(args[i]);
+                } catch (Exception ex) {
+                    throw new IllegalArgumentException("Argument is neither a filter nor a class: " + args[i]);
                 }
-                else
-                {
-                    URLConnection uc = u.openConnection();
-                    if (uc instanceof JarURLConnection)
-                    {
-					    String target = ((JarURLConnection) uc).getJarFileURL().toExternalForm();
-						String prefix = null;
-						if (!("jar:" + target + "!/").equals(desc.getUrl().toExternalForm())) {
-						    prefix = desc.getUrl().toExternalForm().substring(("jar:" + target + "!/").length());
-						}
-                        r = new JarRevision(
-                                ((JarURLConnection) uc).getJarFile(),
-                                ((JarURLConnection) uc).getJarFileURL(),
-								prefix,
-                                uc.getLastModified());
-                    }
-                    else
-                    {
-                        r = new URLRevision(desc.getUrl(), desc.getUrl()
-                                .openConnection().getLastModified());
-                    }
-                }
-                Map<String, String> bundleHeaders = desc.getHeaders();
-				Version osgiVersion = null;
-				try {
-					osgiVersion = Version.parseVersion(bundleHeaders.get(Constants.BUNDLE_VERSION));
-				} catch (Exception ex) {
-					ex.printStackTrace();
-					osgiVersion = Version.emptyVersion;
-				}
-                String sym = bundleHeaders.get(Constants.BUNDLE_SYMBOLICNAME);
-                    if (sym != null)
-                    {
-                        int idx = sym.indexOf(';');
-                        if (idx > 0)
-                        {
-                            sym = sym.substring(0, idx);
-                        }
-						sym = sym.trim();
-                    }
-
-                if ((sym == null)
-                        || !m_symbolicNameToBundle.containsKey( sym ))
-                {
-                    // TODO: framework - support multiple versions
-
-                    // special for osgi.core as it must be bundle id 0
-                    boolean core = "osgi.core".equals(sym);
-                    int id = core ? 0 : m_bundles.size();
-
-                    Bundle bundle = new PojoSRBundle(r, bundleHeaders,
-                            osgiVersion, desc.getUrl().toExternalForm(), m_reg,
-                            m_dispatcher,
-                            bundleHeaders.get(Constants.BUNDLE_ACTIVATOR),
-                            id,
-                            sym,
-                            m_bundles, desc.getClassLoader(), bundleConfig);
-                    if (sym != null)
-                    {
-                        m_symbolicNameToBundle.put(bundle.getSymbolicName(),
-                                bundle);
-                    }
-                }
-
-            }
-
-
-        logger.info("Will start {} bundles", m_bundles.size());
-        for (long i = 0; i < m_bundles.size(); i++)
-        {
-            try
-            {
-                logger.info("Starting {}: {} ", m_bundles.get(i).getBundleId(), m_bundles.get(i).getLocation());
-                m_bundles.get(i).start();
-            }
-            catch (Throwable e)
-            {
-                logger.error("Unable to start bundle: " + i, e);
             }
         }
-
-	}
-
-    public static void main(String[] args) throws Exception
-    {
-    	Filter filter = null;
-    	Class main = null;
-    	for (int i = 0;(args != null) && (i < args.length) && (i < 2); i++) {
-	    	try {
-	    		filter = FrameworkUtil.createFilter(args[i]);
-	    	} catch (InvalidSyntaxException ie) {
-	    		try {
-	    			main = PojoSR.class.getClassLoader().loadClass(args[i]);
-	    		} catch (Exception ex) {
-	    			throw new IllegalArgumentException("Argument is neither a filter nor a class: " + args[i]);
-	    		}
-	    	}
-    	}
         Map config = new HashMap();
         config.put(
                 PojoServiceRegistryFactory.BUNDLE_DESCRIPTORS,
@@ -340,73 +205,144 @@ public class PojoSR implements PojoServiceRegistry
                         .scanForBundles());
         new PojoServiceRegistryFactoryImpl().newPojoServiceRegistry(config);
         if (main != null) {
-        	int count = 0;
-        	if (filter != null) {
-        		count++;
-        	}
-        	if (main != null) {
-        		count++;
-        	}
-        	String[] newArgs = args;
-        	if (count > 0) {
-        		newArgs = new String[args.length - count];
-        		System.arraycopy(args, count, newArgs, 0, newArgs.length);
-        	}
-        	main.getMethod("main", String[].class).invoke(null, (Object) newArgs );
+            int count = 0;
+            if (filter != null) {
+                count++;
+            }
+            if (main != null) {
+                count++;
+            }
+            String[] newArgs = args;
+            if (count > 0) {
+                newArgs = new String[args.length - count];
+                System.arraycopy(args, count, newArgs, 0, newArgs.length);
+            }
+            main.getMethod("main", String[].class).invoke(null, (Object) newArgs);
         }
     }
 
-    public BundleContext getBundleContext()
-    {
+    public void startBundles(List<BundleDescriptor> scan) throws Exception {
+        for (BundleDescriptor desc : scan) {
+            URL u = new URL(desc.getUrl().toExternalForm()
+                    + "META-INF/MANIFEST.MF");
+            Revision r;
+            if (u.toExternalForm().startsWith("file:")) {
+                File root = new File(URLDecoder.decode(desc.getUrl()
+                        .getFile(), "UTF-8"));
+                u = root.toURL();
+                r = new DirRevision(root);
+            } else {
+                URLConnection uc = u.openConnection();
+                if (uc instanceof JarURLConnection) {
+                    String target = ((JarURLConnection) uc).getJarFileURL().toExternalForm();
+                    String prefix = null;
+                    if (!("jar:" + target + "!/").equals(desc.getUrl().toExternalForm())) {
+                        prefix = desc.getUrl().toExternalForm().substring(("jar:" + target + "!/").length());
+                    }
+                    r = new JarRevision(
+                            ((JarURLConnection) uc).getJarFile(),
+                            ((JarURLConnection) uc).getJarFileURL(),
+                            prefix,
+                            uc.getLastModified());
+                } else {
+                    r = new URLRevision(desc.getUrl(), desc.getUrl()
+                            .openConnection().getLastModified());
+                }
+            }
+            Map<String, String> bundleHeaders = desc.getHeaders();
+            Version osgiVersion = null;
+            try {
+                osgiVersion = Version.parseVersion(bundleHeaders.get(Constants.BUNDLE_VERSION));
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                osgiVersion = Version.emptyVersion;
+            }
+            String sym = bundleHeaders.get(Constants.BUNDLE_SYMBOLICNAME);
+            if (sym != null) {
+                int idx = sym.indexOf(';');
+                if (idx > 0) {
+                    sym = sym.substring(0, idx);
+                }
+                sym = sym.trim();
+            }
+
+            if ((sym == null)
+                    || !m_symbolicNameToBundle.containsKey(sym)) {
+                // TODO: framework - support multiple versions
+
+                // special for osgi.core as it must be bundle id 0
+                boolean core = "osgi.core".equals(sym);
+                int id = core ? 0 : m_bundles.size();
+
+                Bundle bundle = new PojoSRBundle(r, bundleHeaders,
+                        osgiVersion, desc.getUrl().toExternalForm(), m_reg,
+                        m_dispatcher,
+                        bundleHeaders.get(Constants.BUNDLE_ACTIVATOR),
+                        id,
+                        sym,
+                        m_bundles, desc.getClassLoader(), bundleConfig);
+                if (sym != null) {
+                    m_symbolicNameToBundle.put(bundle.getSymbolicName(),
+                            bundle);
+                }
+            }
+
+        }
+
+
+        logger.info("Will start {} bundles", m_bundles.size());
+        for (long i = 0; i < m_bundles.size(); i++) {
+            try {
+                logger.info("Starting {}: {} ", m_bundles.get(i).getBundleId(), m_bundles.get(i).getLocation());
+                m_bundles.get(i).start();
+            } catch (Throwable e) {
+                logger.error("Unable to start bundle: " + i, e);
+            }
+        }
+
+    }
+
+    public BundleContext getBundleContext() {
         return m_context;
     }
 
     public void addServiceListener(ServiceListener listener, String filter)
-            throws InvalidSyntaxException
-    {
+            throws InvalidSyntaxException {
         m_context.addServiceListener(listener, filter);
     }
 
-    public void addServiceListener(ServiceListener listener)
-    {
+    public void addServiceListener(ServiceListener listener) {
         m_context.addServiceListener(listener);
     }
 
-    public void removeServiceListener(ServiceListener listener)
-    {
+    public void removeServiceListener(ServiceListener listener) {
         m_context.removeServiceListener(listener);
     }
 
     public ServiceRegistration registerService(String[] clazzes,
-            Object service, Dictionary properties)
-    {
+                                               Object service, Dictionary properties) {
         return m_context.registerService(clazzes, service, properties);
     }
 
     public ServiceRegistration registerService(String clazz, Object service,
-            Dictionary properties)
-    {
+                                               Dictionary properties) {
         return m_context.registerService(clazz, service, properties);
     }
 
     public ServiceReference[] getServiceReferences(String clazz, String filter)
-            throws InvalidSyntaxException
-    {
+            throws InvalidSyntaxException {
         return m_context.getServiceReferences(clazz, filter);
     }
 
-    public ServiceReference getServiceReference(String clazz)
-    {
+    public ServiceReference getServiceReference(String clazz) {
         return m_context.getServiceReference(clazz);
     }
 
-    public Object getService(ServiceReference reference)
-    {
+    public Object getService(ServiceReference reference) {
         return m_context.getService(reference);
     }
 
-    public boolean ungetService(ServiceReference reference)
-    {
+    public boolean ungetService(ServiceReference reference) {
         return m_context.ungetService(reference);
     }
 

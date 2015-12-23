@@ -15,19 +15,15 @@
  */
 package de.kalpatec.pojosr.framework.launch;
 
+import org.osgi.framework.*;
+
 import java.util.Dictionary;
 import java.util.List;
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.InvalidSyntaxException;
-import org.osgi.framework.ServiceListener;
-import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 
-public interface PojoServiceRegistry
-{
+public interface PojoServiceRegistry {
     BundleContext getBundleContext();
-	
-	void startBundles(List<BundleDescriptor> bundles) throws Exception;
+
+    void startBundles(List<BundleDescriptor> bundles) throws Exception;
 
     void addServiceListener(ServiceListener listener, String filter)
             throws InvalidSyntaxException;
@@ -37,10 +33,10 @@ public interface PojoServiceRegistry
     void removeServiceListener(ServiceListener listener);
 
     ServiceRegistration registerService(String[] clazzes,
-            Object service, @SuppressWarnings("rawtypes") Dictionary properties);
+                                        Object service, @SuppressWarnings("rawtypes") Dictionary properties);
 
     ServiceRegistration registerService(String clazz, Object service,
-            @SuppressWarnings("rawtypes") Dictionary properties);
+                                        @SuppressWarnings("rawtypes") Dictionary properties);
 
     ServiceReference[] getServiceReferences(String clazz, String filter)
             throws InvalidSyntaxException;

@@ -8,16 +8,6 @@ import org.osgi.service.startlevel.StartLevel;
  */
 public class StartLevelImpl implements StartLevel {
 
-    public void setStartLevel(int startlevel) {
-        // TODO Auto-generated method stub
-
-    }
-
-    public void setInitialBundleStartLevel(int startlevel) {
-        // TODO Auto-generated method stub
-
-    }
-
     public void setBundleStartLevel(Bundle bundle,
                                     int startlevel) {
         // TODO Auto-generated method stub
@@ -39,9 +29,19 @@ public class StartLevelImpl implements StartLevel {
         return 1;
     }
 
+    public void setStartLevel(int startlevel) {
+        // TODO Auto-generated method stub
+
+    }
+
     public int getInitialBundleStartLevel() {
         // TODO Auto-generated method stub
         return 1;
+    }
+
+    public void setInitialBundleStartLevel(int startlevel) {
+        // TODO Auto-generated method stub
+
     }
 
     public int getBundleStartLevel(Bundle bundle) {

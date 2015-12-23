@@ -12,8 +12,8 @@ import org.osgi.service.packageadmin.RequiredBundle;
  */
 public class PackageAdminImpl implements PackageAdmin {
 
-    private PojoSR pojoSR;
     private final Bundle b;
+    private PojoSR pojoSR;
 
     public PackageAdminImpl(PojoSR pojoSR, Bundle b) {
         this.pojoSR = pojoSR;

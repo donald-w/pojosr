@@ -17,8 +17,7 @@ package de.kalpatec.pojosr.framework.felix.framework.capabilityset;
 
 import java.util.List;
 
-public interface Capability
-{
+public interface Capability {
     static final String MODULE_NAMESPACE = "module";
     static final String HOST_NAMESPACE = "host";
     static final String PACKAGE_NAMESPACE = "package";

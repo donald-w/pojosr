@@ -15,20 +15,27 @@
  */
 package de.kalpatec.pojosr.framework.felix.framework;
 
-import java.util.*;
-
-import org.osgi.framework.*;
-import org.osgi.framework.hooks.service.*;
-import org.osgi.framework.launch.Framework;
-
-import de.kalpatec.pojosr.framework.felix.framework.capabilityset.Capability;
 import de.kalpatec.pojosr.framework.felix.framework.capabilityset.CapabilitySet;
 import de.kalpatec.pojosr.framework.felix.framework.capabilityset.SimpleFilter;
+import org.osgi.framework.*;
 import org.osgi.framework.wiring.BundleCapability;
 
-public class ServiceRegistry
-{
-    private long m_currentServiceId = 1L;
+import java.util.*;
+
+public class ServiceRegistry {
+    private final static Class<?>[] m_hookClasses =
+            {
+                    org.osgi.framework.hooks.bundle.FindHook.class,
+                    org.osgi.framework.hooks.bundle.EventHook.class,
+                    org.osgi.framework.hooks.service.EventHook.class,
+                    org.osgi.framework.hooks.service.EventListenerHook.class,
+                    org.osgi.framework.hooks.service.FindHook.class,
+                    org.osgi.framework.hooks.service.ListenerHook.class,
+                    org.osgi.framework.hooks.weaving.WeavingHook.class,
+                    org.osgi.framework.hooks.resolver.ResolverHookFactory.class,
+                    org.osgi.service.url.URLStreamHandlerService.class,
+                    java.net.ContentHandler.class
+            };
     // Maps bundle to an array of service registrations.
     private final Map m_regsMap = Collections.synchronizedMap(new HashMap());
     // Capability set for all service registrations.
@@ -41,25 +48,12 @@ public class ServiceRegistry
     private final Map m_inUseMap = new HashMap();
     private final ServiceRegistryCallbacks m_callbacks;
     private final WeakHashMap<ServiceReference, ServiceReference> m_blackList =
-        new WeakHashMap<ServiceReference, ServiceReference>();
-    private final static Class<?>[] m_hookClasses =
-    {
-        org.osgi.framework.hooks.bundle.FindHook.class,
-        org.osgi.framework.hooks.bundle.EventHook.class,
-        org.osgi.framework.hooks.service.EventHook.class,
-        org.osgi.framework.hooks.service.EventListenerHook.class,
-        org.osgi.framework.hooks.service.FindHook.class,
-        org.osgi.framework.hooks.service.ListenerHook.class,
-        org.osgi.framework.hooks.weaving.WeavingHook.class,
-        org.osgi.framework.hooks.resolver.ResolverHookFactory.class,
-        org.osgi.service.url.URLStreamHandlerService.class,
-        java.net.ContentHandler.class
-    };
+            new WeakHashMap<ServiceReference, ServiceReference>();
     private final Map<Class<?>, Set<ServiceReference<?>>> m_allHooks =
-        new HashMap<Class<?>, Set<ServiceReference<?>>>();
+            new HashMap<Class<?>, Set<ServiceReference<?>>>();
+    private long m_currentServiceId = 1L;
 
-    public ServiceRegistry(ServiceRegistryCallbacks callbacks)
-    {
+    public ServiceRegistry(ServiceRegistryCallbacks callbacks) {
         m_callbacks = callbacks;
 
         List indices = new ArrayList();
@@ -67,20 +61,83 @@ public class ServiceRegistry
         m_regCapSet = new CapabilitySet(indices, false);
     }
 
-    public ServiceReference[] getRegisteredServices(Bundle bundle)
-    {
-        ServiceRegistration[] regs = (ServiceRegistration[]) m_regsMap.get(bundle);
-        if (regs != null)
-        {
-            List refs = new ArrayList(regs.length);
-            for (int i = 0; i < regs.length; i++)
-            {
-                try
-                {
-                    refs.add(regs[i].getReference());
+    private static ServiceRegistration[] addServiceRegistration(
+            ServiceRegistration[] regs, ServiceRegistration reg) {
+        if (regs == null) {
+            regs = new ServiceRegistration[]
+                    {
+                            reg
+                    };
+        } else {
+            ServiceRegistration[] newRegs = new ServiceRegistration[regs.length + 1];
+            System.arraycopy(regs, 0, newRegs, 0, regs.length);
+            newRegs[regs.length] = reg;
+            regs = newRegs;
+        }
+        return regs;
+    }
+
+    private static ServiceRegistration[] removeServiceRegistration(
+            ServiceRegistration[] regs, ServiceRegistration reg) {
+        for (int i = 0; (regs != null) && (i < regs.length); i++) {
+            if (regs[i].equals(reg)) {
+                // If this is the only usage, then point to empty list.
+                if ((regs.length - 1) == 0) {
+                    regs = new ServiceRegistration[0];
                 }
-                catch (IllegalStateException ex)
-                {
+                // Otherwise, we need to do some array copying.
+                else {
+                    ServiceRegistration[] newRegs = new ServiceRegistration[regs.length - 1];
+                    System.arraycopy(regs, 0, newRegs, 0, i);
+                    if (i < newRegs.length) {
+                        System.arraycopy(
+                                regs, i + 1, newRegs, i, newRegs.length - i);
+                    }
+                    regs = newRegs;
+                }
+            }
+        }
+        return regs;
+    }
+
+    static boolean isHook(String[] classNames, Class<?> hookClass, Object svcObj) {
+        // For a service factory, we can only match names.
+        if (svcObj instanceof ServiceFactory) {
+            for (String className : classNames) {
+                if (className.equals(hookClass.getName())) {
+                    return true;
+                }
+            }
+        }
+
+        // For a service object, check if its class matches.
+        if (hookClass.isAssignableFrom(svcObj.getClass())) {
+            // But still only if it is registered under that interface.
+            String hookName = hookClass.getName();
+            for (String className : classNames) {
+                if (className.equals(hookName)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private static <S> SortedSet<ServiceReference<S>> asTypedSortedSet(
+            SortedSet<ServiceReference<?>> ss) {
+        return (SortedSet<ServiceReference<S>>) (SortedSet) ss;
+
+
+    }
+
+    public ServiceReference[] getRegisteredServices(Bundle bundle) {
+        ServiceRegistration[] regs = (ServiceRegistration[]) m_regsMap.get(bundle);
+        if (regs != null) {
+            List refs = new ArrayList(regs.length);
+            for (int i = 0; i < regs.length; i++) {
+                try {
+                    refs.add(regs[i].getReference());
+                } catch (IllegalStateException ex) {
                     // Don't include the reference as it is not valid anymore
                 }
             }
@@ -91,15 +148,13 @@ public class ServiceRegistry
 
     // Caller is expected to fire REGISTERED event.
     public ServiceRegistration registerService(
-        Bundle bundle, String[] classNames, Object svcObj, Dictionary dict)
-    {
+            Bundle bundle, String[] classNames, Object svcObj, Dictionary dict) {
         ServiceRegistrationImpl reg = null;
 
-        synchronized (this)
-        {
+        synchronized (this) {
             // Create the service registration.
             reg = new ServiceRegistrationImpl(
-                this, bundle, classNames, new Long(m_currentServiceId++), svcObj, dict);
+                    this, bundle, classNames, new Long(m_currentServiceId++), svcObj, dict);
 
             // Keep track of registered hooks.
             addHooks(classNames, svcObj, reg.getReference());
@@ -111,21 +166,18 @@ public class ServiceRegistry
         }
 
         // Notify callback objects about registered service.
-        if (m_callbacks != null)
-        {
+        if (m_callbacks != null) {
             m_callbacks.serviceChanged(new ServiceEvent(
-                ServiceEvent.REGISTERED, reg.getReference()), null);
+                    ServiceEvent.REGISTERED, reg.getReference()), null);
         }
         return reg;
     }
 
-    public void unregisterService(Bundle bundle, ServiceRegistration reg)
-    {
+    public void unregisterService(Bundle bundle, ServiceRegistration reg) {
         // If this is a hook, it should be removed.
         removeHook(reg.getReference());
 
-        synchronized (this)
-        {
+        synchronized (this) {
             // Note that we don't lock the service registration here using
             // the m_lockedRegsMap because we want to allow bundles to get
             // the service during the unregistration process. However, since
@@ -139,18 +191,15 @@ public class ServiceRegistry
         }
 
         // Notify callback objects about unregistering service.
-        if (m_callbacks != null)
-        {
+        if (m_callbacks != null) {
             m_callbacks.serviceChanged(
-                new ServiceEvent(ServiceEvent.UNREGISTERING, reg.getReference()), null);
+                    new ServiceEvent(ServiceEvent.UNREGISTERING, reg.getReference()), null);
         }
 
         // Now forcibly unget the service object for all stubborn clients.
-        synchronized (this)
-        {
+        synchronized (this) {
             Bundle[] clients = getUsingBundles(reg.getReference());
-            for (int i = 0; (clients != null) && (i < clients.length); i++)
-            {
+            for (int i = 0; (clients != null) && (i < clients.length); i++) {
                 while (ungetService(clients[i], reg.getReference()))
                     ; // Keep removing until it is no longer possible
             }
@@ -165,14 +214,11 @@ public class ServiceRegistry
      * bundle.
      *
      * @param bundle the bundle whose services should be unregistered.
-     *
      */
-    public void unregisterServices(Bundle bundle)
-    {
+    public void unregisterServices(Bundle bundle) {
         // Simply remove all service registrations for the bundle.
         ServiceRegistration[] regs = null;
-        synchronized (this)
-        {
+        synchronized (this) {
             regs = (ServiceRegistration[]) m_regsMap.get(bundle);
         }
 
@@ -182,35 +228,26 @@ public class ServiceRegistry
         // be able to register more services.
 
         // Unregister each service.
-        for (int i = 0; (regs != null) && (i < regs.length); i++)
-        {
-            if (((ServiceRegistrationImpl) regs[i]).isValid())
-            {
+        for (int i = 0; (regs != null) && (i < regs.length); i++) {
+            if (((ServiceRegistrationImpl) regs[i]).isValid()) {
                 regs[i].unregister();
             }
         }
 
         // Now remove the bundle itself.
-        synchronized (this)
-        {
+        synchronized (this) {
             m_regsMap.remove(bundle);
         }
     }
 
-    public synchronized List getServiceReferences(String className, SimpleFilter filter)
-    {
-        if ((className == null) && (filter == null))
-        {
+    public synchronized List getServiceReferences(String className, SimpleFilter filter) {
+        if ((className == null) && (filter == null)) {
             // Return all services.
             filter = new SimpleFilter(Constants.OBJECTCLASS, "*", SimpleFilter.PRESENT);
-        }
-        else if ((className != null) && (filter == null))
-        {
+        } else if ((className != null) && (filter == null)) {
             // Return services matching the class name.
             filter = new SimpleFilter(Constants.OBJECTCLASS, className, SimpleFilter.EQ);
-        }
-        else if ((className != null) && (filter != null))
-        {
+        } else if ((className != null) && (filter != null)) {
             // Return services matching the class name and filter.
             List filters = new ArrayList(2);
             filters.add(new SimpleFilter(Constants.OBJECTCLASS, className, SimpleFilter.EQ));
@@ -224,14 +261,11 @@ public class ServiceRegistry
         return new ArrayList(matches);
     }
 
-    public synchronized ServiceReference[] getServicesInUse(Bundle bundle)
-    {
+    public synchronized ServiceReference[] getServicesInUse(Bundle bundle) {
         UsageCount[] usages = (UsageCount[]) m_inUseMap.get(bundle);
-        if (usages != null)
-        {
+        if (usages != null) {
             ServiceReference[] refs = new ServiceReference[usages.length];
-            for (int i = 0; i < refs.length; i++)
-            {
+            for (int i = 0; i < refs.length; i++) {
                 refs[i] = usages[i].m_ref;
             }
             return refs;
@@ -239,37 +273,30 @@ public class ServiceRegistry
         return null;
     }
 
-    public <S> S getService(Bundle bundle, ServiceReference<S> ref)
-    {
+    public <S> S getService(Bundle bundle, ServiceReference<S> ref) {
         UsageCount usage = null;
         Object svcObj = null;
 
         // Get the service registration.
         ServiceRegistrationImpl reg =
-            ((ServiceRegistrationImpl.ServiceReferenceImpl) ref).getRegistration();
+                ((ServiceRegistrationImpl.ServiceReferenceImpl) ref).getRegistration();
 
-        synchronized (this)
-        {
+        synchronized (this) {
             // First make sure that no existing operation is currently
             // being performed by another thread on the service registration.
-            for (Object o = m_lockedRegsMap.get(reg); (o != null); o = m_lockedRegsMap.get(reg))
-            {
+            for (Object o = m_lockedRegsMap.get(reg); (o != null); o = m_lockedRegsMap.get(reg)) {
                 // We don't allow cycles when we call out to the service factory.
-                if (o.equals(Thread.currentThread()))
-                {
+                if (o.equals(Thread.currentThread())) {
                     throw new ServiceException(
-                        "ServiceFactory.getService() resulted in a cycle.",
-                        ServiceException.FACTORY_ERROR,
-                        null);
+                            "ServiceFactory.getService() resulted in a cycle.",
+                            ServiceException.FACTORY_ERROR,
+                            null);
                 }
 
                 // Otherwise, wait for it to be freed.
-                try
-                {
+                try {
                     wait();
-                }
-                catch (InterruptedException ex)
-                {
+                } catch (InterruptedException ex) {
                 }
             }
 
@@ -277,16 +304,14 @@ public class ServiceRegistry
             m_lockedRegsMap.put(reg, Thread.currentThread());
 
             // Make sure the service registration is still valid.
-            if (reg.isValid())
-            {
+            if (reg.isValid()) {
                 // Get the usage count, if any.
                 usage = getUsageCount(bundle, ref);
 
                 // If we don't have a usage count, then create one and
                 // since the spec says we increment usage count before
                 // actually getting the service object.
-                if (usage == null)
-                {
+                if (usage == null) {
                     usage = addUsageCount(bundle, ref);
                 }
 
@@ -301,30 +326,22 @@ public class ServiceRegistry
         // cached the service object yet, so we need to create one now without
         // holding the lock, since we will potentially call out to a service
         // factory.
-        try
-        {
-            if ((usage != null) && (svcObj == null))
-            {
+        try {
+            if ((usage != null) && (svcObj == null)) {
                 svcObj = reg.getService(bundle);
             }
-        }
-        finally
-        {
+        } finally {
             // If we successfully retrieved a service object, then we should
             // cache it in the usage count. If not, we should flush the usage
             // count. Either way, we need to unlock the service registration
             // so that any threads waiting for it can continue.
-            synchronized (this)
-            {
+            synchronized (this) {
                 // Before caching the service object, double check to see if
                 // the registration is still valid, since it may have been
                 // unregistered while we didn't hold the lock.
-                if (!reg.isValid() || (svcObj == null))
-                {
+                if (!reg.isValid() || (svcObj == null)) {
                     flushUsageCount(bundle, ref);
-                }
-                else
-                {
+                } else {
                     usage.m_svcObj = svcObj;
                 }
                 m_lockedRegsMap.remove(reg);
@@ -335,40 +352,32 @@ public class ServiceRegistry
         return (S) svcObj;
     }
 
-    public boolean ungetService(Bundle bundle, ServiceReference ref)
-    {
+    public boolean ungetService(Bundle bundle, ServiceReference ref) {
         UsageCount usage = null;
         ServiceRegistrationImpl reg =
-            ((ServiceRegistrationImpl.ServiceReferenceImpl) ref).getRegistration();
+                ((ServiceRegistrationImpl.ServiceReferenceImpl) ref).getRegistration();
 
-        synchronized (this)
-        {
+        synchronized (this) {
             // First make sure that no existing operation is currently
             // being performed by another thread on the service registration.
-            for (Object o = m_lockedRegsMap.get(reg); (o != null); o = m_lockedRegsMap.get(reg))
-            {
+            for (Object o = m_lockedRegsMap.get(reg); (o != null); o = m_lockedRegsMap.get(reg)) {
                 // We don't allow cycles when we call out to the service factory.
-                if (o.equals(Thread.currentThread()))
-                {
+                if (o.equals(Thread.currentThread())) {
                     throw new IllegalStateException(
-                        "ServiceFactory.ungetService() resulted in a cycle.");
+                            "ServiceFactory.ungetService() resulted in a cycle.");
                 }
 
                 // Otherwise, wait for it to be freed.
-                try
-                {
+                try {
                     wait();
-                }
-                catch (InterruptedException ex)
-                {
+                } catch (InterruptedException ex) {
                 }
             }
 
             // Get the usage count.
             usage = getUsageCount(bundle, ref);
             // If there is no cached services, then just return immediately.
-            if (usage == null)
-            {
+            if (usage == null) {
                 return false;
             }
 
@@ -379,31 +388,25 @@ public class ServiceRegistry
         // If usage count will go to zero, then unget the service
         // from the registration; we do this outside the lock
         // since this might call out to the service factory.
-        try
-        {
-            if (usage.m_count == 1)
-            {
+        try {
+            if (usage.m_count == 1) {
                 // Remove reference from usages array.
                 ((ServiceRegistrationImpl.ServiceReferenceImpl) ref)
-                    .getRegistration().ungetService(bundle, usage.m_svcObj);
+                        .getRegistration().ungetService(bundle, usage.m_svcObj);
             }
-        }
-        finally
-        {
+        } finally {
             // Finally, decrement usage count and flush if it goes to zero or
             // the registration became invalid while we were not holding the
             // lock. Either way, unlock the service registration so that any
             // threads waiting for it can continue.
-            synchronized (this)
-            {
+            synchronized (this) {
                 // Decrement usage count, which spec says should happen after
                 // ungetting the service object.
                 usage.m_count--;
 
                 // If the registration is invalid or the usage count has reached
                 // zero, then flush it.
-                if (!reg.isValid() || (usage.m_count <= 0))
-                {
+                if (!reg.isValid() || (usage.m_count <= 0)) {
                     usage.m_svcObj = null;
                     flushUsageCount(bundle, ref);
                 }
@@ -423,18 +426,14 @@ public class ServiceRegistry
      * specified bundle.
      *
      * @param bundle the bundle whose services are to be released.
-     *
      */
-    public void ungetServices(Bundle bundle)
-    {
+    public void ungetServices(Bundle bundle) {
         UsageCount[] usages;
-        synchronized (this)
-        {
+        synchronized (this) {
             usages = (UsageCount[]) m_inUseMap.get(bundle);
         }
 
-        if (usages == null)
-        {
+        if (usages == null) {
             return;
         }
 
@@ -445,38 +444,29 @@ public class ServiceRegistry
 
         // Remove each service object from the
         // service cache.
-        for (int i = 0; i < usages.length; i++)
-        {
+        for (int i = 0; i < usages.length; i++) {
             // Keep ungetting until all usage count is zero.
-            while (ungetService(bundle, usages[i].m_ref))
-            {
+            while (ungetService(bundle, usages[i].m_ref)) {
                 // Empty loop body.
             }
         }
     }
 
-    public synchronized Bundle[] getUsingBundles(ServiceReference ref)
-    {
+    public synchronized Bundle[] getUsingBundles(ServiceReference ref) {
         Bundle[] bundles = null;
-        for (Iterator iter = m_inUseMap.entrySet().iterator(); iter.hasNext();)
-        {
+        for (Iterator iter = m_inUseMap.entrySet().iterator(); iter.hasNext(); ) {
             Map.Entry entry = (Map.Entry) iter.next();
             Bundle bundle = (Bundle) entry.getKey();
             UsageCount[] usages = (UsageCount[]) entry.getValue();
-            for (int useIdx = 0; useIdx < usages.length; useIdx++)
-            {
-                if (usages[useIdx].m_ref.equals(ref))
-                {
+            for (int useIdx = 0; useIdx < usages.length; useIdx++) {
+                if (usages[useIdx].m_ref.equals(ref)) {
                     // Add the bundle to the array to be returned.
-                    if (bundles == null)
-                    {
+                    if (bundles == null) {
                         bundles = new Bundle[]
-                        {
-                            bundle
-                        };
-                    }
-                    else
-                    {
+                                {
+                                        bundle
+                                };
+                    } else {
                         Bundle[] nbs = new Bundle[bundles.length + 1];
                         System.arraycopy(bundles, 0, nbs, 0, bundles.length);
                         nbs[bundles.length] = bundle;
@@ -488,63 +478,12 @@ public class ServiceRegistry
         return bundles;
     }
 
-    void servicePropertiesModified(ServiceRegistration reg, Dictionary oldProps)
-    {
+    void servicePropertiesModified(ServiceRegistration reg, Dictionary oldProps) {
         updateHook(reg.getReference());
-        if (m_callbacks != null)
-        {
+        if (m_callbacks != null) {
             m_callbacks.serviceChanged(
-                new ServiceEvent(ServiceEvent.MODIFIED, reg.getReference()), oldProps);
+                    new ServiceEvent(ServiceEvent.MODIFIED, reg.getReference()), oldProps);
         }
-    }
-
-    private static ServiceRegistration[] addServiceRegistration(
-        ServiceRegistration[] regs, ServiceRegistration reg)
-    {
-        if (regs == null)
-        {
-            regs = new ServiceRegistration[]
-            {
-                reg
-            };
-        }
-        else
-        {
-            ServiceRegistration[] newRegs = new ServiceRegistration[regs.length + 1];
-            System.arraycopy(regs, 0, newRegs, 0, regs.length);
-            newRegs[regs.length] = reg;
-            regs = newRegs;
-        }
-        return regs;
-    }
-
-    private static ServiceRegistration[] removeServiceRegistration(
-        ServiceRegistration[] regs, ServiceRegistration reg)
-    {
-        for (int i = 0; (regs != null) && (i < regs.length); i++)
-        {
-            if (regs[i].equals(reg))
-            {
-                // If this is the only usage, then point to empty list.
-                if ((regs.length - 1) == 0)
-                {
-                    regs = new ServiceRegistration[0];
-                }
-                // Otherwise, we need to do some array copying.
-                else
-                {
-                    ServiceRegistration[] newRegs = new ServiceRegistration[regs.length - 1];
-                    System.arraycopy(regs, 0, newRegs, 0, i);
-                    if (i < newRegs.length)
-                    {
-                        System.arraycopy(
-                            regs, i + 1, newRegs, i, newRegs.length - i);
-                    }
-                    regs = newRegs;
-                }
-            }
-        }
-        return regs;
     }
 
     /**
@@ -552,17 +491,13 @@ public class ServiceRegistry
      * specified service reference.
      *
      * @param bundle The bundle whose usage counts are being searched.
-     * @param ref The service reference to find in the bundle's usage counts.
+     * @param ref    The service reference to find in the bundle's usage counts.
      * @return The associated usage count or null if not found.
-     *
      */
-    private UsageCount getUsageCount(Bundle bundle, ServiceReference ref)
-    {
+    private UsageCount getUsageCount(Bundle bundle, ServiceReference ref) {
         UsageCount[] usages = (UsageCount[]) m_inUseMap.get(bundle);
-        for (int i = 0; (usages != null) && (i < usages.length); i++)
-        {
-            if (usages[i].m_ref.equals(ref))
-            {
+        for (int i = 0; (usages != null) && (i < usages.length); i++) {
+            if (usages[i].m_ref.equals(ref)) {
                 return usages[i];
             }
         }
@@ -577,24 +512,20 @@ public class ServiceRegistry
      * be incremented.
      *
      * @param bundle The bundle acquiring the service.
-     * @param ref The service reference of the acquired service.
+     * @param ref    The service reference of the acquired service.
      */
-    private UsageCount addUsageCount(Bundle bundle, ServiceReference ref)
-    {
+    private UsageCount addUsageCount(Bundle bundle, ServiceReference ref) {
         UsageCount[] usages = (UsageCount[]) m_inUseMap.get(bundle);
 
         UsageCount usage = new UsageCount();
         usage.m_ref = ref;
 
-        if (usages == null)
-        {
+        if (usages == null) {
             usages = new UsageCount[]
-            {
-                usage
-            };
-        }
-        else
-        {
+                    {
+                            usage
+                    };
+        } else {
             UsageCount[] newUsages = new UsageCount[usages.length + 1];
             System.arraycopy(usages, 0, newUsages, 0, usages.length);
             newUsages[usages.length] = usage;
@@ -616,42 +547,32 @@ public class ServiceRegistry
      * usage count for the specified service reference.
      *
      * @param bundle The bundle whose usage count should be removed.
-     * @param ref The service reference whose usage count should be removed.
-     *
+     * @param ref    The service reference whose usage count should be removed.
      */
-    private void flushUsageCount(Bundle bundle, ServiceReference ref)
-    {
+    private void flushUsageCount(Bundle bundle, ServiceReference ref) {
         UsageCount[] usages = (UsageCount[]) m_inUseMap.get(bundle);
-        for (int i = 0; (usages != null) && (i < usages.length); i++)
-        {
-            if (usages[i].m_ref.equals(ref))
-            {
+        for (int i = 0; (usages != null) && (i < usages.length); i++) {
+            if (usages[i].m_ref.equals(ref)) {
                 // If this is the only usage, then point to empty list.
-                if ((usages.length - 1) == 0)
-                {
+                if ((usages.length - 1) == 0) {
                     usages = null;
                 }
                 // Otherwise, we need to do some array copying.
-                else
-                {
+                else {
                     UsageCount[] newUsages = new UsageCount[usages.length - 1];
                     System.arraycopy(usages, 0, newUsages, 0, i);
-                    if (i < newUsages.length)
-                    {
+                    if (i < newUsages.length) {
                         System.arraycopy(
-                            usages, i + 1, newUsages, i, newUsages.length - i);
+                                usages, i + 1, newUsages, i, newUsages.length - i);
                     }
                     usages = newUsages;
                 }
             }
         }
 
-        if (usages != null)
-        {
+        if (usages != null) {
             m_inUseMap.put(bundle, usages);
-        }
-        else
-        {
+        } else {
             m_inUseMap.remove(bundle);
         }
     }
@@ -659,57 +580,20 @@ public class ServiceRegistry
     //
     // Hook-related methods.
     //
-    boolean isHookBlackListed(ServiceReference sr)
-    {
+    boolean isHookBlackListed(ServiceReference sr) {
         return m_blackList.containsKey(sr);
     }
 
-    void blackListHook(ServiceReference sr)
-    {
+    void blackListHook(ServiceReference sr) {
         m_blackList.put(sr, sr);
     }
 
-    static boolean isHook(String[] classNames, Class<?> hookClass, Object svcObj)
-    {
-        // For a service factory, we can only match names.
-        if (svcObj instanceof ServiceFactory)
-        {
-            for (String className : classNames)
-            {
-                if (className.equals(hookClass.getName()))
-                {
-                    return true;
-                }
-            }
-        }
-
-        // For a service object, check if its class matches.
-        if (hookClass.isAssignableFrom(svcObj.getClass()))
-        {
-            // But still only if it is registered under that interface.
-            String hookName = hookClass.getName();
-            for (String className : classNames)
-            {
-                if (className.equals(hookName))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private void addHooks(String[] classNames, Object svcObj, ServiceReference<?> ref)
-    {
-        for (Class<?> hookClass : m_hookClasses)
-        {
-            if (isHook(classNames, hookClass, svcObj))
-            {
-                synchronized (m_allHooks)
-                {
+    private void addHooks(String[] classNames, Object svcObj, ServiceReference<?> ref) {
+        for (Class<?> hookClass : m_hookClasses) {
+            if (isHook(classNames, hookClass, svcObj)) {
+                synchronized (m_allHooks) {
                     Set<ServiceReference<?>> hooks = m_allHooks.get(hookClass);
-                    if (hooks == null)
-                    {
+                    if (hooks == null) {
                         hooks = new TreeSet<ServiceReference<?>>(Collections.reverseOrder());
                         m_allHooks.put(hookClass, hooks);
                     }
@@ -719,23 +603,18 @@ public class ServiceRegistry
         }
     }
 
-    private void updateHook(ServiceReference ref)
-    {
+    private void updateHook(ServiceReference ref) {
         // We maintain the hooks sorted, so if ranking has changed for example,
         // we need to ensure the order remains correct by resorting the hooks.
         Object svcObj = ((ServiceRegistrationImpl.ServiceReferenceImpl) ref)
-            .getRegistration().getService();
+                .getRegistration().getService();
         String[] classNames = (String[]) ref.getProperty(Constants.OBJECTCLASS);
 
-        for (Class<?> hookClass : m_hookClasses)
-        {
-            if (isHook(classNames, hookClass, svcObj))
-            {
-                synchronized (m_allHooks)
-                {
+        for (Class<?> hookClass : m_hookClasses) {
+            if (isHook(classNames, hookClass, svcObj)) {
+                synchronized (m_allHooks) {
                     Set<ServiceReference<?>> hooks = m_allHooks.get(hookClass);
-                    if (hooks != null)
-                    {
+                    if (hooks != null) {
                         List<ServiceReference<?>> refs = new ArrayList<ServiceReference<?>>(hooks);
                         hooks.clear();
                         hooks.addAll(refs);
@@ -745,24 +624,18 @@ public class ServiceRegistry
         }
     }
 
-    private void removeHook(ServiceReference ref)
-    {
+    private void removeHook(ServiceReference ref) {
         Object svcObj = ((ServiceRegistrationImpl.ServiceReferenceImpl) ref)
-            .getRegistration().getService();
+                .getRegistration().getService();
         String[] classNames = (String[]) ref.getProperty(Constants.OBJECTCLASS);
 
-        for (Class<?> hookClass : m_hookClasses)
-        {
-            if (isHook(classNames, hookClass, svcObj))
-            {
-                synchronized (m_allHooks)
-                {
+        for (Class<?> hookClass : m_hookClasses) {
+            if (isHook(classNames, hookClass, svcObj)) {
+                synchronized (m_allHooks) {
                     Set<ServiceReference<?>> hooks = m_allHooks.get(hookClass);
-                    if (hooks != null)
-                    {
+                    if (hooks != null) {
                         hooks.remove(ref);
-                        if (hooks.isEmpty())
-                        {
+                        if (hooks.isEmpty()) {
                             m_allHooks.remove(hookClass);
                         }
                     }
@@ -771,13 +644,10 @@ public class ServiceRegistry
         }
     }
 
-    public <S> Set<ServiceReference<S>> getHooks(Class<S> hookClass)
-    {
-        synchronized (m_allHooks)
-        {
+    public <S> Set<ServiceReference<S>> getHooks(Class<S> hookClass) {
+        synchronized (m_allHooks) {
             Set<ServiceReference<?>> hooks = m_allHooks.get(hookClass);
-            if (hooks != null)
-            {
+            if (hooks != null) {
                 SortedSet sorted = new TreeSet<ServiceReference<?>>(Collections.reverseOrder());
                 sorted.addAll(hooks);
                 return asTypedSortedSet(sorted);
@@ -786,23 +656,13 @@ public class ServiceRegistry
         }
     }
 
-    private static <S> SortedSet<ServiceReference<S>> asTypedSortedSet(
-        SortedSet<ServiceReference<?>> ss)
-    {
-        return (SortedSet<ServiceReference<S>>) (SortedSet) ss;
-
-
+    public interface ServiceRegistryCallbacks {
+        void serviceChanged(ServiceEvent event, Dictionary oldProps);
     }
 
-    private static class UsageCount
-    {
+    private static class UsageCount {
         public int m_count = 0;
         public ServiceReference m_ref = null;
         public Object m_svcObj = null;
-    }
-
-    public interface ServiceRegistryCallbacks
-    {
-        void serviceChanged(ServiceEvent event, Dictionary oldProps);
     }
 }

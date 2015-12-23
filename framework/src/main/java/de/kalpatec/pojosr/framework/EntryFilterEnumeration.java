@@ -15,19 +15,13 @@
  */
 package de.kalpatec.pojosr.framework;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
-
 import de.kalpatec.pojosr.framework.felix.framework.capabilityset.SimpleFilter;
 
-class EntryFilterEnumeration<T> implements Enumeration<T>
-{
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.*;
+
+class EntryFilterEnumeration<T> implements Enumeration<T> {
     private final Enumeration<String> m_enumeration;
     private final Revision m_revision;
     private final String m_path;
@@ -38,28 +32,24 @@ class EntryFilterEnumeration<T> implements Enumeration<T>
     private final List<T> m_nextEntries = new ArrayList<T>(2);
 
     public EntryFilterEnumeration(Revision rev, boolean includeFragments,
-            String path, String filePattern, boolean recurse,
-            boolean isURLValues)
-    {
+                                  String path, String filePattern, boolean recurse,
+                                  boolean isURLValues) {
         m_revision = rev;
         m_enumeration = rev.getEntries();
         m_recurse = recurse;
         m_isURLValues = isURLValues;
 
         // Sanity check the parameters.
-        if (path == null)
-        {
+        if (path == null) {
             throw new IllegalArgumentException(
                     "The path for findEntries() cannot be null.");
         }
         // Strip leading '/' if present.
-        if ((path.length() > 0) && (path.charAt(0) == '/'))
-        {
+        if ((path.length() > 0) && (path.charAt(0) == '/')) {
             path = path.substring(1);
         }
         // Add a '/' to the end if not present.
-        if ((path.length() > 0) && (path.charAt(path.length() - 1) != '/'))
-        {
+        if ((path.length() > 0) && (path.charAt(path.length() - 1) != '/')) {
             path = path + "/";
         }
         m_path = path;
@@ -72,15 +62,21 @@ class EntryFilterEnumeration<T> implements Enumeration<T>
         findNext();
     }
 
-    public synchronized boolean hasMoreElements()
-    {
+    private static String getLastPathElement(String entryName) {
+        int endIdx = (entryName.charAt(entryName.length() - 1) == '/') ? entryName
+                .length() - 1 : entryName.length();
+        int startIdx = (entryName.charAt(entryName.length() - 1) == '/') ? entryName
+                .lastIndexOf('/', endIdx - 1) + 1 : entryName.lastIndexOf('/',
+                endIdx) + 1;
+        return entryName.substring(startIdx, endIdx);
+    }
+
+    public synchronized boolean hasMoreElements() {
         return (m_nextEntries.size() != 0);
     }
 
-    public synchronized T nextElement()
-    {
-        if (m_nextEntries.size() == 0)
-        {
+    public synchronized T nextElement() {
+        if (m_nextEntries.size() == 0) {
             throw new NoSuchElementException("No more entries.");
         }
         T last = m_nextEntries.remove(0);
@@ -88,27 +84,22 @@ class EntryFilterEnumeration<T> implements Enumeration<T>
         return last;
     }
 
-    private void findNext()
-    {
+    private void findNext() {
         // This method filters the content entry enumeration, such that
         // it only displays the contents of the directory specified by
         // the path argument either recursively or not; much like using
         // "ls -R" or "ls" to list the contents of a directory, respectively.
-        if (m_enumeration == null)
-        {
+        if (m_enumeration == null) {
             return;
         }
-        if (m_nextEntries.size() == 0)
-        {
-            while (m_enumeration.hasMoreElements() && m_nextEntries.size() == 0)
-            {
+        if (m_nextEntries.size() == 0) {
+            while (m_enumeration.hasMoreElements() && m_nextEntries.size() == 0) {
                 // Get the current entry to determine if it should be filtered
                 // or not.
                 String entryName = (String) m_enumeration.nextElement();
                 // Check to see if the current entry is a descendent of the
                 // specified path.
-                if (!entryName.equals(m_path) && entryName.startsWith(m_path))
-                {
+                if (!entryName.equals(m_path) && entryName.startsWith(m_path)) {
                     // Cached entry URL. If we are returning URLs, we use this
                     // cached URL to avoid doing multiple URL lookups from a
                     // module
@@ -128,21 +119,18 @@ class EntryFilterEnumeration<T> implements Enumeration<T>
                     // doing a recursive match, we need to synthesize each
                     // matching
                     // subdirectory of the entry.
-                    if (dirSlashIdx >= 0)
-                    {
+                    if (dirSlashIdx >= 0) {
                         // Start synthesizing directories for the current entry
                         // at the subdirectory after the initial path.
                         int subDirSlashIdx = dirSlashIdx;
                         String dir;
-                        do
-                        {
+                        do {
                             // Calculate the subdirectory name.
                             dir = entryName.substring(0, subDirSlashIdx + 1);
                             // If we have not seen this directory before, then
                             // record
                             // it and potentially synthesize an entry for it.
-                            if (!m_dirEntries.contains(dir))
-                            {
+                            if (!m_dirEntries.contains(dir)) {
                                 // Record it.
                                 m_dirEntries.add(dir);
                                 // If the entry is actually a directory entry
@@ -152,30 +140,22 @@ class EntryFilterEnumeration<T> implements Enumeration<T>
                                 // otherwise,
                                 // synthesize an entry if it matches the file
                                 // pattern.
-                                if (entryName.length() != (subDirSlashIdx + 1))
-                                {
+                                if (entryName.length() != (subDirSlashIdx + 1)) {
                                     // See if the file pattern matches the last
                                     // element of the path.
                                     if (SimpleFilter.compareSubstring(
                                             m_filePattern,
-                                            getLastPathElement(dir)))
-                                    {
-                                        if (m_isURLValues)
-                                        {
+                                            getLastPathElement(dir))) {
+                                        if (m_isURLValues) {
                                             entryURL = (entryURL == null) ? m_revision
                                                     .getEntry(entryName)
                                                     : entryURL;
-                                            try
-                                            {
+                                            try {
                                                 m_nextEntries.add((T) new URL(
                                                         entryURL, "/" + dir));
+                                            } catch (MalformedURLException ex) {
                                             }
-                                            catch (MalformedURLException ex)
-                                            {
-                                            }
-                                        }
-                                        else
-                                        {
+                                        } else {
                                             m_nextEntries.add((T) dir);
                                         }
                                     }
@@ -197,21 +177,16 @@ class EntryFilterEnumeration<T> implements Enumeration<T>
                     // we need
                     // to check if it matches the file pattern.
                     if (m_recurse || (dirSlashIdx < 0)
-                            || (dirSlashIdx == entryName.length() - 1))
-                    {
+                            || (dirSlashIdx == entryName.length() - 1)) {
                         // See if the file pattern matches the last element of
                         // the path.
                         if (SimpleFilter.compareSubstring(m_filePattern,
-                                getLastPathElement(entryName)))
-                        {
-                            if (m_isURLValues)
-                            {
+                                getLastPathElement(entryName))) {
+                            if (m_isURLValues) {
                                 entryURL = (entryURL == null) ? m_revision
                                         .getEntry(entryName) : entryURL;
                                 m_nextEntries.add((T) entryURL);
-                            }
-                            else
-                            {
+                            } else {
                                 m_nextEntries.add((T) entryName);
                             }
                         }
@@ -219,15 +194,5 @@ class EntryFilterEnumeration<T> implements Enumeration<T>
                 }
             }
         }
-    }
-
-    private static String getLastPathElement(String entryName)
-    {
-        int endIdx = (entryName.charAt(entryName.length() - 1) == '/') ? entryName
-                .length() - 1 : entryName.length();
-        int startIdx = (entryName.charAt(entryName.length() - 1) == '/') ? entryName
-                .lastIndexOf('/', endIdx - 1) + 1 : entryName.lastIndexOf('/',
-                endIdx) + 1;
-        return entryName.substring(startIdx, endIdx);
     }
 }

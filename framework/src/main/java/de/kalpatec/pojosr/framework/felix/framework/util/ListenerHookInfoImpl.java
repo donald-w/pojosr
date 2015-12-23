@@ -19,62 +19,52 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.hooks.service.ListenerHook;
 
-public class ListenerHookInfoImpl implements ListenerHook.ListenerInfo
-{
+public class ListenerHookInfoImpl implements ListenerHook.ListenerInfo {
     private final BundleContext m_context;
     private final ServiceListener m_listener;
     private final String m_filter;
     private boolean m_removed;
 
     public ListenerHookInfoImpl(BundleContext context,
-            ServiceListener listener, String filter, boolean removed)
-    {
+                                ServiceListener listener, String filter, boolean removed) {
         m_context = context;
         m_listener = listener;
         m_filter = filter;
         m_removed = removed;
     }
 
-    public BundleContext getBundleContext()
-    {
+    public BundleContext getBundleContext() {
         return m_context;
     }
 
-    public String getFilter()
-    {
+    public String getFilter() {
         return m_filter;
     }
 
-    public boolean isRemoved()
-    {
+    public boolean isRemoved() {
         return m_removed;
     }
 
-    public boolean equals(Object obj)
-    {
-        if (obj == this)
-        {
+    public boolean equals(Object obj) {
+        if (obj == this) {
             return true;
         }
 
-        if (!(obj instanceof ListenerHookInfoImpl))
-        {
+        if (!(obj instanceof ListenerHookInfoImpl)) {
             return false;
         }
 
         ListenerHookInfoImpl other = (ListenerHookInfoImpl) obj;
         return other.m_listener == m_listener
                 && (m_filter == null ? other.m_filter == null : m_filter
-                        .equals(other.m_filter));
+                .equals(other.m_filter));
     }
 
-    public int hashCode()
-    {
+    public int hashCode() {
         int rc = 17;
 
         rc = 37 * rc + m_listener.hashCode();
-        if (m_filter != null)
-        {
+        if (m_filter != null) {
             rc = 37 * rc + m_filter.hashCode();
         }
         return rc;

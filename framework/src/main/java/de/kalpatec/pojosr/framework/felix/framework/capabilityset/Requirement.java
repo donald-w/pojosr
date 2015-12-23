@@ -17,8 +17,7 @@ package de.kalpatec.pojosr.framework.felix.framework.capabilityset;
 
 import java.util.List;
 
-public interface Requirement
-{
+public interface Requirement {
     String getNamespace();
 
     SimpleFilter getFilter();

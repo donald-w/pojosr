@@ -12,8 +12,8 @@ public class LogServiceImpl implements LogService {
 
     private Logger logger = LoggerFactory.getLogger(LogService.class);
 
-        @Override
-        public void log(int level, String message) {
+    @Override
+    public void log(int level, String message) {
         switch (level) {
             case LogService.LOG_ERROR:
                 logger.error(message);
@@ -33,29 +33,29 @@ public class LogServiceImpl implements LogService {
         }
     }
 
-        @Override
-        public void log(int level, String message, Throwable exception) {
+    @Override
+    public void log(int level, String message, Throwable exception) {
         switch (level) {
             case LogService.LOG_ERROR:
-                logger.error(message,exception);
+                logger.error(message, exception);
                 break;
             case LogService.LOG_WARNING:
-                logger.warn(message,exception);
+                logger.warn(message, exception);
                 break;
             case LogService.LOG_INFO:
-                logger.info(message,exception);
+                logger.info(message, exception);
                 break;
             case LogService.LOG_DEBUG:
-                logger.debug(message,exception);
+                logger.debug(message, exception);
                 break;
             default:
-                logger.info(message,exception);
+                logger.info(message, exception);
                 break;
         }
     }
 
-        @Override
-        public void log(ServiceReference sr, int level, String message) {
+    @Override
+    public void log(ServiceReference sr, int level, String message) {
         switch (level) {
             case LogService.LOG_ERROR:
                 logger.error(message);
@@ -75,8 +75,8 @@ public class LogServiceImpl implements LogService {
         }
     }
 
-        @Override
-        public void log(ServiceReference sr, int level, String message, Throwable exception){
+    @Override
+    public void log(ServiceReference sr, int level, String message, Throwable exception) {
         switch (level) {
             case LogService.LOG_ERROR:
                 logger.error(message, exception);

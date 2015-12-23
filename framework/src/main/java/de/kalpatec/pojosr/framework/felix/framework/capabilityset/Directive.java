@@ -15,29 +15,24 @@
  */
 package de.kalpatec.pojosr.framework.felix.framework.capabilityset;
 
-public class Directive
-{
+public class Directive {
     private final String m_name;
     private final Object m_value;
 
-    public Directive(String name, Object value)
-    {
+    public Directive(String name, Object value) {
         m_name = name;
         m_value = value;
     }
 
-    public String getName()
-    {
+    public String getName() {
         return m_name;
     }
 
-    public Object getValue()
-    {
+    public Object getValue() {
         return m_value;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return m_name + "=" + m_value;
     }
 }

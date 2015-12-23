@@ -15,39 +15,34 @@
  */
 package de.kalpatec.pojosr.framework.launch;
 
-import java.io.InputStream;
-import java.net.URL;
-import java.util.*;
+import de.kalpatec.pojosr.framework.felix.framework.util.MapToDictionary;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
-
-import de.kalpatec.pojosr.framework.felix.framework.util.MapToDictionary;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ClasspathScanner
-{
-	private static final Logger logger = LoggerFactory.getLogger(ClasspathScanner.class);
+import java.io.InputStream;
+import java.net.URL;
+import java.util.*;
 
-    public List<BundleDescriptor> scanForBundles() throws Exception
-    {
+public class ClasspathScanner {
+    private static final Logger logger = LoggerFactory.getLogger(ClasspathScanner.class);
+
+    public List<BundleDescriptor> scanForBundles() throws Exception {
         return scanForBundles(null, null);
     }
 
-    public List<BundleDescriptor> scanForBundles(ClassLoader loader) throws Exception
-    {
+    public List<BundleDescriptor> scanForBundles(ClassLoader loader) throws Exception {
         return scanForBundles(null, loader);
     }
 
     public List<BundleDescriptor> scanForBundles(String filterString)
-            throws Exception
-    {
+            throws Exception {
         return scanForBundles(filterString, null);
     }
 
     public List<BundleDescriptor> scanForBundles(String filterString, ClassLoader loader)
-        throws Exception
-    {
+            throws Exception {
         logger.info("Starting classpath scan");
         Filter filter = (filterString != null) ? FrameworkUtil.createFilter(filterString) : null;
 
@@ -55,14 +50,12 @@ public class ClasspathScanner
 
         loader = (loader != null) ? loader : getClass().getClassLoader();
 
-		List<URL> manifestUrls = Collections.list(loader.getResources("META-INF/MANIFEST.MF"));
+        List<URL> manifestUrls = Collections.list(loader.getResources("META-INF/MANIFEST.MF"));
 
-        for (URL manifestURL: manifestUrls)
-        {
+        for (URL manifestURL : manifestUrls) {
             Map<String, String> headers = getHeaders(manifestURL);
 
-            if ((filter == null) || filter.match(new MapToDictionary(headers)))
-            {
+            if ((filter == null) || filter.match(new MapToDictionary(headers))) {
                 bundles.add(new BundleDescriptor(loader, getParentURL(manifestURL),
                         headers));
             }
@@ -76,15 +69,14 @@ public class ClasspathScanner
 
         byte[] bytes = new byte[1024 * 1024 * 2]; // TODO - remove this arbitrary limit
 
-        try (InputStream input = manifestURL.openStream())
-        {
+        try (InputStream input = manifestURL.openStream()) {
             int size = 0;
             for (int i = input.read(bytes); i != -1; i = input.read(bytes, size, bytes.length - size)) {
                 size += i;
                 if (size == bytes.length) {
-                     byte[] tmp = new byte[size * 2];
-                     System.arraycopy(bytes, 0, tmp, 0, bytes.length);
-                     bytes = tmp;
+                    byte[] tmp = new byte[size * 2];
+                    System.arraycopy(bytes, 0, tmp, 0, bytes.length);
+                    bytes = tmp;
                 }
             }
 
@@ -99,65 +91,49 @@ public class ClasspathScanner
             int last = 0;
             int current = 0;
 
-            for (int i = 0; i < size; i++)
-            {
+            for (int i = 0; i < size; i++) {
                 // skip \r and \n if it is follows by another \n
                 // (we catch the blank line case in the next iteration)
-                if (bytes[i] == '\r')
-                {
-                    if ((i + 1 < size) && (bytes[i + 1] == '\n'))
-                    {
+                if (bytes[i] == '\r') {
+                    if ((i + 1 < size) && (bytes[i + 1] == '\n')) {
                         continue;
                     }
                 }
-                if (bytes[i] == '\n')
-                {
-                    if ((i + 1 < size) && (bytes[i + 1] == ' '))
-                    {
+                if (bytes[i] == '\n') {
+                    if ((i + 1 < size) && (bytes[i + 1] == ' ')) {
                         i++;
                         continue;
                     }
                 }
                 // If we don't have a key yet and see the first : we parse it as the key
                 // and skip the :<blank> that follows it.
-                if ((key == null) && (bytes[i] == ':'))
-                {
+                if ((key == null) && (bytes[i] == ':')) {
                     key = new String(bytes, last, (current - last), "UTF-8");
-                    if ((i + 1 < size) && (bytes[i + 1] == ' '))
-                    {
+                    if ((i + 1 < size) && (bytes[i + 1] == ' ')) {
                         last = current + 1;
                         continue;
-                    }
-                    else
-                    {
+                    } else {
                         throw new Exception(
-                            "Manifest error: Missing space separator - " + key);
+                                "Manifest error: Missing space separator - " + key);
                     }
                 }
                 // if we are at the end of a line
-                if (bytes[i] == '\n')
-                {
+                if (bytes[i] == '\n') {
                     // and it is a blank line stop parsing (main attributes are done)
-                    if ((last == current) && (key == null))
-                    {
+                    if ((last == current) && (key == null)) {
                         break;
                     }
                     // Otherwise, parse the value and add it to the map (we throw an
                     // exception if we don't have a key or the key already exist.
                     String value = new String(bytes, last, (current - last), "UTF-8");
-                    if (key == null)
-                    {
+                    if (key == null) {
                         throw new Exception("Manifest error: Missing attribute name - " + value);
-                    }
-                    else if (headers.put(key, value) != null)
-                    {
+                    } else if (headers.put(key, value) != null) {
                         throw new Exception("Manifest error: Duplicate attribute name - " + key);
                     }
                     last = current;
                     key = null;
-                }
-                else
-                {
+                } else {
                     // write back the byte if it needs to be included in the key or the value.
                     bytes[current++] = bytes[i];
                 }
@@ -166,8 +142,7 @@ public class ClasspathScanner
         return headers;
     }
 
-    private URL getParentURL(URL url) throws Exception
-    {
+    private URL getParentURL(URL url) throws Exception {
         String externalForm = url.toExternalForm();
         return new URL(externalForm.substring(0, externalForm.length()
                 - "META-INF/MANIFEST.MF".length()));

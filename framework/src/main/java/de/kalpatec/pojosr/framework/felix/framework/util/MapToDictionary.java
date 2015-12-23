@@ -15,65 +15,57 @@
  */
 package de.kalpatec.pojosr.framework.felix.framework.util;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Map;
 
 /**
  * This is a simple class that implements a <tt>Dictionary</tt> from a
  * <tt>Map</tt>. The resulting dictionary is immutable.
  **/
-public class MapToDictionary extends Dictionary
-{
+public class MapToDictionary extends Dictionary {
     /**
      * Map source.
      **/
     private Map m_map = null;
 
-    public MapToDictionary(Map map)
-    {
-        if (map == null)
-        {
+    public MapToDictionary(Map map) {
+        if (map == null) {
             throw new IllegalArgumentException("Source map cannot be null.");
         }
         m_map = map;
     }
 
-    public Enumeration elements()
-    {
+    public Enumeration elements() {
         return Collections.enumeration(m_map.values());
     }
 
-    public Object get(Object key)
-    {
+    public Object get(Object key) {
         return m_map.get(key);
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return m_map.isEmpty();
     }
 
-    public Enumeration keys()
-    {
+    public Enumeration keys() {
         return Collections.enumeration(m_map.keySet());
     }
 
-    public Object put(Object key, Object value)
-    {
+    public Object put(Object key, Object value) {
         throw new UnsupportedOperationException();
     }
 
-    public Object remove(Object key)
-    {
+    public Object remove(Object key) {
         throw new UnsupportedOperationException();
     }
 
-    public int size()
-    {
+    public int size() {
         return m_map.size();
     }
 
-    public String toString()
-    {
+    public String toString() {
         return m_map.toString();
     }
 }

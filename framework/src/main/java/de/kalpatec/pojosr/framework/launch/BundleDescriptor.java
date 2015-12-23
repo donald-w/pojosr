@@ -18,37 +18,31 @@ package de.kalpatec.pojosr.framework.launch;
 import java.net.URL;
 import java.util.Map;
 
-public class BundleDescriptor
-{
+public class BundleDescriptor {
     private final ClassLoader m_loader;
     private final URL m_url;
     private final Map<String, String> m_headers;
 
     public BundleDescriptor(ClassLoader loader, URL url,
-            Map<String, String> headers)
-    {
+                            Map<String, String> headers) {
         m_loader = loader;
         m_url = url;
         m_headers = headers;
     }
 
-    public ClassLoader getClassLoader()
-    {
+    public ClassLoader getClassLoader() {
         return m_loader;
     }
 
-    public URL getUrl()
-    {
+    public URL getUrl() {
         return m_url;
     }
 
-    public String toString()
-    {
+    public String toString() {
         return m_url.toExternalForm();
     }
 
-    public Map<String, String> getHeaders()
-    {
+    public Map<String, String> getHeaders() {
         return m_headers;
     }
 }
