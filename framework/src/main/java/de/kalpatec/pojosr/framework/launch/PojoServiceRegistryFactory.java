@@ -18,9 +18,7 @@ package de.kalpatec.pojosr.framework.launch;
 import java.util.Map;
 
 public interface PojoServiceRegistryFactory {
-    public static final String BUNDLE_DESCRIPTORS = PojoServiceRegistry.class
-            .getName().toLowerCase() + ".bundles";
+    String BUNDLE_DESCRIPTORS = PojoServiceRegistry.class.getName().toLowerCase() + ".bundles";
 
-    public PojoServiceRegistry newPojoServiceRegistry(Map configuration)
-            throws Exception;
+    PojoServiceRegistry newPojoServiceRegistry(Map configuration) throws Exception;
 }
