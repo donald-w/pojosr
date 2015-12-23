@@ -19,7 +19,7 @@
         <groupId>com.donaldw.pojosr</groupId>
         <artifactId>project</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
