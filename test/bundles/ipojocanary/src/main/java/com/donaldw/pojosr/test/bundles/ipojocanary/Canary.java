@@ -17,11 +17,11 @@ public class Canary {
 
     @Validate
     public void validate() {
-        logger.info("Here I am");
+        logger.info("Validating");
     }
 
     @Invalidate
     public void invalidate() {
-        logger.info("There I was");
+        logger.info("Invalidating");
     }
 }
