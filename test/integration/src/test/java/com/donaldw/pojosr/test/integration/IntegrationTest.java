@@ -1,5 +1,6 @@
 package com.donaldw.pojosr.test.integration;
 
+import de.kalpatec.pojosr.framework.launch.BundleDescriptor;
 import de.kalpatec.pojosr.framework.launch.ClasspathScanner;
 import de.kalpatec.pojosr.framework.launch.PojoServiceRegistry;
 import de.kalpatec.pojosr.framework.launch.PojoServiceRegistryFactory;
@@ -8,6 +9,7 @@ import org.junit.Test;
 import org.osgi.framework.Bundle;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 
@@ -18,7 +20,7 @@ public class IntegrationTest {
 
     @Test
     public void testLaunch() throws Exception {
-        Map config = new HashMap();
+        Map<String, List<BundleDescriptor>> config = new HashMap<>();
         config.put(PojoServiceRegistryFactory.BUNDLE_DESCRIPTORS, new ClasspathScanner().scanForBundles());
 
         ServiceLoader<PojoServiceRegistryFactory> loader = ServiceLoader.load(PojoServiceRegistryFactory.class);
@@ -32,7 +34,7 @@ public class IntegrationTest {
 
     @Test
     public void testLaunchFiltered() throws Exception {
-        Map config = new HashMap();
+        Map<String, List<BundleDescriptor>> config = new HashMap<>();
         config.put(PojoServiceRegistryFactory.BUNDLE_DESCRIPTORS, new ClasspathScanner().scanForBundles("(!(Bundle-SymbolicName=com.donaldw.pojosr.test.bundles.bundle2))"));
 
         ServiceLoader<PojoServiceRegistryFactory> loader = ServiceLoader.load(PojoServiceRegistryFactory.class);
