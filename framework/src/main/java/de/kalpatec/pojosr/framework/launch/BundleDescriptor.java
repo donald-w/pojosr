@@ -23,8 +23,7 @@ public class BundleDescriptor {
     private final URL url;
     private final Map<String, String> headers;
 
-    public BundleDescriptor(ClassLoader classLoader, URL url,
-                            Map<String, String> headers) {
+    public BundleDescriptor(ClassLoader classLoader, URL url, Map<String, String> headers) {
         this.classLoader = classLoader;
         this.url = url;
         this.headers = headers;
