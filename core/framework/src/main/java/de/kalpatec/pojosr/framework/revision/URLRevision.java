@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework;
+package de.kalpatec.pojosr.framework.revision;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 
-class URLRevision extends Revision {
+public class URLRevision implements Revision {
     private final URL m_url;
     private final long m_lastModified;
 

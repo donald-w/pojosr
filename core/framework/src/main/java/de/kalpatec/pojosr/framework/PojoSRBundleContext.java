@@ -162,8 +162,7 @@ class PojoSRBundleContext implements BundleContext {
                 throw new InvalidSyntaxException(ex.getMessage(), filter);
             }
         }
-        List<ServiceReference> result = m_reg.getServiceReferences(clazz,
-                simple);
+        List<ServiceReference> result = m_reg.getServiceReferences(clazz, simple);
         return result.isEmpty() ? null : result
                 .toArray(new ServiceReference[result.size()]);
     }

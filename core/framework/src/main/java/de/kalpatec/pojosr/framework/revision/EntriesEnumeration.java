@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework;
+package de.kalpatec.pojosr.framework.revision;
 
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;

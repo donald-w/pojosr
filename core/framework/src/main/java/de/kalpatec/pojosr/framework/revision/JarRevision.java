@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework;
+package de.kalpatec.pojosr.framework.revision;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,7 +24,7 @@ import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
-class JarRevision extends Revision {
+public class JarRevision implements Revision {
     private final long m_lastModified;
     private final JarFile m_jar;
     private final URL m_url;

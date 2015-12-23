@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework;
+package de.kalpatec.pojosr.framework.revision;
 
 import java.net.URL;
 import java.util.Enumeration;
 
-abstract class Revision {
-    public abstract long getLastModified();
+public interface Revision {
+    long getLastModified();
 
-    public abstract URL getEntry(String entryName);
+    URL getEntry(String entryName);
 
-    public abstract Enumeration<String> getEntries();
+    Enumeration<String> getEntries();
 }

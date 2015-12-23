@@ -19,6 +19,7 @@ import com.donaldw.pojosr.felix.framework.ServiceRegistry;
 import com.donaldw.pojosr.felix.framework.util.EventDispatcher;
 import com.donaldw.pojosr.felix.framework.util.MapToDictionary;
 import com.donaldw.pojosr.felix.framework.util.StringMap;
+import de.kalpatec.pojosr.framework.revision.Revision;
 import org.osgi.framework.*;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.wiring.*;

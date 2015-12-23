@@ -16,12 +16,13 @@
 package de.kalpatec.pojosr.framework;
 
 import com.donaldw.pojosr.felix.framework.capabilityset.SimpleFilter;
+import de.kalpatec.pojosr.framework.revision.Revision;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
-class EntryFilterEnumeration<T> implements Enumeration<T> {
+public class EntryFilterEnumeration<T> implements Enumeration<T> {
     private final Enumeration<String> m_enumeration;
     private final Revision m_revision;
     private final String m_path;

@@ -1,6 +1,7 @@
 package de.kalpatec.pojosr.framework.services;
 
 import de.kalpatec.pojosr.framework.PojoSR;
+import de.kalpatec.pojosr.framework.PojoSRInternals;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.packageadmin.ExportedPackage;
@@ -16,10 +17,10 @@ public class PackageAdminImpl implements PackageAdmin {
     private static final Logger logger = LoggerFactory.getLogger(PackageAdminImpl.class);
 
     private final Bundle b;
-    private PojoSR pojoSR;
+    private PojoSRInternals pojoSRInternals;
 
-    public PackageAdminImpl(PojoSR pojoSR, Bundle b) {
-        this.pojoSR = pojoSR;
+    public PackageAdminImpl(PojoSRInternals pojoSRInternals, Bundle b) {
+        this.pojoSRInternals = pojoSRInternals;
         this.b = b;
     }
 
@@ -29,7 +30,7 @@ public class PackageAdminImpl implements PackageAdmin {
     }
 
     public void refreshPackages(Bundle[] bundles) {
-        pojoSR.m_dispatcher.fireFrameworkEvent(new FrameworkEvent(
+        pojoSRInternals.m_dispatcher.fireFrameworkEvent(new FrameworkEvent(
                 FrameworkEvent.PACKAGES_REFRESHED, b, null));
     }
 
@@ -65,7 +66,7 @@ public class PackageAdminImpl implements PackageAdmin {
 
     public Bundle[] getBundles(String symbolicName,
                                String versionRange) {
-        Bundle result = pojoSR.m_symbolicNameToBundle.get((symbolicName != null) ? symbolicName.trim() : symbolicName);
+        Bundle result = pojoSRInternals.m_symbolicNameToBundle.get((symbolicName != null) ? symbolicName.trim() : symbolicName);
         if (result != null) {
             return new Bundle[]{result};
         }
@@ -77,6 +78,6 @@ public class PackageAdminImpl implements PackageAdmin {
     }
 
     public Bundle getBundle(Class clazz) {
-        return pojoSR.m_context.getBundle();
+        return pojoSRInternals.m_context.getBundle();
     }
 }
