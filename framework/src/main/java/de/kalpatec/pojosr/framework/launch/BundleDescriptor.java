@@ -19,30 +19,30 @@ import java.net.URL;
 import java.util.Map;
 
 public class BundleDescriptor {
-    private final ClassLoader m_loader;
-    private final URL m_url;
-    private final Map<String, String> m_headers;
+    private final ClassLoader classLoader;
+    private final URL url;
+    private final Map<String, String> headers;
 
-    public BundleDescriptor(ClassLoader loader, URL url,
+    public BundleDescriptor(ClassLoader classLoader, URL url,
                             Map<String, String> headers) {
-        m_loader = loader;
-        m_url = url;
-        m_headers = headers;
+        this.classLoader = classLoader;
+        this.url = url;
+        this.headers = headers;
     }
 
     public ClassLoader getClassLoader() {
-        return m_loader;
+        return this.classLoader;
     }
 
     public URL getUrl() {
-        return m_url;
+        return this.url;
     }
 
     public String toString() {
-        return m_url.toExternalForm();
+        return this.url.toExternalForm();
     }
 
     public Map<String, String> getHeaders() {
-        return m_headers;
+        return this.headers;
     }
 }
