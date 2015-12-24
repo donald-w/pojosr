@@ -15,7 +15,7 @@
  */
 package de.kalpatec.pojosr.framework.launch;
 
-import com.donaldw.pojosr.felix.framework.util.MapToDictionary;
+import io.mypojo.felix.framework.util.MapToDictionary;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;

@@ -15,9 +15,9 @@
  */
 package de.kalpatec.pojosr.framework;
 
-import com.donaldw.pojosr.felix.framework.ServiceRegistry;
-import com.donaldw.pojosr.felix.framework.capabilityset.SimpleFilter;
-import com.donaldw.pojosr.felix.framework.util.EventDispatcher;
+import io.mypojo.felix.framework.ServiceRegistry;
+import io.mypojo.felix.framework.capabilityset.SimpleFilter;
+import io.mypojo.felix.framework.util.EventDispatcher;
 import org.osgi.framework.*;
 
 import java.io.File;

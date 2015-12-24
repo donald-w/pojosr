@@ -15,10 +15,10 @@
  */
 package de.kalpatec.pojosr.framework;
 
-import com.donaldw.pojosr.felix.framework.ServiceRegistry;
-import com.donaldw.pojosr.felix.framework.util.EventDispatcher;
-import com.donaldw.pojosr.felix.framework.util.MapToDictionary;
-import com.donaldw.pojosr.felix.framework.util.StringMap;
+import io.mypojo.felix.framework.ServiceRegistry;
+import io.mypojo.felix.framework.util.EventDispatcher;
+import io.mypojo.felix.framework.util.MapToDictionary;
+import io.mypojo.felix.framework.util.StringMap;
 import de.kalpatec.pojosr.framework.revision.Revision;
 import org.osgi.framework.*;
 import org.osgi.framework.startlevel.BundleStartLevel;

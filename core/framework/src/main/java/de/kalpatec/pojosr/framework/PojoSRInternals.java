@@ -1,7 +1,7 @@
 package de.kalpatec.pojosr.framework;
 
-import com.donaldw.pojosr.felix.framework.ServiceRegistry;
-import com.donaldw.pojosr.felix.framework.util.EventDispatcher;
+import io.mypojo.felix.framework.ServiceRegistry;
+import io.mypojo.felix.framework.util.EventDispatcher;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;

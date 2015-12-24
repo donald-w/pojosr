@@ -3,17 +3,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.donaldw.pojosr</groupId>
+        <groupId>io.mypojo</groupId>
         <artifactId>project</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
 
-    <groupId>com.donaldw.pojosr.test.bundles</groupId>
+    <groupId>io.mypojo.test.bundles</groupId>
     <artifactId>diagnostic</artifactId>
     <packaging>bundle</packaging>
-    <name>PojoSR :: Test :: Bundles :: Diagnostic</name>
+    <name>myPOJO :: Test :: Bundles :: Diagnostic</name>
 
     <dependencies>
         <dependency>

@@ -16,7 +16,7 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-        <groupId>com.donaldw.pojosr</groupId>
+        <groupId>io.mypojo</groupId>
         <artifactId>project</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
@@ -24,8 +24,8 @@
 
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
-    <name>PojoSR :: Framework :: Felix Guts</name>
-    <groupId>com.donaldw.pojosr</groupId>
+    <name>myPOJO :: Framework :: Felix Guts</name>
+    <groupId>io.mypojo</groupId>
     <artifactId>felix-guts</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <description>A service registry that enables OSGi style service registry programs without using an OSGi framework.

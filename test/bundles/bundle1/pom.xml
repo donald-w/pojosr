@@ -3,17 +3,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.donaldw.pojosr</groupId>
+        <groupId>io.mypojo</groupId>
         <artifactId>project</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.donaldw.pojosr.test.bundles</groupId>
+    <groupId>io.mypojo.test.bundles</groupId>
     <artifactId>bundle1</artifactId>
     <packaging>bundle</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>PojoSR :: Test :: Bundles :: Bundle 1</name>
+    <name>myPOJO :: Test :: Bundles :: Bundle 1</name>
 
     <dependencies>
         <dependency>
@@ -40,7 +40,7 @@
                 <configuration>
                     <obrRepository>NONE</obrRepository>
                     <instructions>
-                        <Bundle-Activator>com.donaldw.pojosr.test.bundles.bundle1.Activator</Bundle-Activator>
+                        <Bundle-Activator>io.mypojo.test.bundles.bundle1.Activator</Bundle-Activator>
                     </instructions>
                 </configuration>
             </plugin>

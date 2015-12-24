@@ -4,21 +4,21 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.donaldw.pojosr</groupId>
+        <groupId>io.mypojo</groupId>
         <artifactId>project</artifactId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>com.donaldw.pojosr</groupId>
+    <groupId>io.mypojo</groupId>
     <artifactId>launcher</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>PojoSR :: Launcher</name>
+    <name>myPOJO :: Launcher</name>
 
     <dependencies>
         <dependency>
-            <groupId>com.donaldw.pojosr</groupId>
+            <groupId>io.mypojo</groupId>
             <artifactId>framework</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

@@ -10,12 +10,12 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.donaldw.pojosr</groupId>
+    <groupId>io.mypojo</groupId>
     <artifactId>project</artifactId>
     <packaging>pom</packaging>
     <version>0.0.1-SNAPSHOT</version>
-    <name>PojoSR</name>
-    <url>https://github.com/donald-w/pojosr</url>
+    <name>mypojo</name>
+    <url>http://mypojo.io</url>
 
     <licenses>
         <license>
@@ -35,9 +35,9 @@
     </properties>
 
     <scm>
-        <url>https://github.com/donald-w/pojosr</url>
-        <connection>scm:git:https://github.com/donald-w/pojosr.git</connection>
-        <developerConnection>scm:git:https://github.com/donald-w/pojosr.git</developerConnection>
+        <url>https://github.com/donald-w/mypojo</url>
+        <connection>scm:git:https://github.com/donald-w/mypojo.git</connection>
+        <developerConnection>scm:git:https://github.com/donald-w/mypojo.git</developerConnection>
     </scm>
 
     <modules>

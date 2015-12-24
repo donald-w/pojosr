@@ -1,16 +1,16 @@
-# pojosr
+# myPOJO
+
+Based on pojosr by Karl Paul
 
 Originally imported from code.google.com/p/pojosr
 
-The project there looks to have been abandoned
-
-**This fork is a work in progress.**
+**This is a work in progress.**
 
 **Do not use...**
 
 Continuous build status:
 
-[![Build Status](https://travis-ci.org/donald-w/pojosr.svg?branch=master)](https://travis-ci.org/donald-w/pojosr)
+[![Build Status](https://travis-ci.org/donald-w/mypojo.svg?branch=master)](https://travis-ci.org/donald-w/mypojo)
 
 * Remove all printStackTrace
 * Review Felix code / understand its heritage
