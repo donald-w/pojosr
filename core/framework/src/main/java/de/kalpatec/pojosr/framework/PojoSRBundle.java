@@ -30,6 +30,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
+@SuppressWarnings("PackageAccessibility")
 class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
     private final Revision m_revision;
     private final Map<String, String> m_manifest;

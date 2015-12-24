@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.*;
 
+@SuppressWarnings("PackageAccessibility")
 class PojoSRBundleContext implements BundleContext {
     private final Bundle m_bundle;
     private final ServiceRegistry m_reg;

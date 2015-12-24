@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
+@SuppressWarnings("PackageAccessibility")
 public class EntryFilterEnumeration<T> implements Enumeration<T> {
     private final Enumeration<String> m_enumeration;
     private final Revision m_revision;
