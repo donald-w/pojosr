@@ -25,6 +25,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
 
+@SuppressWarnings("PackageAccessibility")
 public class ClasspathScanner {
     private static final Logger logger = LoggerFactory.getLogger(ClasspathScanner.class);
 
