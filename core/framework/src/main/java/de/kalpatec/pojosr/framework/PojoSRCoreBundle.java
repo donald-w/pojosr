@@ -6,35 +6,53 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 class PojoSRCoreBundle extends PojoSRBundle {
     private final Logger logger = LoggerFactory.getLogger(PojoSRCoreBundle.class);
 
     private final PojoSRInternals internals;
 
-    public PojoSRCoreBundle(PojoSR pojoSR, PojoSRInternals internals, Map<String, String> headers, int pojoSRBundleId) {
-        super(new Revision() {
+    public static PojoSRCoreBundle newPojoSRCoreBundle(PojoSRInternals internals, int pojoSRBundleId) {
 
-            @Override
-            public long getLastModified() {
-                return System.currentTimeMillis();
-            }
+        Map<String, String> headers = new HashMap<>();
+        headers.put(Constants.BUNDLE_SYMBOLICNAME,"de.kalpatec.pojosr.framework");
+        headers.put(Constants.BUNDLE_VERSION, "0.0.1-SNAPSHOT");
+        headers.put(Constants.BUNDLE_NAME, "System Bundle");
+        headers.put(Constants.BUNDLE_MANIFESTVERSION, "2");
+        headers.put(Constants.BUNDLE_VENDOR, "kalpatec");
 
-            @Override
-            public Enumeration getEntries() {
-                return Collections.emptyEnumeration();
-            }
+        return new PojoSRCoreBundle(PojoSRCoreBundle.class.getClassLoader(), internals, headers, pojoSRBundleId);
+    }
 
-            @Override
-            public URL getEntry(String entryName) {
-                return getClass().getClassLoader().getResource(entryName);
-            }
-        }, headers, new Version(0, 0, 1), "file:pojosr", internals.m_reg, internals.m_dispatcher, null, pojoSRBundleId, "de.kalpatec.pojosr.framework", internals.m_bundles, pojoSR.getClass()
-                .getClassLoader(), internals.bundleConfig);
+    private PojoSRCoreBundle(ClassLoader classLoader, PojoSRInternals internals, Map<String, String> headers, int pojoSRBundleId) {
+            super(new Revision() {
+                @Override
+                public long getLastModified() {
+                    return System.currentTimeMillis();
+                }
+
+                @Override
+                public Enumeration getEntries() {
+                    return Collections.emptyEnumeration();
+                }
+
+                @Override
+                public URL getEntry(String entryName) {
+                    return getClass().getClassLoader().getResource(entryName);
+                }
+            },
+                headers,
+                new Version(0, 0, 1),
+                "file:pojosr",
+                internals.m_reg,
+                internals.m_dispatcher,
+                null,
+                pojoSRBundleId,
+                "de.kalpatec.pojosr.framework",
+                internals.m_bundles,
+                classLoader,
+                internals.bundleConfig);
 
         this.internals = internals;
     }

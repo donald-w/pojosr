@@ -51,13 +51,7 @@ public class PojoSR implements PojoServiceRegistry {
 
         internals.bundleConfig.putAll(config);
 
-        final Map<String, String> headers = new HashMap<>();
-        headers.put(Constants.BUNDLE_SYMBOLICNAME,"de.kalpatec.pojosr.framework");
-        headers.put(Constants.BUNDLE_VERSION, "0.0.1-SNAPSHOT");
-        headers.put(Constants.BUNDLE_NAME, "System Bundle");
-        headers.put(Constants.BUNDLE_MANIFESTVERSION, "2");
-        headers.put(Constants.BUNDLE_VENDOR, "kalpatec");
-        Bundle b = new PojoSRCoreBundle(this, internals,headers, 1); // we must be bundle 1, as bundle 0 should be osgi.core
+        Bundle b = PojoSRCoreBundle.newPojoSRCoreBundle(internals, 1); // we must be bundle 1, as bundle 0 should be osgi.core
         internals.m_symbolicNameToBundle.put(b.getSymbolicName(), b);
 
         b.start();
@@ -70,8 +64,8 @@ public class PojoSR implements PojoServiceRegistry {
 
         internals.m_context = b.getBundleContext();
 
-        List<BundleDescriptor> scan = (List<BundleDescriptor>) config
-                .get(PojoServiceRegistryFactory.BUNDLE_DESCRIPTORS);
+        @SuppressWarnings("unchecked")
+        List<BundleDescriptor> scan = (List<BundleDescriptor>) config.get(PojoServiceRegistryFactory.BUNDLE_DESCRIPTORS);
 
         if (scan != null) {
             logger.info("Starting bundles");
