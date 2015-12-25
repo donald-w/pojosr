@@ -14,13 +14,12 @@ class PojoSRCoreBundle extends PojoSRBundle {
     private final PojoSRInternals internals;
 
     public static PojoSRCoreBundle newPojoSRCoreBundle(PojoSRInternals internals, int pojoSRBundleId) {
-
         Map<String, String> headers = new HashMap<>();
         headers.put(Constants.BUNDLE_SYMBOLICNAME,"io.mypojo.framework");
         headers.put(Constants.BUNDLE_VERSION, "0.0.1-SNAPSHOT");
         headers.put(Constants.BUNDLE_NAME, "System Bundle");
         headers.put(Constants.BUNDLE_MANIFESTVERSION, "2");
-        headers.put(Constants.BUNDLE_VENDOR, "kalpatec");
+        headers.put(Constants.BUNDLE_VENDOR, "io.mypojo");
 
         return new PojoSRCoreBundle(PojoSRCoreBundle.class.getClassLoader(), internals, headers, pojoSRBundleId);
     }
@@ -65,10 +64,8 @@ class PojoSRCoreBundle extends PojoSRBundle {
         internals.m_dispatcher.startDispatching();
         m_state = STARTING;
 
-        internals.m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STARTING,
-                this));
-        m_context = new PojoSRBundleContext(this, internals.m_reg, internals.m_dispatcher,
-                internals.m_bundles, internals.bundleConfig);
+        internals.m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STARTING, this));
+        m_context = new PojoSRBundleContext(this, internals.m_reg, internals.m_dispatcher, internals.m_bundles, internals.bundleConfig);
         int i = 0;
         for (Bundle b : internals.m_bundles.values()) {
             i++;
@@ -81,9 +78,7 @@ class PojoSRCoreBundle extends PojoSRBundle {
             }
         }
         m_state = ACTIVE;
-        internals.m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STARTED,
-                this));
-
+        internals.m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STARTED, this));
         internals.m_dispatcher.fireFrameworkEvent(new FrameworkEvent(FrameworkEvent.STARTED, this, null));
         super.start();
     }
@@ -102,8 +97,7 @@ class PojoSRCoreBundle extends PojoSRBundle {
         Runnable r = new Runnable() {
 
             public void run() {
-                internals.m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STOPPING,
-                        systemBundle));
+                internals.m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STOPPING, systemBundle));
                 for (Bundle b : internals.m_bundles.values()) {
                     try {
                         if (b != systemBundle) {
@@ -113,8 +107,7 @@ class PojoSRCoreBundle extends PojoSRBundle {
                         t.printStackTrace();
                     }
                 }
-                internals.m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STOPPED,
-                        systemBundle));
+                internals.m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STOPPED, systemBundle));
                 m_state = RESOLVED;
                 internals.m_dispatcher.stopDispatching();
             }

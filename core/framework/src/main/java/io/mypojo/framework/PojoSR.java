@@ -19,6 +19,7 @@ import io.mypojo.framework.launch.BundleDescriptor;
 import io.mypojo.framework.launch.ClasspathScanner;
 import io.mypojo.framework.launch.PojoServiceRegistry;
 import io.mypojo.framework.launch.PojoServiceRegistryFactory;
+import io.mypojo.framework.launch.impl.PojoServiceRegistryFactoryImpl;
 import io.mypojo.framework.revision.DirRevision;
 import io.mypojo.framework.revision.JarRevision;
 import io.mypojo.framework.revision.Revision;

@@ -2,6 +2,7 @@ package io.mypojo.framework;
 
 import io.mypojo.framework.launch.ClasspathScanner;
 import io.mypojo.framework.launch.PojoServiceRegistry;
+import io.mypojo.framework.launch.impl.PojoServiceRegistryFactoryImpl;
 import org.osgi.framework.*;
 import org.osgi.framework.launch.Framework;
 
@@ -14,7 +15,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-class PojoSRFrameworkImpl implements Framework {
+public class PojoSRFrameworkImpl implements Framework {
     private final String m_filter;
     private volatile Bundle m_bundle = null;
     private volatile PojoServiceRegistry m_reg = null;
