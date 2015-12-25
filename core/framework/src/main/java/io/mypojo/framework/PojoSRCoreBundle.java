@@ -104,7 +104,7 @@ class PojoSRCoreBundle extends PojoSRBundle {
                             b.stop();
                         }
                     } catch (Throwable t) {
-                        t.printStackTrace();
+                        logger.warn("Throwable caught on shutdown: ", t);
                     }
                 }
                 internals.m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STOPPED, systemBundle));

@@ -28,6 +28,7 @@ import io.mypojo.framework.services.*;
 import org.osgi.framework.*;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.log.LogService;
 import org.osgi.service.packageadmin.PackageAdmin;
 import org.osgi.service.startlevel.StartLevel;
@@ -62,6 +63,7 @@ public class PojoSR implements PojoServiceRegistry {
         b.getBundleContext().registerService(BundleStartLevel.class.getName(), new BundleStartLevelImpl(), null);
         b.getBundleContext().registerService(FrameworkStartLevel.class.getName(), new FrameworkStartLevelImpl(), null);
         b.getBundleContext().registerService(LogService.class.getName(), new LogServiceImpl(), null);
+        b.getBundleContext().registerService(ConfigurationAdmin.class.getName(), new ConfigurationAdminImpl(this.internals), null);
 
         internals.m_context = b.getBundleContext();
 
@@ -114,12 +116,10 @@ public class PojoSR implements PojoServiceRegistry {
 
     public void startBundles(List<BundleDescriptor> scan) throws Exception {
         for (BundleDescriptor desc : scan) {
-            URL u = new URL(desc.getUrl().toExternalForm()
-                    + "META-INF/MANIFEST.MF");
+            URL u = new URL(desc.getUrl().toExternalForm() + "META-INF/MANIFEST.MF");
             Revision r;
             if (u.toExternalForm().startsWith("file:")) {
-                File root = new File(URLDecoder.decode(desc.getUrl()
-                        .getFile(), "UTF-8"));
+                File root = new File(URLDecoder.decode(desc.getUrl().getFile(), "UTF-8"));
                 u = root.toURL();
                 r = new DirRevision(root);
             } else {
@@ -136,8 +136,7 @@ public class PojoSR implements PojoServiceRegistry {
                             prefix,
                             uc.getLastModified());
                 } else {
-                    r = new URLRevision(desc.getUrl(), desc.getUrl()
-                            .openConnection().getLastModified());
+                    r = new URLRevision(desc.getUrl(), desc.getUrl().openConnection().getLastModified());
                 }
             }
             Map<String, String> bundleHeaders = desc.getHeaders();
@@ -145,7 +144,7 @@ public class PojoSR implements PojoServiceRegistry {
             try {
                 osgiVersion = Version.parseVersion(bundleHeaders.get(Constants.BUNDLE_VERSION));
             } catch (Exception ex) {
-                ex.printStackTrace();
+                logger.error("Error parsing version: " + bundleHeaders.get(Constants.BUNDLE_VERSION), ex);
                 osgiVersion = Version.emptyVersion;
             }
             String sym = bundleHeaders.get(Constants.BUNDLE_SYMBOLICNAME);
@@ -180,7 +179,6 @@ public class PojoSR implements PojoServiceRegistry {
 
         }
 
-
         logger.info("Will start {} bundles", internals.m_bundles.size());
         for (long i = 0; i < internals.m_bundles.size(); i++) {
             try {
@@ -210,18 +208,15 @@ public class PojoSR implements PojoServiceRegistry {
         internals.m_context.removeServiceListener(listener);
     }
 
-    public ServiceRegistration registerService(String[] clazzes,
-                                               Object service, Dictionary properties) {
+    public ServiceRegistration registerService(String[] clazzes, Object service, Dictionary properties) {
         return internals.m_context.registerService(clazzes, service, properties);
     }
 
-    public ServiceRegistration registerService(String clazz, Object service,
-                                               Dictionary properties) {
+    public ServiceRegistration registerService(String clazz, Object service, Dictionary properties) {
         return internals.m_context.registerService(clazz, service, properties);
     }
 
-    public ServiceReference[] getServiceReferences(String clazz, String filter)
-            throws InvalidSyntaxException {
+    public ServiceReference[] getServiceReferences(String clazz, String filter) throws InvalidSyntaxException {
         return internals.m_context.getServiceReferences(clazz, filter);
     }
 
