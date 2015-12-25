@@ -25,6 +25,14 @@
         </license>
     </licenses>
 
+    <developers>
+        <developer>
+            <email>github@donaldw.com</email>
+            <name>Donald W</name>
+            <organization>https://github.com/donald-w</organization>
+        </developer>
+    </developers>
+
     <prerequisites>
         <maven>3.0.5</maven>
     </prerequisites>
