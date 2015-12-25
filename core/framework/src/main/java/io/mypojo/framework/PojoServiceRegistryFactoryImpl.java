@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework;
+package io.mypojo.framework;
 
-import de.kalpatec.pojosr.framework.launch.PojoServiceRegistry;
-import de.kalpatec.pojosr.framework.launch.PojoServiceRegistryFactory;
+import io.mypojo.framework.launch.PojoServiceRegistry;
+import io.mypojo.framework.launch.PojoServiceRegistryFactory;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
 

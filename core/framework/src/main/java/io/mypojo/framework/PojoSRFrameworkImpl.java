@@ -1,7 +1,7 @@
-package de.kalpatec.pojosr.framework;
+package io.mypojo.framework;
 
-import de.kalpatec.pojosr.framework.launch.ClasspathScanner;
-import de.kalpatec.pojosr.framework.launch.PojoServiceRegistry;
+import io.mypojo.framework.launch.ClasspathScanner;
+import io.mypojo.framework.launch.PojoServiceRegistry;
 import org.osgi.framework.*;
 import org.osgi.framework.launch.Framework;
 

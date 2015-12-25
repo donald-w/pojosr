@@ -13,15 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework.revision;
+package io.mypojo.framework.launch;
 
-import java.net.URL;
-import java.util.Enumeration;
+import java.util.Map;
 
-public interface Revision {
-    long getLastModified();
+public interface PojoServiceRegistryFactory {
+    String BUNDLE_DESCRIPTORS = PojoServiceRegistry.class.getName().toLowerCase() + ".bundles";
 
-    URL getEntry(String entryName);
-
-    Enumeration<String> getEntries();
+    PojoServiceRegistry newPojoServiceRegistry(Map configuration) throws Exception;
 }

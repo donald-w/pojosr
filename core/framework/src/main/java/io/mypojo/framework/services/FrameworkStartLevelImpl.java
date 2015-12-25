@@ -1,4 +1,4 @@
-package de.kalpatec.pojosr.framework.services;
+package io.mypojo.framework.services;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkListener;

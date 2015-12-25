@@ -1,7 +1,6 @@
-package de.kalpatec.pojosr.framework.services;
+package io.mypojo.framework.services;
 
-import de.kalpatec.pojosr.framework.PojoSR;
-import de.kalpatec.pojosr.framework.PojoSRInternals;
+import io.mypojo.framework.PojoSRInternals;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.packageadmin.ExportedPackage;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework;
+package io.mypojo.framework;
 
 import io.mypojo.felix.framework.ServiceRegistry;
 import io.mypojo.felix.framework.capabilityset.SimpleFilter;

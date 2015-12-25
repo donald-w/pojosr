@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework;
+package io.mypojo.framework;
 
 import io.mypojo.felix.framework.capabilityset.SimpleFilter;
-import de.kalpatec.pojosr.framework.revision.Revision;
+import io.mypojo.framework.revision.Revision;
 
 import java.net.MalformedURLException;
 import java.net.URL;

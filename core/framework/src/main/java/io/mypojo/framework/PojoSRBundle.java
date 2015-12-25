@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework;
+package io.mypojo.framework;
 
 import io.mypojo.felix.framework.ServiceRegistry;
 import io.mypojo.felix.framework.util.EventDispatcher;
 import io.mypojo.felix.framework.util.MapToDictionary;
 import io.mypojo.felix.framework.util.StringMap;
-import de.kalpatec.pojosr.framework.revision.Revision;
+import io.mypojo.framework.revision.Revision;
 import org.osgi.framework.*;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.wiring.*;

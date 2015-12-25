@@ -1,4 +1,4 @@
-package de.kalpatec.pojosr.framework;
+package io.mypojo.framework;
 
 import io.mypojo.felix.framework.ServiceRegistry;
 import io.mypojo.felix.framework.util.EventDispatcher;

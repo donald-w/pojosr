@@ -1,4 +1,4 @@
-package de.kalpatec.pojosr.framework.services;
+package io.mypojo.framework.services;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.log.LogService;

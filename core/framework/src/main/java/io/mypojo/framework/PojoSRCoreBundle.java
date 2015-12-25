@@ -1,6 +1,6 @@
-package de.kalpatec.pojosr.framework;
+package io.mypojo.framework;
 
-import de.kalpatec.pojosr.framework.revision.Revision;
+import io.mypojo.framework.revision.Revision;
 import org.osgi.framework.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +16,7 @@ class PojoSRCoreBundle extends PojoSRBundle {
     public static PojoSRCoreBundle newPojoSRCoreBundle(PojoSRInternals internals, int pojoSRBundleId) {
 
         Map<String, String> headers = new HashMap<>();
-        headers.put(Constants.BUNDLE_SYMBOLICNAME,"de.kalpatec.pojosr.framework");
+        headers.put(Constants.BUNDLE_SYMBOLICNAME,"io.mypojo.framework");
         headers.put(Constants.BUNDLE_VERSION, "0.0.1-SNAPSHOT");
         headers.put(Constants.BUNDLE_NAME, "System Bundle");
         headers.put(Constants.BUNDLE_MANIFESTVERSION, "2");
@@ -44,12 +44,12 @@ class PojoSRCoreBundle extends PojoSRBundle {
             },
                 headers,
                 new Version(0, 0, 1),
-                "file:pojosr",
+                "file:mypojo",
                 internals.m_reg,
                 internals.m_dispatcher,
                 null,
                 pojoSRBundleId,
-                "de.kalpatec.pojosr.framework",
+                "io.mypojo.framework",
                 internals.m_bundles,
                 classLoader,
                 internals.bundleConfig);
@@ -59,11 +59,11 @@ class PojoSRCoreBundle extends PojoSRBundle {
 
     @Override
     public synchronized void start() throws BundleException {
-        if (m_state != Bundle.RESOLVED) {
+        if (m_state != RESOLVED) {
             return;
         }
         internals.m_dispatcher.startDispatching();
-        m_state = Bundle.STARTING;
+        m_state = STARTING;
 
         internals.m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STARTING,
                 this));
@@ -80,7 +80,7 @@ class PojoSRCoreBundle extends PojoSRBundle {
                 logger.error("Unable to start bundle: " + i, t);
             }
         }
-        m_state = Bundle.ACTIVE;
+        m_state = ACTIVE;
         internals.m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STARTED,
                 this));
 
@@ -92,10 +92,10 @@ class PojoSRCoreBundle extends PojoSRBundle {
 
     @Override
     public synchronized void stop() throws BundleException {
-        if ((m_state == Bundle.STOPPING) || m_state == Bundle.RESOLVED) {
+        if ((m_state == STOPPING) || m_state == RESOLVED) {
             return;
 
-        } else if (m_state != Bundle.ACTIVE) {
+        } else if (m_state != ACTIVE) {
             throw new BundleException("Can't stop pojosr because it is not ACTIVE");
         }
         final Bundle systemBundle = this;
@@ -115,12 +115,12 @@ class PojoSRCoreBundle extends PojoSRBundle {
                 }
                 internals.m_dispatcher.fireBundleEvent(new BundleEvent(BundleEvent.STOPPED,
                         systemBundle));
-                m_state = Bundle.RESOLVED;
+                m_state = RESOLVED;
                 internals.m_dispatcher.stopDispatching();
             }
         };
-        m_state = Bundle.STOPPING;
-        if ("true".equalsIgnoreCase(System.getProperty("de.kalpatec.pojosr.framework.events.sync"))) {
+        m_state = STOPPING;
+        if ("true".equalsIgnoreCase(System.getProperty("io.mypojo.framework.events.sync"))) {
             r.run();
         } else {
             new Thread(r).start();

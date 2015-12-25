@@ -30,7 +30,7 @@ public class EventDispatcher {
     // Pooled requests to avoid memory allocation.
     private static final List<Request> m_requestPool = new ArrayList<Request>();
     private static final boolean m_sync = "true".equalsIgnoreCase(System
-            .getProperty("de.kalpatec.pojosr.framework.events.sync"));
+            .getProperty("io.mypojo.framework.events.sync"));
     // A single thread is used to deliver events for all dispatchers.
     private static Thread m_thread = null;
     private static int m_references = 0;

@@ -13,41 +13,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework.revision;
+package io.mypojo.framework.revision;
 
-import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
+import java.util.Properties;
 
-public class DirRevision implements Revision {
-    private final File m_file;
+public class URLRevision implements Revision {
+    private final URL m_url;
+    private final long m_lastModified;
 
-    public DirRevision(File file) {
-        m_file = file;
+    public URLRevision(URL url, long lastModified) {
+        m_url = url;
+        if (lastModified > 0) {
+            m_lastModified = lastModified;
+        } else {
+            m_lastModified = System.currentTimeMillis();
+        }
     }
 
     @Override
     public long getLastModified() {
-        return m_file.lastModified();
+        return m_lastModified;
     }
 
     public Enumeration getEntries() {
-        return new FileEntriesEnumeration(m_file);
+        return new Properties().elements();
     }
 
     @Override
     public URL getEntry(String entryName) {
+        // TODO Auto-generated method stub
         try {
-            if (entryName != null) {
-                File file = (new File(m_file, (entryName.startsWith("/")) ? entryName.substring(1) : entryName));
-                if (file.exists()) {
-                    return file.toURL();
-                }
-            }
+            return new URL(m_url, entryName);
         } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 }

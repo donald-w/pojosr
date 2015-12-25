@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework.launch;
+package io.mypojo.framework.launch;
 
 import io.mypojo.felix.framework.util.MapToDictionary;
 import org.osgi.framework.Filter;

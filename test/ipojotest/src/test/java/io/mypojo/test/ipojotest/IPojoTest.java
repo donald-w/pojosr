@@ -1,9 +1,9 @@
 package io.mypojo.test.ipojotest;
 
 import io.mypojo.test.bundles.diagnostic.DiagnosticUtils;
-import de.kalpatec.pojosr.framework.launch.ClasspathScanner;
-import de.kalpatec.pojosr.framework.launch.PojoServiceRegistry;
-import de.kalpatec.pojosr.framework.launch.PojoServiceRegistryFactory;
+import io.mypojo.framework.launch.ClasspathScanner;
+import io.mypojo.framework.launch.PojoServiceRegistry;
+import io.mypojo.framework.launch.PojoServiceRegistryFactory;
 import org.junit.Assert;
 import org.junit.Test;
 import org.osgi.framework.Bundle;

@@ -1,8 +1,8 @@
 package io.mypojo.launch;
 
 
-import de.kalpatec.pojosr.framework.launch.BundleDescriptor;
-import de.kalpatec.pojosr.framework.launch.ClasspathScanner;
+import io.mypojo.framework.launch.BundleDescriptor;
+import io.mypojo.framework.launch.ClasspathScanner;
 import org.junit.Assert;
 import org.junit.Test;
 

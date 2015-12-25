@@ -13,17 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.kalpatec.pojosr.framework;
+package io.mypojo.framework;
 
-import de.kalpatec.pojosr.framework.launch.BundleDescriptor;
-import de.kalpatec.pojosr.framework.launch.ClasspathScanner;
-import de.kalpatec.pojosr.framework.launch.PojoServiceRegistry;
-import de.kalpatec.pojosr.framework.launch.PojoServiceRegistryFactory;
-import de.kalpatec.pojosr.framework.revision.DirRevision;
-import de.kalpatec.pojosr.framework.revision.JarRevision;
-import de.kalpatec.pojosr.framework.revision.Revision;
-import de.kalpatec.pojosr.framework.revision.URLRevision;
-import de.kalpatec.pojosr.framework.services.*;
+import io.mypojo.framework.launch.BundleDescriptor;
+import io.mypojo.framework.launch.ClasspathScanner;
+import io.mypojo.framework.launch.PojoServiceRegistry;
+import io.mypojo.framework.launch.PojoServiceRegistryFactory;
+import io.mypojo.framework.revision.DirRevision;
+import io.mypojo.framework.revision.JarRevision;
+import io.mypojo.framework.revision.Revision;
+import io.mypojo.framework.revision.URLRevision;
+import io.mypojo.framework.services.*;
 import org.osgi.framework.*;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;

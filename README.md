@@ -1,7 +1,6 @@
 # myPOJO
 
 Based on pojosr by Karl Paul
-
 Originally imported from code.google.com/p/pojosr
 
 **This is a work in progress.**

@@ -58,10 +58,10 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mainClass>de.kalpatec.pojosr.framework.PojoSR</mainClass>
+                    <mainClass>io.mypojo.framework.PojoSR</mainClass>
                     <systemProperties>
                         <!--<systemProperty>-->
-                            <!--<key>de.kalpatec.pojosr.framework.events.sync</key>-->
+                            <!--<key>io.mypojo.framework.events.sync</key>-->
                             <!--<value>true</value>-->
                         <!--</systemProperty>-->
                     </systemProperties>
