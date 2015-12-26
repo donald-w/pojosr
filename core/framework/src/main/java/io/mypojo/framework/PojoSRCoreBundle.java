@@ -32,7 +32,7 @@ class PojoSRCoreBundle extends PojoSRBundle {
                 }
 
                 @Override
-                public Enumeration getEntries() {
+                public Enumeration<String> getEntries() {
                     return Collections.emptyEnumeration();
                 }
 
@@ -82,8 +82,6 @@ class PojoSRCoreBundle extends PojoSRBundle {
         internals.m_dispatcher.fireFrameworkEvent(new FrameworkEvent(FrameworkEvent.STARTED, this, null));
         super.start();
     }
-
-    ;
 
     @Override
     public synchronized void stop() throws BundleException {
