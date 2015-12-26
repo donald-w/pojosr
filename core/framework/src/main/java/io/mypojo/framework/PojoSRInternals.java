@@ -22,6 +22,6 @@ public class PojoSRInternals {
                 }
             });
     public final EventDispatcher m_dispatcher = new EventDispatcher(m_reg);
-    public final Map<Long, Bundle> m_bundles = new HashMap<Long, Bundle>();
+    public final Map<Long, Bundle> m_bundles = new HashMap<>();
     public final Map bundleConfig = new HashMap();
 }
