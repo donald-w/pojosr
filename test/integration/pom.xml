@@ -1,42 +1,44 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>io.mypojo</groupId>
         <artifactId>project</artifactId>
-        <version>0.0.3-SNAPSHOT</version>
+        <version>0.0.2-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <groupId>io.mypojo.test</groupId>
     <artifactId>integration</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>myPOJO :: Test :: Integration</name>
 
     <dependencies>
         <dependency>
             <groupId>io.mypojo</groupId>
             <artifactId>framework</artifactId>
-            <version>0.0.3-SNAPSHOT</version>
+            <version>0.0.2-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>io.mypojo.test.bundles</groupId>
             <artifactId>bundle1</artifactId>
-            <version>0.0.3-SNAPSHOT</version>
+            <version>0.0.2-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.mypojo.test.bundles</groupId>
             <artifactId>bundle2</artifactId>
-            <version>0.0.3-SNAPSHOT</version>
+            <version>0.0.2-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.mypojo.test.bundles</groupId>
             <artifactId>bundle3</artifactId>
-            <version>0.0.3-SNAPSHOT</version>
+            <version>0.0.2-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
