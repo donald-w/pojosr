@@ -8,6 +8,7 @@
     <packaging>pom</packaging>
     <version>0.0.2-SNAPSHOT</version>
     <name>mypojo</name>
+    <description>A service registry that enables OSGi style service registry programs without using an OSGi framework.</description>
     <url>http://mypojo.io</url>
 
     <licenses>
