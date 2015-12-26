@@ -59,14 +59,11 @@ class PojoSRBundleContext implements BundleContext {
         m_dispatcher.removeListener(this, BundleListener.class, listener);
     }
 
-    public ServiceRegistration registerService(String clazz, Object service,
-                                               Dictionary properties) {
-        return m_reg.registerService(m_bundle, new String[]{clazz}, service,
-                properties);
+    public ServiceRegistration<?> registerService(String clazz, Object service, Dictionary<String, ? > properties) {
+        return m_reg.registerService(m_bundle, new String[]{clazz}, service, properties);
     }
 
-    public ServiceRegistration registerService(String[] clazzes,
-                                               Object service, Dictionary properties) {
+    public ServiceRegistration registerService(String[] clazzes, Object service, Dictionary properties) {
         return m_reg.registerService(m_bundle, clazzes, service, properties);
     }
 
@@ -85,7 +82,7 @@ class PojoSRBundleContext implements BundleContext {
         return getAllServiceReferences(clazz, filter);
     }
 
-    public ServiceReference getServiceReference(String clazz) {
+    public ServiceReference<?> getServiceReference(String clazz) {
         try {
             return getBestServiceReference(getAllServiceReferences(clazz, null));
         } catch (InvalidSyntaxException e) {
@@ -114,7 +111,7 @@ class PojoSRBundleContext implements BundleContext {
         return bestRef;
     }
 
-    public Object getService(ServiceReference reference) {
+    public <S> S getService(ServiceReference<S> reference) {
         return m_reg.getService(m_bundle, reference);
     }
 
@@ -129,6 +126,7 @@ class PojoSRBundleContext implements BundleContext {
         if (System.getProperty("org.osgi.framework.storage") != null) {
             root = new File(new File(System.getProperty("org.osgi.framework.storage")), root.getName());
         }
+        //noinspection ResultOfMethodCallIgnored
         root.mkdirs();
         return filename.trim().length() > 0 ? new File(root, filename) : root;
     }
@@ -188,13 +186,11 @@ class PojoSRBundleContext implements BundleContext {
     }
 
     public void addFrameworkListener(FrameworkListener listener) {
-        m_dispatcher.addListener(this, FrameworkListener.class, listener,
-                null);
+        m_dispatcher.addListener(this, FrameworkListener.class, listener, null);
     }
 
     public void addBundleListener(BundleListener listener) {
-        m_dispatcher
-                .addListener(this, BundleListener.class, listener, null);
+        m_dispatcher.addListener(this, BundleListener.class, listener, null);
     }
 
     public <S> ServiceRegistration<S> registerService(Class<S> clazz, S service, Dictionary<String, ?> properties) {
