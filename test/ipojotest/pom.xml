@@ -6,21 +6,21 @@
     <parent>
         <groupId>io.mypojo</groupId>
         <artifactId>project</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>0.0.1</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <groupId>io.mypojo.test</groupId>
     <artifactId>ipojotest</artifactId>
     <packaging>jar</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>myPOJO :: Test :: iPOJO Test</name>
 
     <dependencies>
         <dependency>
             <groupId>io.mypojo</groupId>
             <artifactId>framework</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1</version>
         </dependency>
 
         <dependency>
@@ -58,20 +58,20 @@
         <dependency>
             <groupId>io.mypojo.test.bundles</groupId>
             <artifactId>bundle1</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>io.mypojo.test.bundles</groupId>
             <artifactId>ipojocanary</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1</version>
         </dependency>
 
         <dependency>
             <groupId>io.mypojo.test.bundles</groupId>
             <artifactId>diagnostic</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>0.0.1</version>
             <scope>test</scope>
         </dependency>
 

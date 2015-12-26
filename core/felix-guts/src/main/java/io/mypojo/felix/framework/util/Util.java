@@ -84,6 +84,8 @@ public class Util {
      * Converts a module identifier to a bundle identifier. Module IDs are
      * typically <tt>&lt;bundle-id&gt;.&lt;revision&gt;</tt>; this method
      * returns only the portion corresponding to the bundle ID.
+     * @param id Module Id
+     * @return Bundle Id
      **/
     public static long getBundleIdFromModuleId(String id) {
         try {
@@ -99,6 +101,8 @@ public class Util {
      * Converts a module identifier to a bundle identifier. Module IDs are
      * typically <tt>&lt;bundle-id&gt;.&lt;revision&gt;</tt>; this method
      * returns only the portion corresponding to the revision.
+     * @param id Module Id
+     * @return Module Revision
      **/
     public static int getModuleRevisionFromModuleId(String id) {
         try {
@@ -183,7 +187,7 @@ public class Util {
      * interfaces it implements and the class loaders of all super classes.
      * </p>
      *
-     * @param svcObj the class that is the root of the search.
+     * @param clazz the class that is the root of the search.
      * @param name   the name of the class to load.
      * @return the loaded class or <tt>null</tt> if it could not be loaded.
      **/
