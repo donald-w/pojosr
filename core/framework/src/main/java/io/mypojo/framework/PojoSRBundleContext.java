@@ -19,6 +19,8 @@ import io.mypojo.felix.framework.ServiceRegistry;
 import io.mypojo.felix.framework.capabilityset.SimpleFilter;
 import io.mypojo.felix.framework.util.EventDispatcher;
 import org.osgi.framework.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.InputStream;
@@ -26,6 +28,8 @@ import java.util.*;
 
 @SuppressWarnings("PackageAccessibility")
 class PojoSRBundleContext implements BundleContext {
+    private static final Logger logger = LoggerFactory.getLogger(PojoSRBundleContext.class);
+
     private final Bundle m_bundle;
     private final ServiceRegistry m_reg;
     private final EventDispatcher m_dispatcher;
@@ -174,8 +178,7 @@ class PojoSRBundleContext implements BundleContext {
         try {
             addServiceListener(listener, null);
         } catch (InvalidSyntaxException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("Invalid call to addServiceListener", e);
         }
     }
 
