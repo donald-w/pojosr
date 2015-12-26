@@ -13,7 +13,7 @@
     <groupId>io.mypojo</groupId>
     <artifactId>project</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.1</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>mypojo</name>
     <url>http://mypojo.io</url>
 
