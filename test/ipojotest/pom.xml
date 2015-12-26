@@ -12,7 +12,7 @@
     <artifactId>ipojotest</artifactId>
     <packaging>jar</packaging>
     <version>0.0.3-SNAPSHOT</version>
-    <name>myPOJO :: Test :: iPOJO Test</name>
+    <name>myPOJO.io :: Test :: iPOJO Test</name>
 
     <dependencies>
         <dependency>

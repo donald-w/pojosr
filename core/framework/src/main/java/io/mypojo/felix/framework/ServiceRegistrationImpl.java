@@ -15,9 +15,9 @@
  */
 package io.mypojo.felix.framework;
 
+import io.mypojo.felix.framework.util.StringMap;
 import io.mypojo.felix.framework.util.Util;
 import io.mypojo.felix.framework.util.MapToDictionary;
-import io.mypojo.felix.framework.util.StringMap;
 import org.osgi.framework.*;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRevision;

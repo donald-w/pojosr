@@ -12,7 +12,7 @@
     <artifactId>integration</artifactId>
     <packaging>jar</packaging>
     <version>0.0.3-SNAPSHOT</version>
-    <name>myPOJO :: Test :: Integration</name>
+    <name>myPOJO.io :: Test :: Integration</name>
 
     <dependencies>
         <dependency>

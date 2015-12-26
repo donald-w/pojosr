@@ -5,7 +5,7 @@
     <artifactId>project</artifactId>
     <packaging>pom</packaging>
     <version>0.0.3-SNAPSHOT</version>
-    <name>mypojo</name>
+    <name>myPOJO.io</name>
     <description>A service registry that enables OSGi style service registry programs without using an OSGi framework.</description>
     <url>http://mypojo.io</url>
 
@@ -39,10 +39,6 @@
         <id>ossrh</id>
         <url>https://oss.sonatype.org/content/repositories/snapshots</url>
       </snapshotRepository>
-      <repository>
-        <id>ossrh</id>
-        <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-      </repository>
     </distributionManagement>
 
     <scm>
@@ -54,8 +50,8 @@
 
     <modules>
         <module>core/framework</module>
-        <module>core/felix-guts</module>
-        <module>launcher</module>
+        <!--<module>core/felix-guts</module>-->
+        <module>test/launcher</module>
         <module>test/bundles/bundle1</module>
         <module>test/bundles/bundle2</module>
         <module>test/bundles/bundle3</module>

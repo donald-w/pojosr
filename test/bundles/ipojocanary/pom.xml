@@ -13,7 +13,7 @@
     <groupId>io.mypojo.test.bundles</groupId>
     <artifactId>ipojocanary</artifactId>
     <packaging>bundle</packaging>
-    <name>myPOJO :: Test :: Bundles :: iPOJO Canary</name>
+    <name>myPOJO.io :: Test :: Bundles :: iPOJO Canary</name>
 
     <dependencies>
         <dependency>
