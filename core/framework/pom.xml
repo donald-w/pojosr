@@ -17,7 +17,7 @@
     <parent>
         <groupId>io.mypojo</groupId>
         <artifactId>project</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -26,7 +26,7 @@
     <name>myPOJO :: Framework</name>
     <groupId>io.mypojo</groupId>
     <artifactId>framework</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3-SNAPSHOT</version>
     <description>A service registry that enables OSGi style service registry programs without using an OSGi framework.
     </description>
 
@@ -55,7 +55,7 @@
         <dependency>
             <groupId>io.mypojo</groupId>
             <artifactId>felix-guts</artifactId>
-            <version>0.0.2</version>
+            <version>0.0.3-SNAPSHOT</version>
         </dependency>
 
         <dependency>

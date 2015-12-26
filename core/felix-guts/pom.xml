@@ -17,7 +17,7 @@
     <parent>
         <groupId>io.mypojo</groupId>
         <artifactId>project</artifactId>
-        <version>0.0.2</version>
+        <version>0.0.3-SNAPSHOT</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -26,7 +26,7 @@
     <name>myPOJO :: Framework :: Felix Guts</name>
     <groupId>io.mypojo</groupId>
     <artifactId>felix-guts</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3-SNAPSHOT</version>
 
     <developers>
         <developer>

@@ -4,7 +4,7 @@
     <groupId>io.mypojo</groupId>
     <artifactId>project</artifactId>
     <packaging>pom</packaging>
-    <version>0.0.2</version>
+    <version>0.0.3-SNAPSHOT</version>
     <name>mypojo</name>
     <description>A service registry that enables OSGi style service registry programs without using an OSGi framework.</description>
     <url>http://mypojo.io</url>
@@ -49,7 +49,7 @@
         <url>https://github.com/donald-w/mypojo</url>
         <connection>scm:git:https://github.com/donald-w/mypojo.git</connection>
         <developerConnection>scm:git:https://github.com/donald-w/mypojo.git</developerConnection>
-      <tag>project-0.0.2</tag>
+      <tag>HEAD</tag>
   </scm>
 
     <modules>
