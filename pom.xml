@@ -49,7 +49,7 @@
   </scm>
 
     <modules>
-        <module>core/framework</module>
+        <module>framework</module>
         <!--<module>core/felix-guts</module>-->
         <module>test/launcher</module>
         <module>test/bundles/bundle1</module>
