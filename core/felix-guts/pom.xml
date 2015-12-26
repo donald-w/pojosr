@@ -28,8 +28,6 @@
     <groupId>io.mypojo</groupId>
     <artifactId>felix-guts</artifactId>
     <version>0.0.2-SNAPSHOT</version>
-    <description>A service registry that enables OSGi style service registry programs without using an OSGi framework.
-    </description>
 
     <developers>
         <developer>
