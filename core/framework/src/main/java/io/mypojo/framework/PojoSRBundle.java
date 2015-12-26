@@ -349,8 +349,7 @@ class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
     }
 
     public Enumeration<String> getEntryPaths(String path) {
-        return new EntryFilterEnumeration<String>(m_revision, false, path, null, false,
-                false);
+        return new EntryFilterEnumeration<String>(m_revision, false, path, null, false, false);
     }
 
     public URL getEntry(String path) {
@@ -365,8 +364,7 @@ class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
     public Enumeration<URL> findEntries(String path, String filePattern,
                                         boolean recurse) {
         // TODO: module - implement this based on the revision
-        return new EntryFilterEnumeration<URL>(m_revision, false, path, filePattern,
-                recurse, true);
+        return new EntryFilterEnumeration<URL>(m_revision, false, path, filePattern, recurse, true);
     }
 
     public BundleContext getBundleContext() {
