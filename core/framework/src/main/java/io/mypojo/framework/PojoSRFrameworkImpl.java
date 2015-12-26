@@ -10,10 +10,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
+import java.security.cert.X509Certificate;
+import java.util.*;
 
 public class PojoSRFrameworkImpl implements Framework {
     private final String m_filter;
@@ -26,10 +24,8 @@ public class PojoSRFrameworkImpl implements Framework {
 
     public void init() throws BundleException {
         try {
-            m_reg = new PojoServiceRegistryFactoryImpl()
-                    .newPojoServiceRegistry(new HashMap());
-            m_bundle = m_reg.getBundleContext()
-                    .getBundle();
+            m_reg = new PojoServiceRegistryFactoryImpl().newPojoServiceRegistry(new HashMap());
+            m_bundle = m_reg.getBundleContext().getBundle();
         } catch (Exception ex) {
             throw new BundleException("Unable to scan classpath", ex);
         }
@@ -73,7 +69,7 @@ public class PojoSRFrameworkImpl implements Framework {
         m_bundle.uninstall();
     }
 
-    public Dictionary getHeaders() {
+    public Dictionary<String, String> getHeaders() {
         return m_bundle.getHeaders();
     }
 
@@ -101,7 +97,7 @@ public class PojoSRFrameworkImpl implements Framework {
         return m_bundle.getResource(name);
     }
 
-    public Dictionary getHeaders(String locale) {
+    public Dictionary<String, String> getHeaders(String locale) {
         return m_bundle.getHeaders(locale);
     }
 
@@ -113,11 +109,11 @@ public class PojoSRFrameworkImpl implements Framework {
         return m_bundle.loadClass(name);
     }
 
-    public Enumeration getResources(String name) throws IOException {
+    public Enumeration<URL> getResources(String name) throws IOException {
         return m_bundle.getResources(name);
     }
 
-    public Enumeration getEntryPaths(String path) {
+    public Enumeration<String> getEntryPaths(String path) {
         return m_bundle.getEntryPaths(path);
     }
 
@@ -129,7 +125,7 @@ public class PojoSRFrameworkImpl implements Framework {
         return m_bundle.getLastModified();
     }
 
-    public Enumeration findEntries(String path, String filePattern,
+    public Enumeration<URL> findEntries(String path, String filePattern,
                                    boolean recurse) {
         return m_bundle.findEntries(path, filePattern, recurse);
     }
@@ -138,7 +134,7 @@ public class PojoSRFrameworkImpl implements Framework {
         return m_bundle.getBundleContext();
     }
 
-    public Map getSignerCertificates(int signersType) {
+    public Map<X509Certificate, List<X509Certificate>> getSignerCertificates(int signersType) {
         return m_bundle.getSignerCertificates(signersType);
     }
 
@@ -146,12 +142,10 @@ public class PojoSRFrameworkImpl implements Framework {
         return m_bundle.getVersion();
     }
 
-    public FrameworkEvent waitForStop(long timeout)
-            throws InterruptedException {
+    public FrameworkEvent waitForStop(long timeout) throws InterruptedException {
         final Object lock = new Object();
 
         m_bundle.getBundleContext().addBundleListener(new SynchronousBundleListener() {
-
             public void bundleChanged(BundleEvent event) {
                 if ((event.getBundle() == m_bundle) && (event.getType() == BundleEvent.STOPPED)) {
                     synchronized (lock) {
@@ -160,6 +154,8 @@ public class PojoSRFrameworkImpl implements Framework {
                 }
             }
         });
+
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (lock) {
             while (m_bundle.getState() != Bundle.RESOLVED) {
                 if (m_bundle.getState() == Bundle.STOPPING) {
