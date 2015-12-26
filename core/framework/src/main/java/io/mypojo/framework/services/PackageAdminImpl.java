@@ -29,12 +29,10 @@ public class PackageAdminImpl implements PackageAdmin {
     }
 
     public void refreshPackages(Bundle[] bundles) {
-        pojoSRInternals.m_dispatcher.fireFrameworkEvent(new FrameworkEvent(
-                FrameworkEvent.PACKAGES_REFRESHED, b, null));
+        pojoSRInternals.m_dispatcher.fireFrameworkEvent(new FrameworkEvent(FrameworkEvent.PACKAGES_REFRESHED, b, null));
     }
 
-    public RequiredBundle[] getRequiredBundles(
-            String symbolicName) {
+    public RequiredBundle[] getRequiredBundles(String symbolicName) {
         return null;
     }
 

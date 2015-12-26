@@ -17,8 +17,7 @@ public class BundleStartLevelImpl implements BundleStartLevel {
     }
 
     @Override
-    public void setStartLevel(int startlevel) {
-
+    public void setStartLevel(int startLevel) {
     }
 
     @Override

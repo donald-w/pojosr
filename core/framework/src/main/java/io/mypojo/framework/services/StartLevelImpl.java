@@ -14,7 +14,6 @@ public class StartLevelImpl implements StartLevel {
     public void setBundleStartLevel(Bundle bundle,
                                     int startlevel) {
         // TODO Auto-generated method stub
-
     }
 
     public boolean isBundlePersistentlyStarted(Bundle bundle) {
@@ -44,7 +43,6 @@ public class StartLevelImpl implements StartLevel {
 
     public void setInitialBundleStartLevel(int startlevel) {
         // TODO Auto-generated method stub
-
     }
 
     public int getBundleStartLevel(Bundle bundle) {

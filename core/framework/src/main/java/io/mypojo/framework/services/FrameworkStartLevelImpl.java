@@ -19,7 +19,6 @@ public class FrameworkStartLevelImpl implements FrameworkStartLevel {
 
     @Override
     public void setStartLevel(int startlevel, FrameworkListener... listeners) {
-
     }
 
     @Override
@@ -29,7 +28,6 @@ public class FrameworkStartLevelImpl implements FrameworkStartLevel {
 
     @Override
     public void setInitialBundleStartLevel(int startlevel) {
-
     }
 
     @Override
