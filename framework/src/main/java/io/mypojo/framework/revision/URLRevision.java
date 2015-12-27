@@ -16,12 +16,17 @@
  */
 package io.mypojo.framework.revision;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Properties;
 
 public class URLRevision implements Revision {
+    private static final Logger logger = LoggerFactory.getLogger(URLRevision.class);
+
     private final URL m_url;
     private final long m_lastModified;
 
@@ -45,12 +50,10 @@ public class URLRevision implements Revision {
 
     @Override
     public URL getEntry(String entryName) {
-        // TODO Auto-generated method stub
         try {
             return new URL(m_url, entryName);
         } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            logger.error("Whilst accessing: " + entryName,e);
             return null;
         }
     }

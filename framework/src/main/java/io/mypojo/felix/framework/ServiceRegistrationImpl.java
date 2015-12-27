@@ -22,10 +22,14 @@ import io.mypojo.felix.framework.util.MapToDictionary;
 import org.osgi.framework.*;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRevision;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 class ServiceRegistrationImpl implements ServiceRegistration {
+    private static final Logger logger = LoggerFactory.getLogger(ServiceRegistrationImpl.class);
+
     // Service registry.
     private final ServiceRegistry m_registry;
     // Bundle providing the service.
@@ -158,7 +162,7 @@ class ServiceRegistrationImpl implements ServiceRegistration {
             try {
                 ungetFactoryUnchecked(relBundle, svcObj);
             } catch (Exception ex) {
-                ex.printStackTrace();
+                logger.error("Whilst releasing service", ex);
             }
         }
     }

@@ -12,7 +12,6 @@ Continuous build status:
 
 [![Build Status](https://travis-ci.org/donald-w/mypojo.svg?branch=master)](https://travis-ci.org/donald-w/mypojo)
 
-* Remove all printStackTrace
 * Review Felix code / understand its heritage
 * Add junit smoke tests
 * Get iPojo working other than via Maven (when launched from IDE, 'bundle' is supplied as target/classes rather than ipojoified jar

@@ -19,6 +19,8 @@ package io.mypojo.felix.framework.util;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URL;
@@ -27,6 +29,8 @@ import java.util.Map;
 import java.util.Properties;
 
 public class Util {
+    private static final Logger logger = LoggerFactory.getLogger(Util.class);
+
     /**
      * The default name used for the default configuration properties file.
      **/
@@ -75,7 +79,7 @@ public class Util {
                     // Nothing we can do.
                 }
 
-                ex.printStackTrace();
+                logger.error("Unable to read properties: " + name, ex);
             }
         }
         return value;

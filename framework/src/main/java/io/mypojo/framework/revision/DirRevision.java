@@ -16,12 +16,17 @@
  */
 package io.mypojo.framework.revision;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Enumeration;
 
 public class DirRevision implements Revision {
+    private static final Logger logger = LoggerFactory.getLogger(DirRevision.class);
+
     private final File m_file;
 
     public DirRevision(File file) {
@@ -47,7 +52,7 @@ public class DirRevision implements Revision {
                 }
             }
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            logger.error("Getting entry: " + entryName,e);
         }
         return null;
     }

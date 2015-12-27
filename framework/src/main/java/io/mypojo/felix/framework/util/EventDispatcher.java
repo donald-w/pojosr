@@ -20,11 +20,15 @@ import io.mypojo.felix.framework.ServiceRegistry;
 import org.osgi.framework.*;
 import org.osgi.framework.hooks.service.ListenerHook;
 import org.osgi.framework.launch.Framework;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.Map.Entry;
 
 public class EventDispatcher {
+    private static final Logger logger = LoggerFactory.getLogger(EventDispatcher.class);
+
     private final static String m_threadLock = new String("thread lock");
     // List of requests.
     private static final List<Request> m_requestList = new ArrayList<Request>();
@@ -112,8 +116,7 @@ public class EventDispatcher {
                     } catch (Throwable th) {
                         if ((type != Request.FRAMEWORK_EVENT)
                                 || (((FrameworkEvent) event).getType() != FrameworkEvent.ERROR)) {
-                            System.out.println("EventDispatcher: Error during dispatch.");
-                            th.printStackTrace();
+                            logger.error("EventDispatcher: Error during dispatch.",th);
                             dispatcher.fireFrameworkEvent(
                                     new FrameworkEvent(FrameworkEvent.ERROR, bundle, th));
                         }
@@ -728,8 +731,7 @@ public class EventDispatcher {
                         try {
                             elh.event(event, shrinkableMap);
                         } catch (Throwable th) {
-                            System.out.println("Problem invoking event hook");
-                            th.printStackTrace();
+                            logger.error("Problem invoking event hook",th);
                         } finally {
                             m_registry.ungetService(felix, sr);
                         }
@@ -790,8 +792,7 @@ public class EventDispatcher {
                                 ((org.osgi.framework.hooks.bundle.EventHook) eh).event((BundleEvent) event, shrinkable);
                             }
                         } catch (Throwable th) {
-                            System.out.println("Problem invoking event hook");
-                            th.printStackTrace();
+                            logger.error("Problem invoking event hook",th);
                         } finally {
                             m_registry.ungetService(bundle, sr);
                         }

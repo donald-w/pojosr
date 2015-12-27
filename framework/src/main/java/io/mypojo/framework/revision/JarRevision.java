@@ -16,6 +16,9 @@
  */
 package io.mypojo.framework.revision;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -26,6 +29,8 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class JarRevision implements Revision {
+    private static final Logger logger = LoggerFactory.getLogger(JarRevision.class);
+
     private final long m_lastModified;
     private final JarFile m_jar;
     private final URL m_url;
@@ -105,10 +110,8 @@ public class JarRevision implements Revision {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Whilst accessing: " + entryName, e);
         }
         return null;
-
     }
-
 }
