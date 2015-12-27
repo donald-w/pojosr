@@ -22,14 +22,14 @@
     <parent>
         <groupId>io.mypojo</groupId>
         <artifactId>project</artifactId>
-        <version>0.0.3-SNAPSHOT</version>
+        <version>0.0.3</version>
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
     <groupId>io.mypojo.test.bundles</groupId>
     <artifactId>bundle2</artifactId>
     <packaging>bundle</packaging>
-    <version>0.0.3-SNAPSHOT</version>
+    <version>0.0.3</version>
     <name>myPOJO.io :: Test :: Bundles :: Bundle 2</name>
 
     <dependencies>
