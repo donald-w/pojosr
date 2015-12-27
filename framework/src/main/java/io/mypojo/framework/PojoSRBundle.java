@@ -444,7 +444,7 @@ class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
     }
 
     public List<BundleRevision> getRevisions() {
-        return Arrays.asList((BundleRevision) this);
+        return Collections.singletonList((BundleRevision) this);
     }
 
     public List<BundleCapability> getDeclaredCapabilities(String namespace) {
