@@ -16,7 +16,7 @@
 
 	<modules>
 		<module>test-jcl</module>
-		<module>core</module>
+		<module>jcl-core</module>
     </modules>
 
 	<properties>
