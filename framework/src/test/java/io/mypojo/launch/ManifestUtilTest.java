@@ -79,5 +79,6 @@ public class ManifestUtilTest {
 
         Assert.assertEquals(17,headers.size());
         Assert.assertEquals(934,headers.get("iPOJO-Components").length());
+        Assert.assertEquals("Apache Maven Bundle Plugin & iPOJO 1.12.1",headers.get("Created-By"));
     }
 }
