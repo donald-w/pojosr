@@ -36,6 +36,9 @@ public class ManifestUtilTest {
         Map<String,String> headers = ManifestUtil.getHeaders(manifestURL);
 
         Assert.assertEquals(3,headers.size());
+        Assert.assertTrue(headers.get("header1").equals("value1"));
+        Assert.assertTrue(headers.get("header2").equals("value2"));
+        Assert.assertTrue(headers.get("header3").equals("value3"));
     }
 
     @Test(expected = Exception.class)
