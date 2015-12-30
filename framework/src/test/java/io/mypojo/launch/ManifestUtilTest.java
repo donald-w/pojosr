@@ -70,4 +70,14 @@ public class ManifestUtilTest {
 
         ManifestUtil.getHeaders(manifestURL);
     }
+
+    @Test()
+    public void testComplex() throws Exception {
+        URL manifestURL = this.getClass().getResource("complex.mf");
+
+        Map<String,String> headers = ManifestUtil.getHeaders(manifestURL);
+
+        Assert.assertEquals(17,headers.size());
+        Assert.assertEquals(934,headers.get("iPOJO-Components").length());
+    }
 }

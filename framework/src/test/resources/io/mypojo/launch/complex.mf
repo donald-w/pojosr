@@ -1,0 +1,35 @@
+Manifest-Version: 1.0
+Bundle-Description: A service registry that enables OSGi style service
+  registry programs without using an OSGi framework.
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Bundle-SymbolicName: io.mypojo.test.bundles.ipojocanary
+Built-By: donald-w
+Bnd-LastModified: 1451519421998
+Bundle-ManifestVersion: 2
+Import-Package: org.slf4j;version="[1.7,2)", org.osgi.service.cm;versi
+ on=1.2, org.apache.felix.ipojo;version="[1.12.1,2.0.0)", org.osgi.ser
+ vice.log;version=1.3, org.apache.felix.ipojo.architecture;version="[1
+ .12.1,2.0.0)"
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.7))"
+Tool: Bnd-2.3.0.201405100607
+Export-Package: io.mypojo.test.bundles.ipojocanary;version="0.0.4"
+Bundle-Name: myPOJO.io :: Test :: Bundles :: iPOJO Canary
+Bundle-Version: 0.0.1.SNAPSHOT
+iPOJO-Components: instance { $component="canary" }component { $name="c
+ anary" $classname="io.mypojo.test.bundles.ipojocanary.CanaryImpl" pro
+ vides { $specifications="{io.mypojo.test.bundles.ipojocanary.Canary}"
+  property { $name="osgi.command.scope" $field="scope" $value="canary"
+  }property { $name="osgi.command.function" $field="function" $value="
+ {doubleMessage}" }}callback { $transition="validate" $method="validat
+ e" }callback { $transition="invalidate" $method="invalidate" }manipul
+ ation { $classname="io.mypojo.test.bundles.ipojocanary.CanaryImpl" in
+ terface { $name="io.mypojo.test.bundles.ipojocanary.Canary" }field { 
+ $name="function" $type="java.lang.String[]" }field { $name="logger" $
+ type="org.slf4j.Logger" }field { $name="scope" $type="java.lang.Strin
+ g" }method { $name="$init" }method { $name="validate" }method { $name
+ ="invalidate" }method { $name="doubleMessage" $return="java.lang.Stri
+ ng" $arguments="{java.lang.String}" $names="{msg}" }}}
+IPOJO-log-level: info
+Build-Jdk: 1.8.0_65
+Created-By: Apache Maven Bundle Plugin & iPOJO 1.12.1
+
