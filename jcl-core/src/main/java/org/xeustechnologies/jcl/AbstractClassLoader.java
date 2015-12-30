@@ -1,12 +1,12 @@
 /**
  * Copyright 2015 Kamran Zafar
- * <p>
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,6 +15,10 @@
  */
 
 package org.xeustechnologies.jcl;
+
+import org.xeustechnologies.jcl.exception.JclException;
+import org.xeustechnologies.jcl.exception.ResourceNotFoundException;
+import org.xeustechnologies.jcl.utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,15 +29,10 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.xeustechnologies.jcl.exception.JclException;
-import org.xeustechnologies.jcl.exception.ResourceNotFoundException;
-import org.xeustechnologies.jcl.utils.Utils;
-
 /**
  * Abstract class loader that can load classes from different resources
  *
  * @author Kamran Zafar
- *
  */
 @SuppressWarnings("unchecked")
 public abstract class AbstractClassLoader extends ClassLoader {
@@ -41,7 +40,9 @@ public abstract class AbstractClassLoader extends ClassLoader {
     // we could use concurrent sorted set like ConcurrentSkipListSet here instead, which would be automatically sorted
     // and wouldn't require the lock.
     // But that was added in 1.6, and according to Maven we're targeting 1.5+.
-    /** Note that all iterations over this list *must* synchronize on it first! */
+    /**
+     * Note that all iterations over this list *must* synchronize on it first!
+     */
     protected final List<ProxyClassLoader> loaders = Collections.synchronizedList(new ArrayList<ProxyClassLoader>());
 
     private final ProxyClassLoader systemLoader = new SystemLoader();
@@ -52,6 +53,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
     /**
      * Build a new instance of AbstractClassLoader.java.
+     *
      * @param parent parent class loader
      */
     public AbstractClassLoader(ClassLoader parent) {
@@ -235,9 +237,28 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
     }
 
+    public ProxyClassLoader getSystemLoader() {
+        return systemLoader;
+    }
+
+    public ProxyClassLoader getParentLoader() {
+        return parentLoader;
+    }
+
+    public ProxyClassLoader getCurrentLoader() {
+        return currentLoader;
+    }
+
+    public ProxyClassLoader getThreadLoader() {
+        return threadLoader;
+    }
+
+    public ProxyClassLoader getOsgiBootLoader() {
+        return osgiBootLoader;
+    }
+
     /**
      * System class loader
-     *
      */
     class SystemLoader extends ProxyClassLoader {
 
@@ -295,7 +316,6 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
     /**
      * Parent class loader
-     *
      */
     class ParentLoader extends ProxyClassLoader {
         private final Logger logger = Logger.getLogger(ParentLoader.class.getName());
@@ -351,7 +371,6 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
     /**
      * Current class loader
-     *
      */
     class CurrentLoader extends ProxyClassLoader {
         private final Logger logger = Logger.getLogger(CurrentLoader.class.getName());
@@ -409,7 +428,6 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
     /**
      * Current class loader
-     *
      */
     class ThreadContextLoader extends ProxyClassLoader {
         private final Logger logger = Logger.getLogger(ThreadContextLoader.class.getName());
@@ -466,14 +484,12 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
     /**
      * Osgi boot loader
-     *
      */
     public final class OsgiBootLoader extends ProxyClassLoader {
+        private static final String JAVA_PACKAGE = "java.";
         private final Logger logger = Logger.getLogger(OsgiBootLoader.class.getName());
         private boolean strictLoading;
         private String[] bootDelagation;
-
-        private static final String JAVA_PACKAGE = "java.";
 
         public OsgiBootLoader() {
             enabled = Configuration.isOsgiBootDelegationEnabled();
@@ -577,25 +593,5 @@ public abstract class AbstractClassLoader extends ClassLoader {
         public void setBootDelagation(String[] bootDelagation) {
             this.bootDelagation = bootDelagation;
         }
-    }
-
-    public ProxyClassLoader getSystemLoader() {
-        return systemLoader;
-    }
-
-    public ProxyClassLoader getParentLoader() {
-        return parentLoader;
-    }
-
-    public ProxyClassLoader getCurrentLoader() {
-        return currentLoader;
-    }
-
-    public ProxyClassLoader getThreadLoader() {
-        return threadLoader;
-    }
-
-    public ProxyClassLoader getOsgiBootLoader() {
-        return osgiBootLoader;
     }
 }

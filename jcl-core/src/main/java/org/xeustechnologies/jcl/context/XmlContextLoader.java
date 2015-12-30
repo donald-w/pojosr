@@ -1,13 +1,12 @@
 /**
- *
  * Copyright 2015 Kamran Zafar
- *
+ * <p/>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p/>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p/>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,17 +15,6 @@
  */
 
 package org.xeustechnologies.jcl.context;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.SchemaFactory;
 
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
@@ -41,12 +29,21 @@ import org.xeustechnologies.jcl.utils.PathResolver;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.SchemaFactory;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  * The class loads the JclContext from XML file. See the documentation and
  * schema for more details on how to write the JCL context xml.
- * 
+ *
  * @author Kamran
- * 
  */
 public class XmlContextLoader implements JclContextLoader {
     private static final String CLASSPATH = "classpath:";
@@ -71,13 +68,10 @@ public class XmlContextLoader implements JclContextLoader {
 
     private static final String XML_SCHEMA_LANG = "http://www.w3.org/2001/XMLSchema";
     private static final String JCL_CONTEXT_SCHEMA = "org/xeustechnologies/jcl/context/jcl-context.xsd";
-
+    private static Logger logger = Logger.getLogger(XmlContextLoader.class.getName());
     private final String file;
     private final JclContext jclContext;
-
     private final List<PathResolver> pathResolvers = new ArrayList<PathResolver>();
-
-    private static Logger logger = Logger.getLogger( XmlContextLoader.class.getName() );
 
     public XmlContextLoader(String file) {
         this.file = file;
@@ -86,21 +80,21 @@ public class XmlContextLoader implements JclContextLoader {
 
     /**
      * Loads the JCL context from XML file
-     * 
+     *
      * @see org.xeustechnologies.jcl.context.JclContextLoader#loadContext()
-     */ 
+     */
     public void loadContext() {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setValidating( false );
-        factory.setNamespaceAware( true );
+        factory.setValidating(false);
+        factory.setNamespaceAware(true);
 
-        SchemaFactory schemaFactory = SchemaFactory.newInstance( XML_SCHEMA_LANG );
+        SchemaFactory schemaFactory = SchemaFactory.newInstance(XML_SCHEMA_LANG);
 
         try {
-            factory.setSchema( schemaFactory.newSchema( new Source[] { new StreamSource( getClass().getClassLoader()
-                    .getResourceAsStream( JCL_CONTEXT_SCHEMA ) ) } ) );
+            factory.setSchema(schemaFactory.newSchema(new Source[]{new StreamSource(getClass().getClassLoader()
+                    .getResourceAsStream(JCL_CONTEXT_SCHEMA))}));
         } catch (SAXException e) {
-            throw new JclContextException( e );
+            throw new JclContextException(e);
         }
 
         try {
@@ -108,55 +102,55 @@ public class XmlContextLoader implements JclContextLoader {
 
             Document d = null;
 
-            if (file.startsWith( CLASSPATH ))
-                d = builder.parse( getClass().getClassLoader().getResourceAsStream( file.split( CLASSPATH )[1] ) );
+            if (file.startsWith(CLASSPATH))
+                d = builder.parse(getClass().getClassLoader().getResourceAsStream(file.split(CLASSPATH)[1]));
             else {
-                d = builder.parse( file );
+                d = builder.parse(file);
             }
 
-            NodeList nl = d.getElementsByTagName( ELEMENT_JCL );
+            NodeList nl = d.getElementsByTagName(ELEMENT_JCL);
             for (int i = 0; i < nl.getLength(); i++) {
-                Node n = nl.item( i );
+                Node n = nl.item(i);
 
-                String name = n.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue();
+                String name = n.getAttributes().getNamedItem(ATTRIBUTE_NAME).getNodeValue();
 
                 JarClassLoader jcl = new JarClassLoader();
 
                 NodeList config = n.getChildNodes();
 
                 for (int j = 0; j < config.getLength(); j++) {
-                    Node c = config.item( j );
-                    if (c.getNodeName().equals( ELEMENT_LOADERS )) {
-                        processLoaders( jcl, c );
-                    } else if (c.getNodeName().equals( ELEMENT_SOURCES )) {
-                        processSources( jcl, c );
+                    Node c = config.item(j);
+                    if (c.getNodeName().equals(ELEMENT_LOADERS)) {
+                        processLoaders(jcl, c);
+                    } else if (c.getNodeName().equals(ELEMENT_SOURCES)) {
+                        processSources(jcl, c);
                     }
                 }
 
-                jclContext.addJcl( name, jcl );
+                jclContext.addJcl(name, jcl);
 
-                if (logger.isLoggable( Level.FINER ))
-                    logger.finer( "JarClassLoader[" + name + "] loaded into context." );
+                if (logger.isLoggable(Level.FINER))
+                    logger.finer("JarClassLoader[" + name + "] loaded into context.");
             }
 
         } catch (SAXParseException e) {
-            JclContextException we = new JclContextException( e.getMessage() + " [" + file + " (" + e.getLineNumber()
-                    + ", " + e.getColumnNumber() + ")]" );
-            we.setStackTrace( e.getStackTrace() );
+            JclContextException we = new JclContextException(e.getMessage() + " [" + file + " (" + e.getLineNumber()
+                    + ", " + e.getColumnNumber() + ")]");
+            we.setStackTrace(e.getStackTrace());
 
             throw we;
         } catch (JclContextException e) {
             throw e;
         } catch (Exception e) {
-            throw new JclContextException( e );
+            throw new JclContextException(e);
         }
     }
 
     /**
      * Unloads the context
-     * 
+     *
      * @see org.xeustechnologies.jcl.context.JclContextLoader#unloadContext()
-     */ 
+     */
     public void unloadContext() {
         JclContext.destroy();
     }
@@ -164,25 +158,25 @@ public class XmlContextLoader implements JclContextLoader {
     private void processSources(JarClassLoader jcl, Node c) {
         NodeList sources = c.getChildNodes();
         for (int k = 0; k < sources.getLength(); k++) {
-            Node s = sources.item( k );
+            Node s = sources.item(k);
 
-            if (s.getNodeName().equals( ELEMENT_SOURCE )) {
+            if (s.getNodeName().equals(ELEMENT_SOURCE)) {
                 String path = s.getTextContent();
                 Object[] res = null;
 
                 for (PathResolver pr : pathResolvers) {
-                    res = pr.resolvePath( path );
+                    res = pr.resolvePath(path);
 
                     if (res != null) {
                         for (Object r : res)
-                            jcl.add( r );
+                            jcl.add(r);
 
                         break;
                     }
                 }
 
                 if (res == null)
-                    jcl.add( path );
+                    jcl.add(path);
             }
         }
     }
@@ -190,35 +184,35 @@ public class XmlContextLoader implements JclContextLoader {
     private void processLoaders(JarClassLoader jcl, Node c) {
         NodeList loaders = c.getChildNodes();
         for (int k = 0; k < loaders.getLength(); k++) {
-            Node l = loaders.item( k );
-            if (l.getNodeName().equals( ELEMENT_LOADER )) {
-                if (l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_PARENT )) {
-                    processLoader( jcl.getParentLoader(), l );
-                } else if (l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_CURRENT )) {
-                    processLoader( jcl.getCurrentLoader(), l );
-                } else if (l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_LOCAL )) {
-                    processLoader( jcl.getLocalLoader(), l );
-                } else if (l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_THREAD )) {
-                    processLoader( jcl.getThreadLoader(), l );
-                } else if (l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_SYSTEM )) {
-                    processLoader( jcl.getSystemLoader(), l );
-                } else if (l.getAttributes().getNamedItem( ATTRIBUTE_NAME ).getNodeValue().equals( JCL_BOOTOSGI )) {
-                    processLoader( jcl.getOsgiBootLoader(), l );
+            Node l = loaders.item(k);
+            if (l.getNodeName().equals(ELEMENT_LOADER)) {
+                if (l.getAttributes().getNamedItem(ATTRIBUTE_NAME).getNodeValue().equals(JCL_PARENT)) {
+                    processLoader(jcl.getParentLoader(), l);
+                } else if (l.getAttributes().getNamedItem(ATTRIBUTE_NAME).getNodeValue().equals(JCL_CURRENT)) {
+                    processLoader(jcl.getCurrentLoader(), l);
+                } else if (l.getAttributes().getNamedItem(ATTRIBUTE_NAME).getNodeValue().equals(JCL_LOCAL)) {
+                    processLoader(jcl.getLocalLoader(), l);
+                } else if (l.getAttributes().getNamedItem(ATTRIBUTE_NAME).getNodeValue().equals(JCL_THREAD)) {
+                    processLoader(jcl.getThreadLoader(), l);
+                } else if (l.getAttributes().getNamedItem(ATTRIBUTE_NAME).getNodeValue().equals(JCL_SYSTEM)) {
+                    processLoader(jcl.getSystemLoader(), l);
+                } else if (l.getAttributes().getNamedItem(ATTRIBUTE_NAME).getNodeValue().equals(JCL_BOOTOSGI)) {
+                    processLoader(jcl.getOsgiBootLoader(), l);
                 } else {
                     Objenesis objenesis = new ObjenesisStd();
 
                     Class<?> clazz = null;
                     try {
                         clazz = getClass().getClassLoader().loadClass(
-                                l.getAttributes().getNamedItem( ATTRIBUTE_CLASS ).getNodeValue() );
+                                l.getAttributes().getNamedItem(ATTRIBUTE_CLASS).getNodeValue());
                     } catch (Exception e) {
-                        throw new JclContextException( e );
+                        throw new JclContextException(e);
                     }
 
-                    ProxyClassLoader pcl = (ProxyClassLoader) objenesis.newInstance( clazz );
-                    jcl.addLoader( pcl );
+                    ProxyClassLoader pcl = (ProxyClassLoader) objenesis.newInstance(clazz);
+                    jcl.addLoader(pcl);
 
-                    processLoader( pcl, l );
+                    processLoader(pcl, l);
                 }
             }
         }
@@ -227,27 +221,27 @@ public class XmlContextLoader implements JclContextLoader {
     private void processLoader(ProxyClassLoader loader, Node node) {
         NodeList oe = node.getChildNodes();
         for (int i = 0; i < oe.getLength(); i++) {
-            Node noe = oe.item( i );
-            if (noe.getNodeName().equals( ELEMENT_ORDER ) && !( loader instanceof AbstractClassLoader.OsgiBootLoader )) {
-                loader.setOrder( Integer.parseInt( noe.getTextContent() ) );
-            } else if (noe.getNodeName().equals( ELEMENT_ENABLED )) {
-                loader.setEnabled( Boolean.parseBoolean( noe.getTextContent() ) );
-            } else if (noe.getNodeName().equals( ELEMENT_STRICT )
+            Node noe = oe.item(i);
+            if (noe.getNodeName().equals(ELEMENT_ORDER) && !(loader instanceof AbstractClassLoader.OsgiBootLoader)) {
+                loader.setOrder(Integer.parseInt(noe.getTextContent()));
+            } else if (noe.getNodeName().equals(ELEMENT_ENABLED)) {
+                loader.setEnabled(Boolean.parseBoolean(noe.getTextContent()));
+            } else if (noe.getNodeName().equals(ELEMENT_STRICT)
                     && loader instanceof AbstractClassLoader.OsgiBootLoader) {
-                ( (AbstractClassLoader.OsgiBootLoader) loader ).setStrictLoading( Boolean.parseBoolean( noe
-                        .getTextContent() ) );
-            } else if (noe.getNodeName().equals( ELEMENT_BOOT_DELEGATION )
+                ((AbstractClassLoader.OsgiBootLoader) loader).setStrictLoading(Boolean.parseBoolean(noe
+                        .getTextContent()));
+            } else if (noe.getNodeName().equals(ELEMENT_BOOT_DELEGATION)
                     && loader instanceof AbstractClassLoader.OsgiBootLoader) {
-                ( (AbstractClassLoader.OsgiBootLoader) loader ).setBootDelagation( noe.getTextContent().split( "," ) );
+                ((AbstractClassLoader.OsgiBootLoader) loader).setBootDelagation(noe.getTextContent().split(","));
             }
         }
 
-        if (logger.isLoggable( Level.FINEST ))
-            logger.finest( "Loader[" + loader.getClass().getName() + "] configured: [" + loader.getOrder() + ", "
-                    + loader.isEnabled() + "]" );
+        if (logger.isLoggable(Level.FINEST))
+            logger.finest("Loader[" + loader.getClass().getName() + "] configured: [" + loader.getOrder() + ", "
+                    + loader.isEnabled() + "]");
     }
 
     public void addPathResolver(PathResolver pr) {
-        pathResolvers.add( pr );
+        pathResolvers.add(pr);
     }
 }
