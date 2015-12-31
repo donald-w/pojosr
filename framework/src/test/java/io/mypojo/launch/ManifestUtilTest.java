@@ -21,6 +21,7 @@ import io.mypojo.framework.launch.ManifestUtil;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
@@ -48,7 +49,7 @@ public class ManifestUtilTest {
         ManifestUtil.getHeaders(manifestURL);
     }
 
-    @Test
+    @Test(expected = IOException.class)
     public void testGetHeadersExceptionMissingKey() throws Exception {
         URL manifestURL = this.getClass().getResource("test3-manifest.mf");
 
@@ -64,7 +65,7 @@ public class ManifestUtilTest {
         ManifestUtil.getHeaders(manifestURL);
     }
 
-    @Test(expected = Exception.class)
+    @Test()
     public void testGetHeadersExceptionDuplicateAttribute() throws Exception {
         URL manifestURL = this.getClass().getResource("test5-manifest.mf");
 
