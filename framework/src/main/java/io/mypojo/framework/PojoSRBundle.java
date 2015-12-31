@@ -524,7 +524,6 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
     @SuppressWarnings("PackageAccessibility")
     public static class PojoSRInternals {
         public final Map<String, Bundle> m_symbolicNameToBundle = new HashMap<>();
-        public final EventDispatcher m_dispatcher = new EventDispatcher(m_reg);
         public final ServiceRegistry m_reg = new ServiceRegistry(
                 new ServiceRegistry.ServiceRegistryCallbacks() {
                     public void serviceChanged(ServiceEvent event,
@@ -532,6 +531,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
                         m_dispatcher.fireServiceEvent(event, oldProps, null);
                     }
                 });
+        public final EventDispatcher m_dispatcher = new EventDispatcher(m_reg);
         public final Map<Long, Bundle> m_bundles = new HashMap<>();
         public final Map bundleConfig = new HashMap();
         public BundleContext m_context;
