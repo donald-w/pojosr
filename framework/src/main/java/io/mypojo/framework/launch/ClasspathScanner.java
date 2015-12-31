@@ -14,16 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.mypojo.framework.launch;
 
 import io.mypojo.felix.framework.util.MapToDictionary;
+import io.mypojo.framework.launch.impl.ManifestUtil;
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("PackageAccessibility")
 public class ClasspathScanner {

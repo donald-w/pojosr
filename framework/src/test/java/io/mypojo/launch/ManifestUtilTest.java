@@ -17,7 +17,7 @@
 
 package io.mypojo.launch;
 
-import io.mypojo.framework.launch.ManifestUtil;
+import io.mypojo.framework.launch.impl.ManifestUtil;
 import org.junit.Assert;
 import org.junit.Test;
 

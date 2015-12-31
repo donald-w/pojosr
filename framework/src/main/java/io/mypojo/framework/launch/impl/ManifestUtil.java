@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package io.mypojo.framework.launch;
+package io.mypojo.framework.launch.impl;
 
 import java.io.InputStream;
 import java.net.URL;
