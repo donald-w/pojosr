@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.mypojo.framework.revision;
 
 import org.slf4j.Logger;
@@ -27,26 +28,26 @@ import java.util.Enumeration;
 public class DirRevision implements Revision {
     private static final Logger logger = LoggerFactory.getLogger(DirRevision.class);
 
-    private final File m_file;
+    private final File file;
 
     public DirRevision(File file) {
-        m_file = file;
+        this.file = file;
     }
 
     @Override
     public long getLastModified() {
-        return m_file.lastModified();
+        return file.lastModified();
     }
 
-    public Enumeration getEntries() {
-        return new FileEntriesEnumeration(m_file);
+    public Enumeration<String> getEntries() {
+        return new FileEntriesEnumeration(file);
     }
 
     @Override
     public URL getEntry(String entryName) {
         try {
             if (entryName != null) {
-                File file = (new File(m_file, (entryName.startsWith("/")) ? entryName.substring(1) : entryName));
+                File file = (new File(this.file, (entryName.startsWith("/")) ? entryName.substring(1) : entryName));
                 if (file.exists()) {
                     return file.toURL();
                 }

@@ -17,7 +17,7 @@
 
 package io.mypojo.framework.services;
 
-import io.mypojo.framework.PojoSRInternals;
+import io.mypojo.framework.PojoSRBundle;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
@@ -32,9 +32,9 @@ import java.io.IOException;
 public class ConfigurationAdminImpl implements ConfigurationAdmin {
     private static final Logger logger = LoggerFactory.getLogger(ConfigurationAdminImpl.class);
 
-    private final PojoSRInternals internals;
+    private final PojoSRBundle.PojoSRInternals internals;
 
-    public ConfigurationAdminImpl(PojoSRInternals internals) {
+    public ConfigurationAdminImpl(PojoSRBundle.PojoSRInternals internals) {
         this.internals = internals;
     }
 

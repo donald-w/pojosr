@@ -20,14 +20,10 @@ package io.mypojo.framework.revision;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 
-class EntriesEnumeration implements Enumeration {
+class EntriesEnumeration implements Enumeration<String> {
     private final Enumeration m_enumeration;
     private final String m_prefix;
     private volatile Object current;
-
-    public EntriesEnumeration(Enumeration enumeration) {
-        this(enumeration, null);
-    }
 
     public EntriesEnumeration(Enumeration enumeration, String prefix) {
         m_enumeration = enumeration;
@@ -48,12 +44,13 @@ class EntriesEnumeration implements Enumeration {
         return (current != null);
     }
 
-    public Object nextElement() {
+    // TODO implement without toString()
+    public String nextElement() {
         try {
             if (hasMoreElements()) {
-                return current;
+                return current.toString();
             } else {
-                return m_enumeration.nextElement();
+                return m_enumeration.nextElement().toString();
             }
         } finally {
             current = null;

@@ -14,13 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.mypojo.framework.revision;
 
 import java.io.File;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
-class FileEntriesEnumeration implements Enumeration {
+class FileEntriesEnumeration implements Enumeration<String> {
     private final File m_dir;
     private final File[] m_children;
     private int m_counter = 0;
@@ -34,7 +35,7 @@ class FileEntriesEnumeration implements Enumeration {
         return (m_children != null) && (m_counter < m_children.length);
     }
 
-    public synchronized Object nextElement() {
+    public synchronized String nextElement() {
         if ((m_children == null) || (m_counter >= m_children.length)) {
             throw new NoSuchElementException("No more entry paths.");
         }

@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.mypojo.framework;
 
 import io.mypojo.framework.launch.BundleDescriptor;
@@ -41,13 +42,16 @@ import java.net.JarURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("PackageAccessibility")
 public class PojoSR implements PojoServiceRegistry {
     private static final Logger logger = LoggerFactory.getLogger(PojoSR.class);
 
-    private final PojoSRInternals internals = new PojoSRInternals();
+    private final PojoSRBundle.PojoSRInternals internals = new PojoSRBundle.PojoSRInternals();
 
     public PojoSR(Map config) throws Exception {
         logger.info("Initialising PojoSR");

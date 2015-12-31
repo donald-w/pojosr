@@ -17,7 +17,7 @@
 
 package io.mypojo.framework.services;
 
-import io.mypojo.framework.PojoSRInternals;
+import io.mypojo.framework.PojoSRBundle;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.service.packageadmin.ExportedPackage;
@@ -33,9 +33,9 @@ public class PackageAdminImpl implements PackageAdmin {
     private static final Logger logger = LoggerFactory.getLogger(PackageAdminImpl.class);
 
     private final Bundle b;
-    private PojoSRInternals pojoSRInternals;
+    private PojoSRBundle.PojoSRInternals pojoSRInternals;
 
-    public PackageAdminImpl(PojoSRInternals pojoSRInternals, Bundle b) {
+    public PackageAdminImpl(PojoSRBundle.PojoSRInternals pojoSRInternals, Bundle b) {
         this.pojoSRInternals = pojoSRInternals;
         this.b = b;
     }

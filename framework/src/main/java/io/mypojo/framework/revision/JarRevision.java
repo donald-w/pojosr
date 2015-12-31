@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.mypojo.framework.revision;
 
 import org.slf4j.Logger;
@@ -54,7 +55,7 @@ public class JarRevision implements Revision {
         return m_lastModified;
     }
 
-    public Enumeration getEntries() {
+    public Enumeration<String> getEntries() {
         return new EntriesEnumeration(m_jar.entries(), m_prefix);
     }
 

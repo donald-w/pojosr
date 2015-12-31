@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.mypojo.framework.revision;
 
 import org.slf4j.Logger;
@@ -44,6 +45,7 @@ public class URLRevision implements Revision {
         return m_lastModified;
     }
 
+    // TODO convert to Enumeration<String>
     public Enumeration getEntries() {
         return new Properties().elements();
     }

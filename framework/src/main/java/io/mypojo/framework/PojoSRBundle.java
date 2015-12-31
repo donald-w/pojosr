@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.mypojo.framework;
 
 import io.mypojo.felix.framework.ServiceRegistry;
@@ -32,7 +33,7 @@ import java.net.URL;
 import java.util.*;
 
 @SuppressWarnings("PackageAccessibility")
-class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
+public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
     private final Revision m_revision;
     private final Map<String, String> m_manifest;
     private final Version m_version;
@@ -518,5 +519,21 @@ class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
                 return result;
             }
         };
+    }
+
+    @SuppressWarnings("PackageAccessibility")
+    public static class PojoSRInternals {
+        public final Map<String, Bundle> m_symbolicNameToBundle = new HashMap<>();
+        public final EventDispatcher m_dispatcher = new EventDispatcher(m_reg);
+        public final ServiceRegistry m_reg = new ServiceRegistry(
+                new ServiceRegistry.ServiceRegistryCallbacks() {
+                    public void serviceChanged(ServiceEvent event,
+                                               Dictionary oldProps) {
+                        m_dispatcher.fireServiceEvent(event, oldProps, null);
+                    }
+                });
+        public final Map<Long, Bundle> m_bundles = new HashMap<>();
+        public final Map bundleConfig = new HashMap();
+        public BundleContext m_context;
     }
 }
