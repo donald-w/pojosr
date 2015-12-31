@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.mypojo.felix.framework.capabilityset;
 
 import java.util.ArrayList;
@@ -155,11 +156,7 @@ public class SimpleFilter {
                     sf = SimpleFilter.subfilter(filter,
                             ((Integer) top).intValue(), idx);
                 }
-            } else if (!isEscaped && (filter.charAt(idx) == '\\')) {
-                isEscaped = true;
-            } else {
-                isEscaped = false;
-            }
+            } else isEscaped = !isEscaped && (filter.charAt(idx) == '\\');
 
             idx = skipWhitespace(filter, idx + 1);
         }
@@ -369,11 +366,7 @@ public class SimpleFilter {
             // If this is the last piece, then make sure the
             // string ends with it.
             if (i == len - 1) {
-                if (s.endsWith(piece)) {
-                    result = true;
-                } else {
-                    result = false;
-                }
+                result = s.endsWith(piece);
                 break loop;
             }
 

@@ -14,18 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.mypojo.felix.framework.capabilityset;
 
 import java.util.List;
 
 public interface Capability {
-    static final String MODULE_NAMESPACE = "module";
-    static final String HOST_NAMESPACE = "host";
-    static final String PACKAGE_NAMESPACE = "package";
-    static final String SINGLETON_NAMESPACE = "singleton";
+    String MODULE_NAMESPACE = "module";
+    String HOST_NAMESPACE = "host";
+    String PACKAGE_NAMESPACE = "package";
+    String SINGLETON_NAMESPACE = "singleton";
 
-    public static final String PACKAGE_ATTR = "package";
-    public static final String VERSION_ATTR = "version";
+    String PACKAGE_ATTR = "package";
+    String VERSION_ATTR = "version";
 
     String getNamespace();
 

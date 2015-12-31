@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.mypojo.felix.framework.capabilityset;
 
 import io.mypojo.felix.framework.util.StringComparator;
@@ -135,7 +136,7 @@ public class CapabilitySet {
                         return false;
                     }
                 case SimpleFilter.APPROX:
-                    return compareApproximate(((Comparable) lhs), rhs);
+                    return compareApproximate(lhs, rhs);
                 case SimpleFilter.SUBSTRING:
                     return SimpleFilter.compareSubstring((List<String>) rhs, (String) lhs);
                 default:
@@ -240,7 +241,7 @@ public class CapabilitySet {
                 }
                 Constructor ctor = lhs.getClass().getConstructor(STRING_CLASS);
                 ctor.setAccessible(true);
-                rhs = ctor.newInstance(new Object[]{rhsString});
+                rhs = ctor.newInstance(rhsString);
             }
         } catch (Exception ex) {
             throw new Exception(

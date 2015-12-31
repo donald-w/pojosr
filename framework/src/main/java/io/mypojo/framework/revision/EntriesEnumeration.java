@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.mypojo.framework.revision;
 
 import java.util.Enumeration;
@@ -35,7 +36,7 @@ class EntriesEnumeration implements Enumeration {
 
     public boolean hasMoreElements() {
         while ((current == null) && m_enumeration.hasMoreElements()) {
-            String result = (String) ((ZipEntry) m_enumeration.nextElement()).getName();
+            String result = ((ZipEntry) m_enumeration.nextElement()).getName();
             if (m_prefix != null) {
                 if (result.startsWith(m_prefix)) {
                     current = result.substring(m_prefix.length());

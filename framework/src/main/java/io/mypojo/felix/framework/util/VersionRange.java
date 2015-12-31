@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.mypojo.felix.framework.util;
 
 import org.osgi.framework.Version;
@@ -100,10 +101,7 @@ public class VersionRange {
                 && (m_ceiling == null || !m_ceiling.equals(other.m_ceiling))) {
             return false;
         }
-        if (m_isCeilingInclusive != other.m_isCeilingInclusive) {
-            return false;
-        }
-        return true;
+        return m_isCeilingInclusive == other.m_isCeilingInclusive;
     }
 
     public int hashCode() {

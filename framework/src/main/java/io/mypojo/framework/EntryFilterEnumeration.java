@@ -14,6 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.mypojo.framework;
 
 import io.mypojo.felix.framework.capabilityset.SimpleFilter;
@@ -99,7 +100,7 @@ public class EntryFilterEnumeration<T> implements Enumeration<T> {
             while (m_enumeration.hasMoreElements() && m_nextEntries.size() == 0) {
                 // Get the current entry to determine if it should be filtered
                 // or not.
-                String entryName = (String) m_enumeration.nextElement();
+                String entryName = m_enumeration.nextElement();
                 // Check to see if the current entry is a descendent of the
                 // specified path.
                 if (!entryName.equals(m_path) && entryName.startsWith(m_path)) {
