@@ -7,7 +7,7 @@
         <version>0.0.4-SNAPSHOT</version>
     </parent>
     <artifactId>test-jcl</artifactId>
-    <name>JCL - Test JAR</name>
+    <name>myPOJO.io :: JCL - Test JAR</name>
     <description>A Test JAR file containg a Test bean. This file is used in unit tests</description>
     <build>
         <plugins>
