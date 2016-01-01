@@ -5,7 +5,7 @@
     <groupId>org.xeustechnologies</groupId>
     <artifactId>jcl</artifactId>
     <name>Jar Class Loader</name>
-    <version>2.8-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Jar Class Loader</description>
 

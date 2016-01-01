@@ -68,7 +68,7 @@
 
     <modules>
         <module>framework</module>
-        <!--<module>core/felix-guts</module>-->
+        <module>jcl</module>
         <module>test/launcher</module>
         <module>test/bundles/bundle1</module>
         <module>test/bundles/bundle2</module>
