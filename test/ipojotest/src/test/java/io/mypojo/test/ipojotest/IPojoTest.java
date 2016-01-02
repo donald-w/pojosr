@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Donald W - github@donaldw.com
+ * Copyright 2016 Donald W - github@donaldw.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,10 @@
 
 package io.mypojo.test.ipojotest;
 
-import io.mypojo.test.bundles.diagnostic.DiagnosticUtils;
 import io.mypojo.framework.launch.ClasspathScanner;
 import io.mypojo.framework.launch.PojoServiceRegistry;
 import io.mypojo.framework.launch.PojoServiceRegistryFactory;
+import io.mypojo.test.bundles.diagnostic.DiagnosticUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.osgi.framework.Bundle;

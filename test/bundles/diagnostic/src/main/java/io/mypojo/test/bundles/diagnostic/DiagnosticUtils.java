@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Donald W - github@donaldw.com
+ * Copyright 2016 Donald W - github@donaldw.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

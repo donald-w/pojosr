@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Donald W - github@donaldw.com
+ * Copyright 2016 Donald W - github@donaldw.com
  * Copyright 2011 Karl Pauls karlpauls@gmail.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,11 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package io.mypojo.felix.framework;
 
+import io.mypojo.felix.framework.util.MapToDictionary;
 import io.mypojo.felix.framework.util.StringMap;
 import io.mypojo.felix.framework.util.Util;
-import io.mypojo.felix.framework.util.MapToDictionary;
 import org.osgi.framework.*;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRevision;

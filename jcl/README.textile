@@ -175,7 +175,7 @@ In this example two classloaders are created in a single context. The source pat
   </context-param>
 
   <listener>
-    <listener-class>org.xeustechnologies.jcl.web.JclContextLoaderListener</listener-class>
+    <listener-class>io.mypojo.jcl.web.JclContextLoaderListener</listener-class>
   </listener>
 </code>
 </pre>
@@ -225,7 +225,7 @@ http://www.xeustechnologies.org/schema/jcl http://www.xeustechnologies.org/schem
         </constructor-arg>
     </jcl:jcl>
 
-    <bean id="test1" class="org.xeustechnologies.jcl.test.Test">
+    <bean id="test1" class="io.mypojo.jcl.test.Test">
         <jcl:jcl-ref ref="jcl1" />
         <constructor-arg ref="name"/>
         <property name="lastName">
@@ -308,7 +308,7 @@ By default the object factory creates objects of classes loaded in JCL without p
 
 h2. Manipulating class loading order & adding custom classloaders
 
-JCL v2 by default looks for classes in five places in order, local JCL class loader (order=1), current class loader (order=2), parent class loader (order=3), in thread context class loader (order=4) and then in system class loader (order=5). There is a sixth class loader available for Osgi boot delegation; it is described later in the document. In addition to built-in loaders, more class loaders can be added by extending the __org.xeustechnologies.jcl.ProxyClassLoader__ class. Each loader has a loading order and the default loading orders can be changed. Below is an example that shows how to do this:
+JCL v2 by default looks for classes in five places in order, local JCL class loader (order=1), current class loader (order=2), parent class loader (order=3), in thread context class loader (order=4) and then in system class loader (order=5). There is a sixth class loader available for Osgi boot delegation; it is described later in the document. In addition to built-in loaders, more class loaders can be added by extending the __io.mypojo.jcl.ProxyClassLoader__ class. Each loader has a loading order and the default loading orders can be changed. Below is an example that shows how to do this:
 
 <pre>
 <code>
@@ -321,7 +321,7 @@ JCL v2 by default looks for classes in five places in order, local JCL class loa
   jcl.getThreadLoader().setOrder(4); // if not found look in thread context class loader
   jcl.getCurrentLoader().setOrder(5); // if not found look in current class loader
 
-  // A custom class loader that extends org.xeustechnologies.jcl.ProxyClassLoader
+  // A custom class loader that extends io.mypojo.jcl.ProxyClassLoader
   MyLoader loader=new MyLoader();
   loader.setOrder(6);
 
@@ -347,7 +347,7 @@ Similarly a -D argument can be passed to the VM; this is done by passing a boole
 
 <pre>
 <code>
-  -Dorg.xeustechnologies.jcl.AbstractClassLoader$ParentLoader=false\
+  -Dio.mypojo.jcl.AbstractClassLoader$ParentLoader=false\
   -Dmypack.MyLoader=false
 </code>
 </pre>
@@ -419,7 +419,7 @@ h2. Maven Dependency
 <pre>
 <code>
   <dependency>
- 	<groupId>org.xeustechnologies</groupId>
+ 	<groupId>io.mypojo</groupId>
 	<artifactId>jcl-core</artifactId> 
 	<version>2.7</version>
   </dependency>

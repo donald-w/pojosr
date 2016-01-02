@@ -2,7 +2,7 @@
 <jcl-context>
     <jcl name="jcl1">
         <loaders>
-            <loader name="custom" class="org.xeustechnologies.jcl.test.TestLoader">
+            <loader name="custom" class="io.mypojo.jcl.test.TestLoader">
                 <order>6</order>
                 <enabled>true</enabled>
             </loader>
@@ -43,7 +43,7 @@
             <loader name="jcl.bootosgi">
                 <enabled>true</enabled>
                 <strict>true</strict>
-                <bootDelegation>org.xeustechnologies.jcl.test.*</bootDelegation>
+                <bootDelegation>io.mypojo.jcl.test.*</bootDelegation>
             </loader>
         </loaders>
         <sources>
