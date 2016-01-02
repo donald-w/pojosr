@@ -26,7 +26,7 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>io.mypojo</groupId>
+                                    <groupId>io.mypojo.jcl</groupId>
                                     <artifactId>test-jcl</artifactId>
                                     <version>${project.version}</version>
                                 </artifactItem>
@@ -56,7 +56,7 @@
     </build>
     <dependencies>
         <dependency>
-            <groupId>io.mypojo</groupId>
+            <groupId>io.mypojo.jcl</groupId>
             <artifactId>test-jcl</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
