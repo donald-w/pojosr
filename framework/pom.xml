@@ -55,13 +55,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>io.mypojo</groupId>-->
-            <!--<artifactId>felix-guts</artifactId>-->
-            <!--<version>0.0.3-SNAPSHOT</version>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
