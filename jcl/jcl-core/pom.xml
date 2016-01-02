@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.mypojo</groupId>
+        <groupId>io.mypojo.jcl</groupId>
         <artifactId>jcl</artifactId>
         <version>0.0.4-SNAPSHOT</version>
     </parent>
