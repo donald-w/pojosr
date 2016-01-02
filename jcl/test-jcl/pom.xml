@@ -17,7 +17,7 @@
                 <version>2.6</version>
                 <configuration>
                     <includes>
-                        <include>org/xeustechnologies/jcl/test/Test.class</include>
+                        <include>io/mypojo/jcl/test/Test.class</include>
                     </includes>
                 </configuration>
             </plugin>
