@@ -4,9 +4,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>io.mypojo.jcl</groupId>
-        <artifactId>jcl</artifactId>
+        <groupId>io.mypojo</groupId>
+        <artifactId>project</artifactId>
         <version>0.0.4-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>jcl-core</artifactId>

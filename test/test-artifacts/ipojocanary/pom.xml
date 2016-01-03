@@ -26,7 +26,6 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
-
     <groupId>io.mypojo.test.bundles</groupId>
     <artifactId>ipojocanary</artifactId>
     <packaging>bundle</packaging>
