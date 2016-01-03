@@ -27,7 +27,7 @@
                         <configuration>
                             <artifactItems>
                                 <artifactItem>
-                                    <groupId>io.mypojo.jcl</groupId>
+                                    <groupId>io.mypojo.test.test-artifacts</groupId>
                                     <artifactId>test-jcl</artifactId>
                                     <version>${project.version}</version>
                                 </artifactItem>
