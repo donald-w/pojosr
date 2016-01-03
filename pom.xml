@@ -68,7 +68,7 @@
 
     <modules>
         <module>framework</module>
-        <module>jcl/jcl-core</module>
+        <module>jcl-core</module>
         <module>test/test-jcl</module>
         <module>test/bundles/bundle1</module>
         <module>test/bundles/bundle2</module>
