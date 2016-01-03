@@ -25,10 +25,13 @@ import org.slf4j.LoggerFactory;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static io.mypojo.jcl.Configuration.isLocalLoaderEnabled;
+import static java.util.Collections.synchronizedMap;
+import static java.util.Collections.unmodifiableMap;
 
 /**
  * Reads the class bytes from jar files and other resources using
@@ -38,7 +41,7 @@ import java.util.Map;
  */
 @SuppressWarnings("unchecked")
 public class JarClassLoader extends AbstractClassLoader {
-    private static Logger logger = LoggerFactory.getLogger(JarClassLoader.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(JarClassLoader.class);
     /**
      * Class cache
      */
@@ -49,7 +52,7 @@ public class JarClassLoader extends AbstractClassLoader {
 
     public JarClassLoader() {
         classpathResources = new ClasspathResources();
-        classes = Collections.synchronizedMap(new HashMap<String, Class>());
+        classes = synchronizedMap(new HashMap<String, Class>());
         initialize();
     }
 
@@ -238,7 +241,7 @@ public class JarClassLoader extends AbstractClassLoader {
      * @return Map
      */
     public Map<String, Class> getLoadedClasses() {
-        return Collections.unmodifiableMap(classes);
+        return unmodifiableMap(classes);
     }
 
     /**
@@ -246,11 +249,11 @@ public class JarClassLoader extends AbstractClassLoader {
      */
     class LocalLoader extends ProxyClassLoader {
 
-        private final Logger logger = LoggerFactory.getLogger(LocalLoader.class.getName());
+        private final Logger logger = LoggerFactory.getLogger(LocalLoader.class);
 
         public LocalLoader() {
             order = 10;
-            enabled = Configuration.isLocalLoaderEnabled();
+            enabled = isLocalLoaderEnabled();
         }
 
         @Override

@@ -19,7 +19,10 @@ package io.mypojo.jcl.context;
 
 import io.mypojo.jcl.JarClassLoader;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static io.mypojo.jcl.context.JclContext.DEFAULT_NAME;
+import static io.mypojo.jcl.context.JclContext.destroy;
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * This class is builds the context from a single JCL instance. This should be
@@ -28,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * @author Kamran
  */
 public class DefaultContextLoader implements JclContextLoader {
-    private static Logger logger = LoggerFactory.getLogger(DefaultContextLoader.class.getName());
+    private static Logger logger = getLogger(DefaultContextLoader.class);
     private final JclContext jclContext;
     private final JarClassLoader jcl;
 
@@ -43,12 +46,12 @@ public class DefaultContextLoader implements JclContextLoader {
      * @see JclContextLoader#loadContext()
      */
     public void loadContext() {
-        jclContext.addJcl(JclContext.DEFAULT_NAME, jcl);
+        jclContext.addJcl(DEFAULT_NAME, jcl);
 
         logger.info("Default JarClassLoader loaded into context.");
     }
 
     public void unloadContext() {
-        JclContext.destroy();
+        destroy();
     }
 }

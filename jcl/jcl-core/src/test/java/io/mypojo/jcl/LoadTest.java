@@ -18,14 +18,11 @@
 package io.mypojo.jcl;
 
 import io.mypojo.jcl.context.DefaultContextLoader;
-import io.mypojo.jcl.context.JclContext;
 import io.mypojo.jcl.context.JclContextLoader;
 import io.mypojo.jcl.context.XmlContextLoader;
 import io.mypojo.jcl.exception.JclContextException;
 import io.mypojo.jcl.proxy.CglibProxyProvider;
-import io.mypojo.jcl.proxy.ProxyProviderFactory;
 import io.mypojo.jcl.test.TestInterface;
-import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 import org.junit.Test;
@@ -42,11 +39,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static io.mypojo.jcl.JclObjectFactory.getInstance;
+import static io.mypojo.jcl.JclUtils.*;
+import static io.mypojo.jcl.context.JclContext.destroy;
+import static io.mypojo.jcl.context.JclContext.get;
+import static io.mypojo.jcl.proxy.ProxyProviderFactory.setDefaultProxyProvider;
+
 @SuppressWarnings("all")
 @RunWith(JUnit4.class)
 public class LoadTest extends TestCase {
 
-    private static Logger logger = LoggerFactory.getLogger(LoadTest.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(LoadTest.class);
 
     @Test
     public void testWithResourceName() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
@@ -152,10 +155,10 @@ public class LoadTest extends TestCase {
         JarClassLoader jc = new JarClassLoader();
         jc.add("./target/test-jcl.jar");
 
-        JclObjectFactory factory = JclObjectFactory.getInstance();
+        JclObjectFactory factory = getInstance();
         Object testObj = factory.create(jc, "io.mypojo.jcl.test.Test");
 
-        TestInterface ti = JclUtils.cast(testObj, TestInterface.class);
+        TestInterface ti = cast(testObj, TestInterface.class);
 
         assertNotNull(ti);
 
@@ -167,16 +170,16 @@ public class LoadTest extends TestCase {
         //
         // assertNotNull( ti );
 
-        ti = (TestInterface) JclUtils.toCastable(testObj, TestInterface.class);
+        ti = (TestInterface) toCastable(testObj, TestInterface.class);
 
         assertNotNull(ti);
 
-        ti = (TestInterface) JclUtils.shallowClone(testObj);
+        ti = (TestInterface) shallowClone(testObj);
 
         assertNotNull(ti);
 
         // Deep clone.
-        ti = (TestInterface) JclUtils.deepClone(testObj);
+        ti = (TestInterface) deepClone(testObj);
 
         assertNotNull(ti);
     }
@@ -187,10 +190,10 @@ public class LoadTest extends TestCase {
         jc.add("./target/test-jcl.jar");
 
         // Set default to cglib
-        ProxyProviderFactory.setDefaultProxyProvider(new CglibProxyProvider());
+        setDefaultProxyProvider(new CglibProxyProvider());
 
         // Create auto proxies
-        JclObjectFactory factory = JclObjectFactory.getInstance(true);
+        JclObjectFactory factory = getInstance(true);
         TestInterface test = (TestInterface) factory.create(jc, "io.mypojo.jcl.test.Test");
 
         assertNotNull(test);
@@ -210,7 +213,7 @@ public class LoadTest extends TestCase {
             testObj = jc.loadClass("io.mypojo.jcl.test.Test").newInstance();
 
             // Must have been loaded by a CL other than JCL-Local
-            Assert.assertFalse(testObj.getClass().getClassLoader().equals("io.mypojo.jcl.JarClassLoader"));
+            assertFalse(testObj.getClass().getClassLoader().equals("io.mypojo.jcl.JarClassLoader"));
             return;
         } catch (ClassNotFoundException cnfe) {
             // expected if not found
@@ -259,17 +262,17 @@ public class LoadTest extends TestCase {
         XmlContextLoader cl = new XmlContextLoader("classpath:jcl.xml");
         cl.loadContext();
 
-        JclContext.get("jcl1").loadClass("io.mypojo.jcl.test.Test");
+        get("jcl1").loadClass("io.mypojo.jcl.test.Test");
 
         try {
-            JclContext.get("jcl2").loadClass("io.mypojo.jcl.test.Test");
+            get("jcl2").loadClass("io.mypojo.jcl.test.Test");
             throw new AssertionFailedError("expected ClassNotFoundException");
         } catch (ClassNotFoundException e) {
             // expected
         }
 
         assertEquals("sun.misc.Launcher$AppClassLoader",
-                JclContext.get("jcl3").loadClass("io.mypojo.jcl.test.Test").getClassLoader().getClass()
+                get("jcl3").loadClass("io.mypojo.jcl.test.Test").getClassLoader().getClass()
                         .getName());
     }
 
@@ -288,13 +291,13 @@ public class LoadTest extends TestCase {
         }
 
         // Destroy existing context loaded by testXmlContextLoader()
-        JclContext.destroy();
+        destroy();
 
         JclContextLoader contextLoader = new DefaultContextLoader(jc);
         contextLoader.loadContext();
 
         // Test context
-        Object testObj = JclContext.get().loadClass("io.mypojo.jcl.test.Test").newInstance();
+        Object testObj = get().loadClass("io.mypojo.jcl.test.Test").newInstance();
         assertNotNull(testObj);
         assertEquals("io.mypojo.jcl.JarClassLoader", testObj.getClass().getClassLoader().getClass()
                 .getName());
