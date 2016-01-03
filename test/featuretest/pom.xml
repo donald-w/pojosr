@@ -42,7 +42,7 @@
 
         <dependency>
             <groupId>io.mypojo</groupId>
-            <artifactId>jcl-core</artifactId>
+            <artifactId>jcl</artifactId>
             <version>0.0.4-SNAPSHOT</version>
         </dependency>
 
