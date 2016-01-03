@@ -50,7 +50,7 @@ public class LoadTest extends TestCase {
 
     @Test
     public void testWithResourceName() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-        JarClassLoader jc = new JarClassLoader(new String[]{"./target/test-jcl.jar"});
+        ClassLoader jc = new JarClassLoader(new String[]{"./target/test-jcl.jar"});
 
         // New class
         Object testObj = jc.loadClass("io.mypojo.jcl.test.Test").newInstance();
@@ -63,7 +63,7 @@ public class LoadTest extends TestCase {
 
     @Test
     public void testPackagedResource() {
-        JarClassLoader jc = new JarClassLoader(new String[]{"./target/test-jcl.jar"});
+        ClassLoader jc = new JarClassLoader(new String[]{"./target/test-jcl.jar"});
 
         InputStream is = jc.getResourceAsStream("test/test.properties");
 
@@ -75,7 +75,7 @@ public class LoadTest extends TestCase {
 
     @Test
     public void testPackagedResourceURL() {
-        JarClassLoader jc = new JarClassLoader(new String[]{"./target/test-jcl.jar"});
+        ClassLoader jc = new JarClassLoader(new String[]{"./target/test-jcl.jar"});
 
         URL url = jc.getResource("test/test.properties");
 
@@ -84,7 +84,7 @@ public class LoadTest extends TestCase {
 
     @Test
     public void testMissingResourceURL() {
-        JarClassLoader jc = new JarClassLoader(new String[]{"./target/test-jcl.jar"});
+        ClassLoader jc = new JarClassLoader(new String[]{"./target/test-jcl.jar"});
 
         URL url = jc.getResource("asdf/adsf");
 
@@ -93,7 +93,7 @@ public class LoadTest extends TestCase {
 
     @Test
     public void testWithClassFolder() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-        JarClassLoader jc = new JarClassLoader(new String[]{"./target/test-jcl.jar"});
+        ClassLoader jc = new JarClassLoader(new String[]{"./target/test-jcl.jar"});
 
         Object testObj = jc.loadClass("io.mypojo.jcl.test.Test").newInstance();
         assertNotNull(testObj);
@@ -105,7 +105,7 @@ public class LoadTest extends TestCase {
         // URL url = new URL("http://localhost:8080/blank/test-jcl.jar");
         File f = new File("./target/test-jcl.jar");
 
-        JarClassLoader jc = new JarClassLoader(new URL[]{f.toURI().toURL()});
+        ClassLoader jc = new JarClassLoader(new URL[]{f.toURI().toURL()});
         Object testObj = jc.loadClass("io.mypojo.jcl.test.Test").newInstance();
         assertNotNull(testObj);
     }
@@ -114,7 +114,7 @@ public class LoadTest extends TestCase {
     public void testWithInputStream() throws InstantiationException, IllegalAccessException, ClassNotFoundException,
             IOException {
         FileInputStream fis = new FileInputStream("./target/test-jcl.jar");
-        JarClassLoader jc = new JarClassLoader(new FileInputStream[]{fis});
+        ClassLoader jc = new JarClassLoader(new FileInputStream[]{fis});
         Object testObj = jc.loadClass("io.mypojo.jcl.test.Test").newInstance();
         assertNotNull(testObj);
         fis.close();
@@ -124,7 +124,10 @@ public class LoadTest extends TestCase {
     public void testAddingClassSources() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
         JarClassLoader jc = new JarClassLoader();
         jc.add("./target/test-jcl.jar");
-        Object testObj = jc.loadClass("io.mypojo.jcl.test.Test").newInstance();
+
+        ClassLoader cl = jc;
+
+        Object testObj = cl.loadClass("io.mypojo.jcl.test.Test").newInstance();
         assertNotNull(testObj);
     }
 
@@ -138,8 +141,10 @@ public class LoadTest extends TestCase {
 
         jc.add("./target/test-classes");
 
+        ClassLoader cl = jc;
+
         // Should be loaded from system
-        Object testObj = jc.loadClass("io.mypojo.jcl.test.Test").newInstance();
+        Object testObj = cl.loadClass("io.mypojo.jcl.test.Test").newInstance();
         assertNotNull(testObj);
     }
 

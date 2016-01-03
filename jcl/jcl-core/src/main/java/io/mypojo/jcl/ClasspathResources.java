@@ -19,12 +19,13 @@ package io.mypojo.jcl;
 
 import io.mypojo.jcl.exception.JclException;
 import io.mypojo.jcl.exception.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  * Class that builds a local classpath by loading resources from different
@@ -34,7 +35,7 @@ import java.util.logging.Logger;
  */
 public class ClasspathResources extends JarResources {
 
-    private static Logger logger = Logger.getLogger(ClasspathResources.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(ClasspathResources.class);
     private boolean ignoreMissingResources;
 
     public ClasspathResources() {
@@ -68,14 +69,14 @@ public class ClasspathResources extends JarResources {
                     if (!collisionAllowed)
                         throw new JclException("Resource " + entryName + " already loaded");
                     else {
-                        if (logger.isLoggable(Level.FINEST))
-                            logger.finest("Resource " + entryName + " already loaded; ignoring entry...");
+                        if (logger.isDebugEnabled())
+                            logger.debug("Resource " + entryName + " already loaded; ignoring entry...");
                         return;
                     }
                 }
 
-                if (logger.isLoggable(Level.FINEST))
-                    logger.finest("Loading resource: " + entryName);
+                if (logger.isDebugEnabled())
+                    logger.debug("Loading resource: " + entryName);
 
                 JclJarEntry entry = new JclJarEntry();
                 File parentFile = resourceFile.getAbsoluteFile().getParentFile();
@@ -106,8 +107,8 @@ public class ClasspathResources extends JarResources {
      * @param url
      */
     private void loadRemoteResource(URL url) {
-        if (logger.isLoggable(Level.FINEST))
-            logger.finest("Attempting to load a remote resource.");
+        if (logger.isDebugEnabled())
+            logger.debug("Attempting to load a remote resource.");
 
         if (url.toString().toLowerCase().endsWith(".jar")) {
             loadJar(url);
@@ -131,14 +132,14 @@ public class ClasspathResources extends JarResources {
                 if (!collisionAllowed)
                     throw new JclException("Resource " + url.toString() + " already loaded");
                 else {
-                    if (logger.isLoggable(Level.FINEST))
-                        logger.finest("Resource " + url.toString() + " already loaded; ignoring entry...");
+                    if (logger.isDebugEnabled())
+                        logger.debug("Resource " + url.toString() + " already loaded; ignoring entry...");
                     return;
                 }
             }
 
-            if (logger.isLoggable(Level.FINEST))
-                logger.finest("Loading remote resource.");
+            if (logger.isDebugEnabled())
+                logger.debug("Loading remote resource.");
 
             JclJarEntry entry = new JclJarEntry();
             entry.setResourceBytes(content);
@@ -184,14 +185,14 @@ public class ClasspathResources extends JarResources {
                     if (!collisionAllowed)
                         throw new JclException("Class " + entryName + " already loaded");
                     else {
-                        if (logger.isLoggable(Level.FINEST))
-                            logger.finest("Class " + entryName + " already loaded; ignoring entry...");
+                        if (logger.isDebugEnabled())
+                            logger.debug("Class " + entryName + " already loaded; ignoring entry...");
                         return;
                     }
                 }
 
-                if (logger.isLoggable(Level.FINEST))
-                    logger.finest("Loading class: " + entryName);
+                if (logger.isDebugEnabled())
+                    logger.debug("Loading class: " + entryName);
 
                 JclJarEntry entry = new JclJarEntry();
                 entry.setResourceBytes(content);
@@ -234,8 +235,8 @@ public class ClasspathResources extends JarResources {
      * @param path
      */
     public void loadResource(String path) {
-        if (logger.isLoggable(Level.FINEST))
-            logger.finest("Resource: " + path);
+        if (logger.isDebugEnabled())
+            logger.debug("Resource: " + path);
 
         File fp = new File(path);
 
@@ -294,8 +295,8 @@ public class ClasspathResources extends JarResources {
      */
     public void unload(String resource) {
         if (jarEntryContents.containsKey(resource)) {
-            if (logger.isLoggable(Level.FINEST))
-                logger.finest("Removing resource " + resource);
+            if (logger.isDebugEnabled())
+                logger.debug("Removing resource " + resource);
             jarEntryContents.remove(resource);
         } else {
             throw new ResourceNotFoundException(resource, "Resource not found in local ClasspathResources");
