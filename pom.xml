@@ -69,6 +69,7 @@
     <modules>
         <module>framework</module>
         <module>jcl-core</module>
+
         <module>test/test-artifacts/test-jcl</module>
         <module>test/test-artifacts/bundle1</module>
         <module>test/test-artifacts/bundle2</module>
@@ -76,6 +77,7 @@
         <module>test/test-artifacts/features</module>
         <module>test/test-artifacts/diagnostic</module>
         <module>test/test-artifacts/ipojocanary</module>
+
         <module>test/launcher</module>
         <module>test/integration</module>
         <module>test/ipojotest</module>
