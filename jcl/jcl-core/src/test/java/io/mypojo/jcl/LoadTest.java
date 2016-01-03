@@ -31,6 +31,8 @@ import junit.framework.TestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,14 +41,12 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @SuppressWarnings("all")
 @RunWith(JUnit4.class)
 public class LoadTest extends TestCase {
 
-    private static Logger logger = Logger.getLogger(LoadTest.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(LoadTest.class.getName());
 
     @Test
     public void testWithResourceName() throws InstantiationException, IllegalAccessException, ClassNotFoundException {
@@ -67,8 +67,7 @@ public class LoadTest extends TestCase {
 
         InputStream is = jc.getResourceAsStream("test/test.properties");
 
-        if (logger.isLoggable(Level.FINER))
-            logger.finer(is.toString());
+        logger.info(is.toString());
 
         assertNotNull(is);
     }

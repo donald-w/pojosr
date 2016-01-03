@@ -18,11 +18,11 @@
 package io.mypojo.jcl;
 
 import io.mypojo.jcl.exception.JclException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A factory class that loads classes from specified JarClassLoader and tries to
@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 public class JclObjectFactory {
     private static JclObjectFactory jclObjectFactory = new JclObjectFactory();
     private static boolean autoProxy;
-    private final Logger logger = Logger.getLogger(JclObjectFactory.class.getName());
+    private final Logger logger = LoggerFactory.getLogger(JclObjectFactory.class);
 
     /**
      * private constructor
@@ -219,9 +219,9 @@ public class JclObjectFactory {
                 }
             }
 
-            if (logger.isLoggable(Level.FINER)) {
-                logger.finer("Class: " + superClass);
-                logger.finer("Class Interfaces: " + il);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Class: " + superClass);
+                logger.debug("Class Interfaces: " + il);
             }
 
             if (superClass == null && il.size() == 0) {

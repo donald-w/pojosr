@@ -24,6 +24,8 @@ import io.mypojo.jcl.exception.JclContextException;
 import io.mypojo.jcl.utils.PathResolver;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -37,8 +39,6 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * The class loads the JclContext from XML file. See the documentation and
@@ -69,7 +69,7 @@ public class XmlContextLoader implements JclContextLoader {
 
     private static final String XML_SCHEMA_LANG = "http://www.w3.org/2001/XMLSchema";
     private static final String JCL_CONTEXT_SCHEMA = "io/mypojo/jcl/context/jcl-context.xsd";
-    private static Logger logger = Logger.getLogger(XmlContextLoader.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(XmlContextLoader.class);
     private final String file;
     private final JclContext jclContext;
     private final List<PathResolver> pathResolvers = new ArrayList<PathResolver>();
@@ -130,8 +130,7 @@ public class XmlContextLoader implements JclContextLoader {
 
                 jclContext.addJcl(name, jcl);
 
-                if (logger.isLoggable(Level.FINER))
-                    logger.finer("JarClassLoader[" + name + "] loaded into context.");
+                logger.info("JarClassLoader[" + name + "] loaded into context.");
             }
 
         } catch (SAXParseException e) {
@@ -237,8 +236,8 @@ public class XmlContextLoader implements JclContextLoader {
             }
         }
 
-        if (logger.isLoggable(Level.FINEST))
-            logger.finest("Loader[" + loader.getClass().getName() + "] configured: [" + loader.getOrder() + ", "
+        if (logger.isDebugEnabled())
+            logger.debug("Loader[" + loader.getClass().getName() + "] configured: [" + loader.getOrder() + ", "
                     + loader.isEnabled() + "]");
     }
 

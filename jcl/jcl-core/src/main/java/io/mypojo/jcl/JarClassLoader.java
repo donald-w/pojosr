@@ -19,6 +19,8 @@ package io.mypojo.jcl;
 
 import io.mypojo.jcl.exception.JclException;
 import io.mypojo.jcl.exception.ResourceNotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -27,8 +29,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Reads the class bytes from jar files and other resources using
@@ -38,7 +38,7 @@ import java.util.logging.Logger;
  */
 @SuppressWarnings("unchecked")
 public class JarClassLoader extends AbstractClassLoader {
-    private static Logger logger = Logger.getLogger(JarClassLoader.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(JarClassLoader.class.getName());
     /**
      * Class cache
      */
@@ -166,12 +166,12 @@ public class JarClassLoader extends AbstractClassLoader {
      * @param className
      */
     public void unloadClass(String className) {
-        if (logger.isLoggable(Level.FINEST))
-            logger.finest("Unloading class " + className);
+        if (logger.isDebugEnabled())
+            logger.debug("Unloading class " + className);
 
         if (classes.containsKey(className)) {
-            if (logger.isLoggable(Level.FINEST))
-                logger.finest("Removing loaded class " + className);
+            if (logger.isDebugEnabled())
+                logger.debug("Removing loaded class " + className);
             classes.remove(className);
             try {
                 classpathResources.unload(formatClassName(className));
@@ -246,7 +246,7 @@ public class JarClassLoader extends AbstractClassLoader {
      */
     class LocalLoader extends ProxyClassLoader {
 
-        private final Logger logger = Logger.getLogger(LocalLoader.class.getName());
+        private final Logger logger = LoggerFactory.getLogger(LocalLoader.class.getName());
 
         public LocalLoader() {
             order = 10;
@@ -260,8 +260,8 @@ public class JarClassLoader extends AbstractClassLoader {
 
             result = classes.get(className);
             if (result != null) {
-                if (logger.isLoggable(Level.FINEST))
-                    logger.finest("Returning local loaded class [" + className + "] from cache");
+                if (logger.isDebugEnabled())
+                    logger.debug("Returning local loaded class [" + className + "] from cache");
                 return result;
             }
 
@@ -289,8 +289,8 @@ public class JarClassLoader extends AbstractClassLoader {
                 resolveClass(result);
 
             classes.put(className, result);
-            if (logger.isLoggable(Level.FINEST))
-                logger.finest("Return new local loaded class " + className);
+            if (logger.isDebugEnabled())
+                logger.debug("Return new local loaded class " + className);
             return result;
         }
 
@@ -298,8 +298,8 @@ public class JarClassLoader extends AbstractClassLoader {
         public InputStream loadResource(String name) {
             byte[] arr = classpathResources.getResource(name);
             if (arr != null) {
-                if (logger.isLoggable(Level.FINEST))
-                    logger.finest("Returning newly loaded resource " + name);
+                if (logger.isDebugEnabled())
+                    logger.debug("Returning newly loaded resource " + name);
 
                 return new ByteArrayInputStream(arr);
             }
@@ -311,8 +311,8 @@ public class JarClassLoader extends AbstractClassLoader {
         public URL findResource(String name) {
             URL url = classpathResources.getResourceURL(name);
             if (url != null) {
-                if (logger.isLoggable(Level.FINEST))
-                    logger.finest("Returning newly loaded resource " + name);
+                if (logger.isDebugEnabled())
+                    logger.debug("Returning newly loaded resource " + name);
 
                 return url;
             }

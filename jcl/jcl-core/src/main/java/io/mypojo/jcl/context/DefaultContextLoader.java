@@ -18,9 +18,8 @@
 package io.mypojo.jcl.context;
 
 import io.mypojo.jcl.JarClassLoader;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is builds the context from a single JCL instance. This should be
@@ -29,7 +28,7 @@ import java.util.logging.Logger;
  * @author Kamran
  */
 public class DefaultContextLoader implements JclContextLoader {
-    private static Logger logger = Logger.getLogger(DefaultContextLoader.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(DefaultContextLoader.class.getName());
     private final JclContext jclContext;
     private final JarClassLoader jcl;
 
@@ -46,8 +45,7 @@ public class DefaultContextLoader implements JclContextLoader {
     public void loadContext() {
         jclContext.addJcl(JclContext.DEFAULT_NAME, jcl);
 
-        if (logger.isLoggable(Level.FINER))
-            logger.finer("Default JarClassLoader loaded into context.");
+        logger.info("Default JarClassLoader loaded into context.");
     }
 
     public void unloadContext() {

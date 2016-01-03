@@ -17,9 +17,10 @@
 
 package io.mypojo.jcl.test;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Test implements Serializable, TestInterface {
 
@@ -27,7 +28,7 @@ public class Test implements Serializable, TestInterface {
      * serialVersionUID:long
      */
     private static final long serialVersionUID = 7683330206220877077L;
-    private static Logger logger = Logger.getLogger(Test.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(Test.class);
     private String firstName;
     private String lastName;
 
@@ -43,8 +44,7 @@ public class Test implements Serializable, TestInterface {
     public String sayHello() {
         String hello = "Hello " + firstName + " " + lastName;
 
-        if (logger.isLoggable(Level.FINER))
-            logger.finer("Hello " + firstName + " " + lastName);
+        logger.info("Hello " + firstName + " " + lastName);
 
         return hello;
     }

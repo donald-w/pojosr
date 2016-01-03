@@ -18,6 +18,8 @@
 package io.mypojo.jcl;
 
 import io.mypojo.jcl.exception.JclException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -26,8 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * JarResources reads jar files and loads the class content/bytes in a HashMap
@@ -36,7 +36,7 @@ import java.util.logging.Logger;
  */
 public class JarResources {
 
-    private static Logger logger = Logger.getLogger(JarResources.class.getName());
+    private static Logger logger = LoggerFactory.getLogger(JarResources.class);
     protected Map<String, JclJarEntry> jarEntryContents;
     protected boolean collisionAllowed;
 
@@ -104,8 +104,8 @@ public class JarResources {
      * @param jarFile
      */
     public void loadJar(String jarFile) {
-        if (logger.isLoggable(Level.FINEST))
-            logger.finest("Loading jar: " + jarFile);
+        if (logger.isDebugEnabled())
+            logger.debug("Loading jar: " + jarFile);
 
         FileInputStream fis = null;
         try {
@@ -131,8 +131,8 @@ public class JarResources {
      * @param url
      */
     public void loadJar(URL url) {
-        if (logger.isLoggable(Level.FINEST))
-            logger.finest("Loading jar: " + url.toString());
+        if (logger.isDebugEnabled())
+            logger.debug("Loading jar: " + url.toString());
 
         InputStream in = null;
         try {
@@ -167,8 +167,8 @@ public class JarResources {
 
             JarEntry jarEntry = null;
             while ((jarEntry = jis.getNextJarEntry()) != null) {
-                if (logger.isLoggable(Level.FINEST))
-                    logger.finest(dump(jarEntry));
+                if (logger.isDebugEnabled())
+                    logger.debug(dump(jarEntry));
 
                 if (jarEntry.isDirectory()) {
                     continue;
@@ -178,15 +178,15 @@ public class JarResources {
                     if (!collisionAllowed)
                         throw new JclException("Class/Resource " + jarEntry.getName() + " already loaded");
                     else {
-                        if (logger.isLoggable(Level.FINEST))
-                            logger.finest("Class/Resource " + jarEntry.getName()
+                        if (logger.isDebugEnabled())
+                            logger.debug("Class/Resource " + jarEntry.getName()
                                     + " already loaded; ignoring entry...");
                         continue;
                     }
                 }
 
-                if (logger.isLoggable(Level.FINEST))
-                    logger.finest("Entry Name: " + jarEntry.getName() + ", " + "Entry Size: " + jarEntry.getSize());
+                if (logger.isDebugEnabled())
+                    logger.debug("Entry Name: " + jarEntry.getName() + ", " + "Entry Size: " + jarEntry.getSize());
 
                 byte[] b = new byte[2048];
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -202,8 +202,8 @@ public class JarResources {
                 entry.setResourceBytes(out.toByteArray());
                 jarEntryContents.put(jarEntry.getName(), entry);
 
-                if (logger.isLoggable(Level.FINEST))
-                    logger.finest(jarEntry.getName() + ": size=" + out.size() + " ,csize="
+                if (logger.isDebugEnabled())
+                    logger.debug(jarEntry.getName() + ": size=" + out.size() + " ,csize="
                             + jarEntry.getCompressedSize());
 
                 out.close();
@@ -211,8 +211,8 @@ public class JarResources {
         } catch (IOException e) {
             throw new JclException(e);
         } catch (NullPointerException e) {
-            if (logger.isLoggable(Level.FINEST))
-                logger.finest("Done loading.");
+            if (logger.isDebugEnabled())
+                logger.debug("Done loading.");
         } finally {
             if (jis != null)
                 try {
