@@ -69,15 +69,16 @@
     <modules>
         <module>framework</module>
         <module>jcl</module>
-        <module>test/launcher</module>
         <module>test/bundles/bundle1</module>
         <module>test/bundles/bundle2</module>
         <module>test/bundles/bundle3</module>
         <module>test/bundles/features</module>
         <module>test/bundles/diagnostic</module>
         <module>test/bundles/ipojocanary</module>
+        <module>test/launcher</module>
         <module>test/integration</module>
         <module>test/ipojotest</module>
+        <module>test/featuretest</module>
     </modules>
 
     <dependencyManagement>
