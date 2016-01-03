@@ -72,20 +72,20 @@
         </dependency>
 
         <dependency>
-            <groupId>io.mypojo.test.bundles</groupId>
+            <groupId>io.mypojo.test.test-artifacts</groupId>
             <artifactId>bundle1</artifactId>
             <version>0.0.4-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>io.mypojo.test.bundles</groupId>
+            <groupId>io.mypojo.test.test-artifacts</groupId>
             <artifactId>ipojocanary</artifactId>
             <version>0.0.4-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>io.mypojo.test.bundles</groupId>
+            <groupId>io.mypojo.test.test-artifacts</groupId>
             <artifactId>diagnostic</artifactId>
             <version>0.0.4-SNAPSHOT</version>
             <scope>test</scope>

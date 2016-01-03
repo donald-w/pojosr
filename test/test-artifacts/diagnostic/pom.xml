@@ -27,7 +27,7 @@
     </parent>
 
 
-    <groupId>io.mypojo.test.bundles</groupId>
+    <groupId>io.mypojo.test.test-artifacts</groupId>
     <artifactId>diagnostic</artifactId>
     <packaging>bundle</packaging>
     <name>myPOJO.io :: Test :: Test Artifacts :: Diagnostic</name>

@@ -26,7 +26,7 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
-    <groupId>io.mypojo.test.bundles</groupId>
+    <groupId>io.mypojo.test.test-artifacts</groupId>
     <artifactId>bundle3</artifactId>
     <packaging>bundle</packaging>
     <version>0.0.4-SNAPSHOT</version>

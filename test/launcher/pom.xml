@@ -26,7 +26,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <groupId>io.mypojo</groupId>
+    <groupId>io.mypojo.test</groupId>
     <artifactId>launcher</artifactId>
     <packaging>pom</packaging>
     <version>0.0.4-SNAPSHOT</version>
@@ -93,7 +93,7 @@
         </dependency>
 
         <dependency>
-            <groupId>io.mypojo.test.bundles</groupId>
+            <groupId>io.mypojo.test.test-artifacts</groupId>
             <artifactId>ipojocanary</artifactId>
             <version>0.0.4-SNAPSHOT</version>
         </dependency>

@@ -5,9 +5,9 @@
           xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.2.0 http://karaf.apache.org/xmlns/features/v1.2.0 ">
 
     <feature name="sample-feature" version="${project.version}">
-        <bundle>mvn:io.mypojo.test.bundles/bundle1/${project.version}</bundle>
-        <bundle>mvn:io.mypojo.test.bundles/bundle2/${project.version}</bundle>
-        <bundle>mvn:io.mypojo.test.bundles/bundle3/${project.version}</bundle>
+        <bundle>mvn:io.mypojo.test.test-artifacts/bundle1/${project.version}</bundle>
+        <bundle>mvn:io.mypojo.test.test-artifacts/bundle2/${project.version}</bundle>
+        <bundle>mvn:io.mypojo.test.test-artifacts/bundle3/${project.version}</bundle>
     </feature>
 
 </features>

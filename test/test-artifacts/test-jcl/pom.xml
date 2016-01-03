@@ -9,6 +9,7 @@
         <relativePath>../../../pom.xml</relativePath>
     </parent>
 
+    <groupId>io.mypojo.test.test-artifacts</groupId>
     <artifactId>test-jcl</artifactId>
     <name>myPOJO.io :: Test :: Test Artifacts :: JCL - Test JAR</name>
     <description>A Test JAR file containg a Test bean. This file is used in unit tests</description>

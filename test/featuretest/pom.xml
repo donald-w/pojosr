@@ -41,7 +41,7 @@
         </dependency>
 
         <dependency>
-            <groupId>io.mypojo.jcl</groupId>
+            <groupId>io.mypojo</groupId>
             <artifactId>jcl-core</artifactId>
             <version>0.0.4-SNAPSHOT</version>
         </dependency>
@@ -75,7 +75,7 @@
                         <configuration>
                             <!-- TODO introduce proper maven dependency -->
                             <descriptors>
-                                <descriptor>mvn:io.mypojo.test/features/${project.version}/xml/features</descriptor>
+                                <descriptor>mvn:io.mypojo.test.test-artifacts/features/${project.version}/xml/features</descriptor>
                             </descriptors>
                             <features>
                                 <feature>sample-feature</feature>
