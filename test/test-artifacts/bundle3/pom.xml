@@ -30,7 +30,7 @@
     <artifactId>bundle3</artifactId>
     <packaging>bundle</packaging>
     <version>0.0.4-SNAPSHOT</version>
-    <name>myPOJO.io :: Test :: Bundles :: Bundle 3</name>
+    <name>myPOJO.io :: Test :: Test Artifacts :: Bundle 3</name>
 
     <dependencies>
         <dependency>

@@ -30,7 +30,7 @@
     <artifactId>features</artifactId>
     <packaging>jar</packaging>
     <version>0.0.4-SNAPSHOT</version>
-    <name>myPOJO.io :: Test :: Feature</name>
+    <name>myPOJO.io :: Test :: Test Artifacts :: Features</name>
 
     <build>
         <plugins>
