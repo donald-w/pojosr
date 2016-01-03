@@ -69,13 +69,13 @@
     <modules>
         <module>framework</module>
         <module>jcl-core</module>
-        <module>test/test-jcl</module>
-        <module>test/bundles/bundle1</module>
-        <module>test/bundles/bundle2</module>
-        <module>test/bundles/bundle3</module>
-        <module>test/bundles/features</module>
-        <module>test/bundles/diagnostic</module>
-        <module>test/bundles/ipojocanary</module>
+        <module>test/test-artifacts/test-jcl</module>
+        <module>test/test-artifacts/bundle1</module>
+        <module>test/test-artifacts/bundle2</module>
+        <module>test/test-artifacts/bundle3</module>
+        <module>test/test-artifacts/features</module>
+        <module>test/test-artifacts/diagnostic</module>
+        <module>test/test-artifacts/ipojocanary</module>
         <module>test/launcher</module>
         <module>test/integration</module>
         <module>test/ipojotest</module>
