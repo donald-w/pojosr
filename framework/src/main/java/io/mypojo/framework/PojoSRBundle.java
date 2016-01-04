@@ -524,7 +524,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
     @SuppressWarnings("PackageAccessibility")
     public static class PojoSRInternals {
         public final Map<String, Bundle> m_symbolicNameToBundle = new HashMap<>();
-        public final EventDispatcher m_dispatcher = new EventDispatcher(m_reg);
+        public final EventDispatcher m_dispatcher;
         public final ServiceRegistry m_reg = new ServiceRegistry(
                 new ServiceRegistry.ServiceRegistryCallbacks() {
                     public void serviceChanged(ServiceEvent event,
@@ -535,5 +535,11 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
         public final Map<Long, Bundle> m_bundles = new HashMap<>();
         public final Map bundleConfig = new HashMap();
         public BundleContext m_context;
+
+        public PojoSRInternals() {
+            // Done here rather than at initialisation because of an IntelliJ bug where Rearrange Code places this before
+            // m_reg initialisation, which creates an 'Illegal Forward Reference' at compile time.
+            this.m_dispatcher = new EventDispatcher(m_reg);
+        }
     }
 }
