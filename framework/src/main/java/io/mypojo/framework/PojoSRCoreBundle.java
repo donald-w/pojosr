@@ -33,34 +33,23 @@ class PojoSRCoreBundle extends PojoSRBundle {
 
     private final PojoSRInternals internals;
 
-    public static PojoSRCoreBundle newPojoSRCoreBundle(PojoSRInternals internals, int pojoSRBundleId) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put(Constants.BUNDLE_SYMBOLICNAME,"io.mypojo.framework");
-        headers.put(Constants.BUNDLE_VERSION, "0.0.1-SNAPSHOT");
-        headers.put(Constants.BUNDLE_NAME, "System Bundle");
-        headers.put(Constants.BUNDLE_MANIFESTVERSION, "2");
-        headers.put(Constants.BUNDLE_VENDOR, "io.mypojo");
-
-        return new PojoSRCoreBundle(PojoSRCoreBundle.class.getClassLoader(), internals, headers, pojoSRBundleId);
-    }
-
     private PojoSRCoreBundle(ClassLoader classLoader, PojoSRInternals internals, Map<String, String> headers, int pojoSRBundleId) {
-            super(new Revision() {
-                @Override
-                public long getLastModified() {
-                    return System.currentTimeMillis();
-                }
+        super(new Revision() {
+                  @Override
+                  public long getLastModified() {
+                      return System.currentTimeMillis();
+                  }
 
-                @Override
-                public Enumeration<String> getEntries() {
-                    return Collections.emptyEnumeration();
-                }
+                  @Override
+                  public Enumeration<String> getEntries() {
+                      return Collections.emptyEnumeration();
+                  }
 
-                @Override
-                public URL getEntry(String entryName) {
-                    return getClass().getClassLoader().getResource(entryName);
-                }
-            },
+                  @Override
+                  public URL getEntry(String entryName) {
+                      return getClass().getClassLoader().getResource(entryName);
+                  }
+              },
                 headers,
                 new Version(0, 0, 1),
                 "file:mypojo",
@@ -74,6 +63,17 @@ class PojoSRCoreBundle extends PojoSRBundle {
                 internals.bundleConfig);
 
         this.internals = internals;
+    }
+
+    public static PojoSRCoreBundle newPojoSRCoreBundle(PojoSRInternals internals, int pojoSRBundleId) {
+        Map<String, String> headers = new HashMap<>();
+        headers.put(Constants.BUNDLE_SYMBOLICNAME, "io.mypojo.framework");
+        headers.put(Constants.BUNDLE_VERSION, "0.0.1-SNAPSHOT");
+        headers.put(Constants.BUNDLE_NAME, "System Bundle");
+        headers.put(Constants.BUNDLE_MANIFESTVERSION, "2");
+        headers.put(Constants.BUNDLE_VENDOR, "io.mypojo");
+
+        return new PojoSRCoreBundle(PojoSRCoreBundle.class.getClassLoader(), internals, headers, pojoSRBundleId);
     }
 
     @Override

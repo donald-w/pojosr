@@ -57,6 +57,6 @@ public class IPojoTest {
         logger.debug("Sleeping for a bit");
         Thread.sleep(2000);
 
-        DiagnosticUtils.dumpBundles(logger,registry.getBundleContext());
+        DiagnosticUtils.dumpBundles(logger, registry.getBundleContext());
     }
 }

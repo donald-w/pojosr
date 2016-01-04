@@ -90,6 +90,7 @@ public class Util {
      * Converts a module identifier to a bundle identifier. Module IDs are
      * typically <tt>&lt;bundle-id&gt;.&lt;revision&gt;</tt>; this method
      * returns only the portion corresponding to the bundle ID.
+     *
      * @param id Module Id
      * @return Bundle Id
      **/
@@ -107,6 +108,7 @@ public class Util {
      * Converts a module identifier to a bundle identifier. Module IDs are
      * typically <tt>&lt;bundle-id&gt;.&lt;revision&gt;</tt>; this method
      * returns only the portion corresponding to the revision.
+     *
      * @param id Module Id
      * @return Module Revision
      **/
@@ -194,7 +196,7 @@ public class Util {
      * </p>
      *
      * @param clazz the class that is the root of the search.
-     * @param name   the name of the class to load.
+     * @param name  the name of the class to load.
      * @return the loaded class or <tt>null</tt> if it could not be loaded.
      **/
     public static Class loadClassUsingClass(Class clazz, String name) {

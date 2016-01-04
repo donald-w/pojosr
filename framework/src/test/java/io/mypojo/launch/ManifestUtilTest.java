@@ -34,9 +34,9 @@ public class ManifestUtilTest {
     public void testGetHeaders() throws Exception {
         URL manifestURL = this.getClass().getResource("test1-manifest.mf");
 
-        Map<String,String> headers = ManifestUtil.getHeaders(manifestURL);
+        Map<String, String> headers = ManifestUtil.getHeaders(manifestURL);
 
-        Assert.assertEquals(3,headers.size());
+        Assert.assertEquals(3, headers.size());
         Assert.assertTrue(headers.get("header1").equals("value1"));
         Assert.assertTrue(headers.get("header2").equals("value2"));
         Assert.assertTrue(headers.get("header3").equals("value3"));
@@ -53,9 +53,9 @@ public class ManifestUtilTest {
     public void testGetHeadersExceptionMissingKey() throws Exception {
         URL manifestURL = this.getClass().getResource("test3-manifest.mf");
 
-        Map<String,String> headers = ManifestUtil.getHeaders(manifestURL);
+        Map<String, String> headers = ManifestUtil.getHeaders(manifestURL);
 
-        Assert.assertEquals(3,headers.size());
+        Assert.assertEquals(3, headers.size());
     }
 
     @Test(expected = Exception.class)
@@ -76,11 +76,11 @@ public class ManifestUtilTest {
     public void testComplex() throws Exception {
         URL manifestURL = this.getClass().getResource("complex.mf");
 
-        Map<String,String> headers = ManifestUtil.getHeaders(manifestURL);
+        Map<String, String> headers = ManifestUtil.getHeaders(manifestURL);
 
-        Assert.assertEquals(17,headers.size());
-        Assert.assertEquals(934,headers.get("iPOJO-Components").length());
-        Assert.assertEquals("Apache Maven Bundle Plugin & iPOJO 1.12.1",headers.get("Created-By"));
+        Assert.assertEquals(17, headers.size());
+        Assert.assertEquals(934, headers.get("iPOJO-Components").length());
+        Assert.assertEquals("Apache Maven Bundle Plugin & iPOJO 1.12.1", headers.get("Created-By"));
         Assert.assertEquals("1.0", headers.get("Manifest-Version"));
         Assert.assertEquals("2", headers.get("Bundle-ManifestVersion"));
     }

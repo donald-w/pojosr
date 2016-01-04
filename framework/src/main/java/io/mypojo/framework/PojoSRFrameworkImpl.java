@@ -143,7 +143,7 @@ public class PojoSRFrameworkImpl implements Framework {
     }
 
     public Enumeration<URL> findEntries(String path, String filePattern,
-                                   boolean recurse) {
+                                        boolean recurse) {
         return m_bundle.findEntries(path, filePattern, recurse);
     }
 

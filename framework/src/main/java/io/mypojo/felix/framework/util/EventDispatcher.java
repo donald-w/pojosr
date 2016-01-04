@@ -117,7 +117,7 @@ public class EventDispatcher {
                     } catch (Throwable th) {
                         if ((type != Request.FRAMEWORK_EVENT)
                                 || (((FrameworkEvent) event).getType() != FrameworkEvent.ERROR)) {
-                            logger.error("EventDispatcher: Error during dispatch.",th);
+                            logger.error("EventDispatcher: Error during dispatch.", th);
                             dispatcher.fireFrameworkEvent(
                                     new FrameworkEvent(FrameworkEvent.ERROR, bundle, th));
                         }
@@ -732,7 +732,7 @@ public class EventDispatcher {
                         try {
                             elh.event(event, shrinkableMap);
                         } catch (Throwable th) {
-                            logger.error("Problem invoking event hook",th);
+                            logger.error("Problem invoking event hook", th);
                         } finally {
                             m_registry.ungetService(felix, sr);
                         }
@@ -793,7 +793,7 @@ public class EventDispatcher {
                                 ((org.osgi.framework.hooks.bundle.EventHook) eh).event((BundleEvent) event, shrinkable);
                             }
                         } catch (Throwable th) {
-                            logger.error("Problem invoking event hook",th);
+                            logger.error("Problem invoking event hook", th);
                         } finally {
                             m_registry.ungetService(bundle, sr);
                         }

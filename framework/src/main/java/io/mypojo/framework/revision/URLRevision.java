@@ -55,7 +55,7 @@ public class URLRevision implements Revision {
         try {
             return new URL(m_url, entryName);
         } catch (MalformedURLException e) {
-            logger.error("Whilst accessing: " + entryName,e);
+            logger.error("Whilst accessing: " + entryName, e);
             return null;
         }
     }

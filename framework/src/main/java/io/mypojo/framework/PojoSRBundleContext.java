@@ -65,7 +65,7 @@ class PojoSRBundleContext implements BundleContext {
         m_dispatcher.removeListener(this, BundleListener.class, listener);
     }
 
-    public ServiceRegistration<?> registerService(String clazz, Object service, Dictionary<String, ? > properties) {
+    public ServiceRegistration<?> registerService(String clazz, Object service, Dictionary<String, ?> properties) {
         return m_reg.registerService(m_bundle, new String[]{clazz}, service, properties);
     }
 

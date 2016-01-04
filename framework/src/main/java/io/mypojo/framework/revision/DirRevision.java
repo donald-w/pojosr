@@ -53,7 +53,7 @@ public class DirRevision implements Revision {
                 }
             }
         } catch (MalformedURLException e) {
-            logger.error("Getting entry: " + entryName,e);
+            logger.error("Getting entry: " + entryName, e);
         }
         return null;
     }

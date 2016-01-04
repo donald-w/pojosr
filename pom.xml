@@ -16,7 +16,8 @@
   ~
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.mypojo</groupId>
@@ -24,7 +25,8 @@
     <packaging>pom</packaging>
     <version>0.0.4-SNAPSHOT</version>
     <name>myPOJO.io</name>
-    <description>A service registry that enables OSGi style service registry programs without using an OSGi framework.</description>
+    <description>A service registry that enables OSGi style service registry programs without using an OSGi framework.
+    </description>
     <url>http://mypojo.io</url>
 
     <licenses>
@@ -53,18 +55,18 @@
     </properties>
 
     <distributionManagement>
-      <snapshotRepository>
-        <id>ossrh</id>
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-      </snapshotRepository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <scm>
         <url>https://github.com/donald-w/mypojo</url>
         <connection>scm:git:https://github.com/donald-w/mypojo.git</connection>
         <developerConnection>scm:git:https://github.com/donald-w/mypojo.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <modules>
         <module>framework</module>
