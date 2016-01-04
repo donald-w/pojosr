@@ -47,7 +47,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
     private final EventDispatcher m_dispatcher;
     private final ClassLoader m_loader;
     private final Map m_config;
-    private final Map<String,Map> m_cachedHeaders = new HashMap<>();
+    private final Map<String,Map<String,String>> m_cachedHeaders = new HashMap<>();
     volatile int m_state = Bundle.RESOLVED;
     volatile BundleContext m_context = null;
     private volatile BundleActivator m_activator = null;
@@ -213,7 +213,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
         return new MapToDictionary(getCurrentLocalizedHeader(locale));
     }
 
-    Map getCurrentLocalizedHeader(String locale) {
+    Map<String, String> getCurrentLocalizedHeader(String locale) {
         Map<String,String> result = null;
 
         // Spec says empty local returns raw headers.
@@ -248,7 +248,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
         // If the requested locale is not cached, then try to create it.
         if (result == null) {
             // Get a modifiable copy of the raw headers.
-            Map headers = new StringMap(m_manifest, false);
+            Map<String, String> headers = new StringMap(m_manifest, false);
             // Assume for now that this will be the result.
             result = headers;
 
@@ -328,7 +328,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
         return result;
     }
 
-    private void updateHeaderCache(String locale, Map localizedHeaders) {
+    private void updateHeaderCache(String locale, Map<String,String> localizedHeaders) {
         synchronized (m_cachedHeaders) {
             m_cachedHeaders.put(locale, localizedHeaders);
             m_cachedHeadersTimestamp = System.currentTimeMillis();
