@@ -71,12 +71,11 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
         m_config = config;
     }
 
-    private static List createLocalizationResourceList(String basename,
-                                                       String locale) {
-        List result = new ArrayList(4);
+    private static List<String> createLocalizationResourceList(String basename, String locale) {
+        List<String> result = new ArrayList<>(4);
 
         StringTokenizer tokens;
-        StringBuffer tempLocale = new StringBuffer(basename);
+        StringBuilder tempLocale = new StringBuilder(basename);
 
         result.add(tempLocale.toString());
 
@@ -178,7 +177,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
         throw new BundleException("pojosr bundles can't be uninstalled");
     }
 
-    public Dictionary getHeaders() {
+    public Dictionary<String,String> getHeaders() {
         return getHeaders(Locale.getDefault().toString());
     }
 
@@ -209,7 +208,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
         return result;
     }
 
-    public Dictionary getHeaders(String locale) {
+    public Dictionary<String,String> getHeaders(String locale) {
         return new MapToDictionary(getCurrentLocalizedHeader(locale));
     }
 
@@ -275,20 +274,19 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
                 }
 
                 // Create ordered list of files to load properties from
-                List resourceList = createLocalizationResourceList(basename,
+                List<String> resourceList = createLocalizationResourceList(basename,
                         locale);
 
                 // Create a merged props file with all available props for this
                 // locale
                 boolean found = false;
                 Properties mergedProperties = new Properties();
-                for (Iterator it = resourceList.iterator(); it.hasNext(); ) {
-                    URL temp = m_revision.getEntry(it.next() + ".properties");
+                for (String aResourceList : resourceList) {
+                    URL temp = m_revision.getEntry(aResourceList + ".properties");
                     if (temp != null) {
                         found = true;
                         try {
-                            mergedProperties.load(temp.openConnection()
-                                    .getInputStream());
+                            mergedProperties.load(temp.openConnection().getInputStream());
                         } catch (IOException ex) {
                             // File doesn't exist, just continue loop
                         }
@@ -471,7 +469,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
             }
 
             public Collection<String> listResources(String path, String filePattern, int options) {
-                Collection<String> result = new ArrayList<String>();
+                Collection<String> result = new ArrayList<>();
                 for (URL u : findEntries(path, filePattern, options)) {
                     result.add(u.toString());
                 }
@@ -512,7 +510,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
             }
 
             public List<URL> findEntries(String path, String filePattern, int options) {
-                List<URL> result = new ArrayList<URL>();
+                List<URL> result = new ArrayList<>();
                 for (Enumeration<URL> e = PojoSRBundle.this.findEntries(path, filePattern, options == BundleWiring.FINDENTRIES_RECURSE); e.hasMoreElements(); ) {
                     result.add(e.nextElement());
                 }
