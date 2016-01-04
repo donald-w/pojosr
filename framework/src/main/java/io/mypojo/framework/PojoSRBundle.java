@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.security.cert.X509Certificate;
 import java.util.*;
 
 @SuppressWarnings("PackageAccessibility")
@@ -46,7 +47,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
     private final EventDispatcher m_dispatcher;
     private final ClassLoader m_loader;
     private final Map m_config;
-    private final Map m_cachedHeaders = new HashMap();
+    private final Map<String,Map> m_cachedHeaders = new HashMap<>();
     volatile int m_state = Bundle.RESOLVED;
     volatile BundleContext m_context = null;
     private volatile BundleActivator m_activator = null;
@@ -213,7 +214,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
     }
 
     Map getCurrentLocalizedHeader(String locale) {
-        Map result = null;
+        Map<String,String> result = null;
 
         // Spec says empty local returns raw headers.
         if ((locale == null) || (locale.length() == 0)) {
@@ -227,7 +228,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
                 // only contain the localized headers for the default locale at
                 // the time of uninstall, so just return that.
                 if (getState() == Bundle.UNINSTALLED) {
-                    result = (Map) m_cachedHeaders.values().iterator().next();
+                    result = m_cachedHeaders.values().iterator().next();
                 }
                 // If the bundle has been updated, clear the cached headers.
                 else if (getLastModified() > m_cachedHeadersTimestamp) {
@@ -238,7 +239,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
                     // Check if headers for this locale have already been
                     // resolved
                     if (m_cachedHeaders.containsKey(locale)) {
-                        result = (Map) m_cachedHeaders.get(locale);
+                        result = m_cachedHeaders.get(locale);
                     }
                 }
             }
@@ -297,8 +298,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
                 // should
                 // return the default localization.
                 if (!found && !locale.equals(Locale.getDefault().toString())) {
-                    result = getCurrentLocalizedHeader(Locale.getDefault()
-                            .toString());
+                    result = getCurrentLocalizedHeader(Locale.getDefault().toString());
                 }
                 // Otherwise, perform the localization based on the discovered
                 // properties and cache the result.
@@ -349,12 +349,11 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
     }
 
     public Enumeration<String> getEntryPaths(String path) {
-        return new EntryFilterEnumeration<String>(m_revision, false, path, null, false, false);
+        return new EntryFilterEnumeration<>(m_revision, false, path, null, false, false);
     }
 
     public URL getEntry(String path) {
-        URL result = m_revision.getEntry(path);
-        return result;
+        return m_revision.getEntry(path);
     }
 
     public long getLastModified() {
@@ -364,16 +363,16 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
     public Enumeration<URL> findEntries(String path, String filePattern,
                                         boolean recurse) {
         // TODO: module - implement this based on the revision
-        return new EntryFilterEnumeration<URL>(m_revision, false, path, filePattern, recurse, true);
+        return new EntryFilterEnumeration<>(m_revision, false, path, filePattern, recurse, true);
     }
 
     public BundleContext getBundleContext() {
         return m_context;
     }
 
-    public Map getSignerCertificates(int signersType) {
+    public Map<X509Certificate, List<X509Certificate>> getSignerCertificates(int signersType) {
         // TODO: security - fix this
-        return new HashMap();
+        return new HashMap<>();
     }
 
     public Version getVersion() {
@@ -381,10 +380,7 @@ public class PojoSRBundle implements Bundle, BundleRevisions, BundleRevision {
     }
 
     public boolean equals(Object o) {
-        if (o instanceof PojoSRBundle) {
-            return ((PojoSRBundle) o).m_id == m_id;
-        }
-        return false;
+        return (o instanceof PojoSRBundle) && ((PojoSRBundle) o).m_id == m_id;
     }
 
     public int compareTo(Bundle o) {
