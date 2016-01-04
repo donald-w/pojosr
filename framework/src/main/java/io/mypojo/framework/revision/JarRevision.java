@@ -34,14 +34,14 @@ public class JarRevision implements Revision {
 
     private final long m_lastModified;
     private final JarFile m_jar;
-    private final URL m_url;
+    //private final URL m_url;
     private final String m_urlString;
     private final String m_prefix;
 
     public JarRevision(JarFile jar, URL url, String prefix, long lastModified) {
         m_jar = jar;
-        m_url = url;
-        m_urlString = m_url.toExternalForm();
+        //m_url = url;
+        m_urlString = url.toExternalForm();
         m_prefix = prefix;
         if (lastModified > 0) {
             m_lastModified = lastModified;
@@ -81,7 +81,6 @@ public class JarRevision implements Revision {
 
                                 public void connect() throws IOException {
                                     // TODO Auto-generated method stub
-
                                 }
 
                                 public InputStream getInputStream()
