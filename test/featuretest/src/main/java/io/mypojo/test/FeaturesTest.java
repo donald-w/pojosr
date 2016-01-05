@@ -38,8 +38,8 @@ public class FeaturesTest {
 
         JarClassLoader jc = new JarClassLoader();
 
-        jc.add("./target/features-repo/io/mypojo/test/bundles/bundle1/0.0.4-SNAPSHOT/bundle1-0.0.4-SNAPSHOT.jar");
-        jc.add("./target/features-repo/io/mypojo/test/bundles/bundle2/0.0.4-SNAPSHOT/bundle2-0.0.4-SNAPSHOT.jar");
+        jc.add("./target/features-repo/io/mypojo/test/test-artifacts/bundle1/0.0.4-SNAPSHOT/bundle1-0.0.4-SNAPSHOT.jar");
+        jc.add("./target/features-repo/io/mypojo/test/test-artifacts/bundle2/0.0.4-SNAPSHOT/bundle2-0.0.4-SNAPSHOT.jar");
 //        jc.add("./target/features-repo/io/mypojo/test/bundles/bundle3/0.0.4-SNAPSHOT/bundle3-0.0.4-SNAPSHOT.jar");
 
         Map config = new HashMap();
