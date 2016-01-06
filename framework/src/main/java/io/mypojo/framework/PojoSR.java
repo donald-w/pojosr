@@ -58,7 +58,7 @@ public class PojoSR implements PojoServiceRegistry {
 
         internals.bundleConfig.putAll(config);
 
-        Bundle b = PojoSRCoreBundle.newPojoSRCoreBundle(internals, 1); // we must be bundle 1, as bundle 0 should be osgi.core
+        Bundle b = PojoSRCoreBundle.newPojoSRCoreBundle(internals, 0);
         internals.m_symbolicNameToBundle.put(b.getSymbolicName(), b);
 
         b.start();
@@ -161,8 +161,7 @@ public class PojoSR implements PojoServiceRegistry {
                 sym = sym.trim();
             }
 
-            if ((sym == null)
-                    || !internals.m_symbolicNameToBundle.containsKey(sym)) {
+            if ((sym != null) && !internals.m_symbolicNameToBundle.containsKey(sym)) {
                 // TODO: framework - support multiple versions
 
                 // special for osgi.core as it must be bundle id 0
@@ -176,12 +175,10 @@ public class PojoSR implements PojoServiceRegistry {
                         id,
                         sym,
                         internals.m_bundles, desc.getClassLoader(), internals.bundleConfig);
-                if (sym != null) {
-                    internals.m_symbolicNameToBundle.put(bundle.getSymbolicName(),
-                            bundle);
-                }
-            }
 
+
+                 internals.m_symbolicNameToBundle.put(bundle.getSymbolicName(), bundle);
+            }
         }
 
         logger.info("Will start {} bundles", internals.m_bundles.size());

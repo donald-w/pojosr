@@ -26,7 +26,9 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
+import java.util.jar.Manifest;
 
 /**
  * JarResources reads jar files and loads the class content/bytes in a HashMap
@@ -207,6 +209,20 @@ public class JarResources {
 
                 out.close();
             }
+
+            // JarInputStream 'consumes' the manifest. We want it available, since it fundamentally underpins how the ClassPathScanner works
+            Manifest manifest = jis.getManifest();
+            if (manifest != null) {
+                try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+                    manifest.write(out);
+
+                    JclJarEntry entry = new JclJarEntry();
+                    entry.setBaseUrl(argBaseUrl);
+                    entry.setResourceBytes(out.toByteArray());
+                    jarEntryContents.put(JarFile.MANIFEST_NAME, entry);
+                }
+            }
+
         } catch (IOException e) {
             throw new JclException(e);
         } catch (NullPointerException e) {
