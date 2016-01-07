@@ -44,17 +44,14 @@ public class ClasspathResources extends JarResources {
 
     /**
      * Reads the resource content
-     *
-     * @param resource
      */
     private void loadResourceContent(String resource, String pack) {
         File resourceFile = new File(resource);
         String entryName = "";
-        FileInputStream fis = null;
-        byte[] content = null;
-        try {
-            fis = new FileInputStream(resourceFile);
-            content = new byte[(int) resourceFile.length()];
+
+        try (FileInputStream fis = new FileInputStream(resourceFile)) {
+
+            byte[] content = new byte[(int) resourceFile.length()];
 
             if (fis.read(content) != -1) {
 
@@ -91,19 +88,11 @@ public class ClasspathResources extends JarResources {
             }
         } catch (IOException e) {
             throw new JclException(e);
-        } finally {
-            try {
-                fis.close();
-            } catch (IOException e) {
-                throw new JclException(e);
-            }
         }
     }
 
     /**
      * Attempts to load a remote resource (jars, properties files, etc)
-     *
-     * @param url
      */
     private void loadRemoteResource(URL url) {
         if (logger.isDebugEnabled())
@@ -114,12 +103,10 @@ public class ClasspathResources extends JarResources {
             return;
         }
 
-        InputStream stream = null;
-        ByteArrayOutputStream out = null;
-        try {
-            stream = url.openStream();
-            out = new ByteArrayOutputStream();
-
+        try (
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                InputStream stream = url.openStream()
+        ) {
             int byt;
             while (((byt = stream.read()) != -1)) {
                 out.write(byt);
@@ -145,40 +132,21 @@ public class ClasspathResources extends JarResources {
             jarEntryContents.put(url.toString(), entry);
         } catch (IOException e) {
             throw new JclException(e);
-        } finally {
-            if (out != null)
-                try {
-                    out.close();
-                } catch (IOException e) {
-                    throw new JclException(e);
-                }
-            if (stream != null)
-                try {
-                    stream.close();
-                } catch (IOException e) {
-                    throw new JclException(e);
-                }
         }
     }
 
     /**
      * Reads the class content
-     *
-     * @param clazz
-     * @param pack
      */
     private void loadClassContent(String clazz, String pack) {
         File cf = new File(clazz);
-        FileInputStream fis = null;
-        String entryName = "";
-        byte[] content = null;
 
-        try {
-            fis = new FileInputStream(cf);
-            content = new byte[(int) cf.length()];
+        try (FileInputStream fis = new FileInputStream(cf)) {
+
+            byte[] content = new byte[(int) cf.length()];
 
             if (fis.read(content) != -1) {
-                entryName = pack + "/" + cf.getName();
+                String entryName = pack + "/" + cf.getName();
 
                 if (jarEntryContents.containsKey(entryName)) {
                     if (!collisionAllowed)
@@ -199,21 +167,11 @@ public class ClasspathResources extends JarResources {
             }
         } catch (IOException e) {
             throw new JclException(e);
-        } finally {
-            if (fis != null)
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    throw new JclException(e);
-                }
         }
-
     }
 
     /**
      * Reads local and remote resources
-     *
-     * @param url
      */
     public void loadResource(URL url) {
         try {
@@ -230,8 +188,6 @@ public class ClasspathResources extends JarResources {
     /**
      * Reads local resources from - Jar files - Class folders - Jar Library
      * folders
-     *
-     * @param path
      */
     public void loadResource(String path) {
         if (logger.isDebugEnabled())
@@ -249,9 +205,6 @@ public class ClasspathResources extends JarResources {
     /**
      * Reads local resources from - Jar files - Class folders - Jar Library
      * folders
-     *
-     * @param fol
-     * @param packName
      */
     private void loadResource(File fol, String packName) {
         if (fol.isFile()) {
@@ -289,8 +242,6 @@ public class ClasspathResources extends JarResources {
 
     /**
      * Removes the loaded resource
-     *
-     * @param resource
      */
     public void unload(String resource) {
         if (jarEntryContents.containsKey(resource)) {
