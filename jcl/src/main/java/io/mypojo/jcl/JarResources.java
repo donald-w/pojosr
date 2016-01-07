@@ -45,14 +45,10 @@ public class JarResources {
      * Default constructor
      */
     public JarResources() {
-        jarEntryContents = new HashMap<String, JclJarEntry>();
+        jarEntryContents = new HashMap<>();
         collisionAllowed = Configuration.suppressCollisionException();
     }
 
-    /**
-     * @param name
-     * @return URL
-     */
     public URL getResourceURL(String name) {
 
         JclJarEntry entry = jarEntryContents.get(name);
@@ -61,7 +57,7 @@ public class JarResources {
                 throw new JclException("non-URL accessible resource");
             }
             try {
-                return new URL(entry.getBaseUrl().toString() + name);
+                return new URL(entry.getBaseUrl() + name);
             } catch (MalformedURLException e) {
                 throw new JclException(e);
             }
@@ -70,10 +66,6 @@ public class JarResources {
         return null;
     }
 
-    /**
-     * @param name
-     * @return byte[]
-     */
     public byte[] getResource(String name) {
         JclJarEntry entry = jarEntryContents.get(name);
         if (entry != null) {
@@ -90,7 +82,7 @@ public class JarResources {
      */
     public Map<String, byte[]> getResources() {
 
-        Map<String, byte[]> resourcesAsBytes = new HashMap<String, byte[]>(jarEntryContents.size());
+        Map<String, byte[]> resourcesAsBytes = new HashMap<>(jarEntryContents.size());
 
         for (Map.Entry<String, JclJarEntry> entry : jarEntryContents.entrySet()) {
             resourcesAsBytes.put(entry.getKey(), entry.getValue().getResourceBytes());
@@ -101,72 +93,48 @@ public class JarResources {
 
     /**
      * Reads the specified jar file
-     *
-     * @param jarFile
      */
     public void loadJar(String jarFile) {
         if (logger.isDebugEnabled())
             logger.debug("Loading jar: " + jarFile);
 
-        FileInputStream fis = null;
-        try {
-            File file = new File(jarFile);
-            String baseUrl = "jar:" + file.toURI().toString() + "!/";
-            fis = new FileInputStream(file);
+        File file = new File(jarFile);
+        String baseUrl = "jar:" + file.toURI().toString() + "!/";
+
+        try (FileInputStream fis = new FileInputStream(file)) {
             loadJar(baseUrl, fis);
         } catch (IOException e) {
             throw new JclException(e);
-        } finally {
-            if (fis != null)
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    throw new JclException(e);
-                }
         }
     }
 
     /**
      * Reads the jar file from a specified URL
-     *
-     * @param url
      */
     public void loadJar(URL url) {
         if (logger.isDebugEnabled())
             logger.debug("Loading jar: " + url.toString());
 
-        InputStream in = null;
-        try {
+        try (InputStream in = url.openStream()) {
             String baseUrl = "jar:" + url.toString() + "!/";
-            in = url.openStream();
             loadJar(baseUrl, in);
         } catch (IOException e) {
             throw new JclException(e);
-        } finally {
-            if (in != null)
-                try {
-                    in.close();
-                } catch (IOException e) {
-                    throw new JclException(e);
-                }
         }
     }
 
     /**
      * Load the jar contents from InputStream
-     *
-     * @param argBaseUrl
      */
     public void loadJar(String argBaseUrl, InputStream jarStream) {
 
-        BufferedInputStream bis = null;
-        JarInputStream jis = null;
+        try (
+                BufferedInputStream bis = new BufferedInputStream(jarStream);
+                JarInputStream jis = new JarInputStream(bis)
+        )
+            {
 
-        try {
-            bis = new BufferedInputStream(jarStream);
-            jis = new JarInputStream(bis);
-
-            JarEntry jarEntry = null;
+            JarEntry jarEntry;
             while ((jarEntry = jis.getNextJarEntry()) != null) {
                 if (logger.isDebugEnabled())
                     logger.debug(dump(jarEntry));
@@ -192,7 +160,7 @@ public class JarResources {
                 byte[] b = new byte[2048];
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-                int len = 0;
+                int len;
                 while ((len = jis.read(b)) > 0) {
                     out.write(b, 0, len);
                 }
@@ -228,31 +196,14 @@ public class JarResources {
         } catch (NullPointerException e) {
             if (logger.isDebugEnabled())
                 logger.debug("Done loading.");
-        } finally {
-            if (jis != null)
-                try {
-                    jis.close();
-                } catch (IOException e) {
-                    throw new JclException(e);
-                }
-
-            if (bis != null)
-                try {
-                    bis.close();
-                } catch (IOException e) {
-                    throw new JclException(e);
-                }
         }
     }
 
     /**
      * For debugging
-     *
-     * @param je
-     * @return String
      */
     private String dump(JarEntry je) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         if (je.isDirectory()) {
             sb.append("d ");
         } else {
@@ -267,9 +218,9 @@ public class JarResources {
 
         sb.append(je.getName());
         sb.append("\t");
-        sb.append("" + je.getSize());
+        sb.append("").append(je.getSize());
         if (je.getMethod() == JarEntry.DEFLATED) {
-            sb.append("/" + je.getCompressedSize());
+            sb.append("/").append(je.getCompressedSize());
         }
 
         return (sb.toString());
