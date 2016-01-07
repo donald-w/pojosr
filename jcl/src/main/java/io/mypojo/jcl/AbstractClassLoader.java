@@ -174,7 +174,7 @@ public abstract class AbstractClassLoader extends ClassLoader {
             return Collections.emptyEnumeration();
         }
 
-        Vector<URL> urlVector = new Vector<URL>();
+        Vector<URL> urlVector = new Vector<>();
         URL url = null;
 
         // Check osgi boot delegation
@@ -554,9 +554,6 @@ public abstract class AbstractClassLoader extends ClassLoader {
 
         /**
          * Check if the class/resource is part of OSGi boot delegation
-         *
-         * @param resourceName
-         * @return
          */
         private boolean isPartOfOsgiBootDelegation(String resourceName) {
             if (resourceName.startsWith(JAVA_PACKAGE))

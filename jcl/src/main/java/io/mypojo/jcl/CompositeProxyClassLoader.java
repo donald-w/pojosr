@@ -29,7 +29,7 @@ import java.util.List;
  * @author <a href="mailto:jguibert@intelligents-ia.com" >Jerome Guibert</a>
  */
 public class CompositeProxyClassLoader extends ProxyClassLoader {
-    private final List<ProxyClassLoader> proxyClassLoaders = new ArrayList<ProxyClassLoader>();
+    private final List<ProxyClassLoader> proxyClassLoaders = new ArrayList<>();
 
     /**
      * Build a new instance of CompositeProxyClassLoader.java.
@@ -68,7 +68,6 @@ public class CompositeProxyClassLoader extends ProxyClassLoader {
     }
 
     /**
-     * @return
      * @see java.util.List#isEmpty()
      */
     public boolean isEmpty() {

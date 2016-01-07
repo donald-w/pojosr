@@ -57,8 +57,6 @@ public class JarClassLoader extends AbstractClassLoader {
 
     /**
      * Loads classes from different sources
-     *
-     * @param sources
      */
     public JarClassLoader(Object[] sources) {
         this();
@@ -67,8 +65,6 @@ public class JarClassLoader extends AbstractClassLoader {
 
     /**
      * Loads classes from different sources
-     *
-     * @param sources
      */
     public JarClassLoader(List sources) {
         this();
@@ -84,8 +80,6 @@ public class JarClassLoader extends AbstractClassLoader {
 
     /**
      * Add all jar/class sources
-     *
-     * @param sources
      */
     public void addAll(Object[] sources) {
         for (Object source : sources) {
@@ -95,8 +89,6 @@ public class JarClassLoader extends AbstractClassLoader {
 
     /**
      * Add all jar/class sources
-     *
-     * @param sources
      */
     public void addAll(List sources) {
         for (Object source : sources) {
@@ -106,8 +98,6 @@ public class JarClassLoader extends AbstractClassLoader {
 
     /**
      * Loads local/remote source
-     *
-     * @param source
      */
     public void add(Object source) {
         if (source instanceof InputStream)
@@ -123,8 +113,6 @@ public class JarClassLoader extends AbstractClassLoader {
 
     /**
      * Loads local/remote resource
-     *
-     * @param resourceName
      */
     public void add(String resourceName) {
         classpathResources.loadResource(resourceName);
@@ -132,8 +120,6 @@ public class JarClassLoader extends AbstractClassLoader {
 
     /**
      * Loads classes from InputStream
-     *
-     * @param jarStream
      */
     public void add(InputStream jarStream) {
         classpathResources.loadJar(null, jarStream);
@@ -141,8 +127,6 @@ public class JarClassLoader extends AbstractClassLoader {
 
     /**
      * Loads local/remote resource
-     *
-     * @param url
      */
     public void add(URL url) {
         classpathResources.loadResource(url);
@@ -151,9 +135,6 @@ public class JarClassLoader extends AbstractClassLoader {
     /**
      * Reads the class bytes from different local and remote resources using
      * ClasspathResources
-     *
-     * @param className
-     * @return byte[]
      */
     protected byte[] loadClassBytes(String className) {
         className = formatClassName(className);
@@ -164,8 +145,6 @@ public class JarClassLoader extends AbstractClassLoader {
     /**
      * Attempts to unload class, it only unloads the locally loaded classes by
      * JCL
-     *
-     * @param className
      */
     public void unloadClass(String className) {
         if (logger.isDebugEnabled())
@@ -192,8 +171,6 @@ public class JarClassLoader extends AbstractClassLoader {
     }
 
     /**
-     * @param className
-     * @return String
      */
     protected String formatClassName(String className) {
         className = className.replace('/', '~');
