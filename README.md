@@ -6,7 +6,7 @@ Originally imported from code.google.com/p/pojosr
 
 **This is a work in progress.**
 
-**Do not use...**
+**Do not use.**
 
 Continuous build status:
 
