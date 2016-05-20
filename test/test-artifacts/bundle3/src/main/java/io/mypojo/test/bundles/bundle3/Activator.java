@@ -29,12 +29,12 @@ public class Activator implements BundleActivator {
 
     @Override
     public void start(BundleContext context) throws Exception {
-        logger.info("Starting Bundle3");
+        logger.info("Activating Bundle3");
     }
 
     @Override
     public void stop(BundleContext context) throws Exception {
-        logger.info("Stopping Bundle3");
+        logger.info("Activating Bundle3");
     }
 }
 
