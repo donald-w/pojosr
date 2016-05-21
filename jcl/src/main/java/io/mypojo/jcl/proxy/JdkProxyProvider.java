@@ -16,7 +16,7 @@
 
 package io.mypojo.jcl.proxy;
 
-import io.mypojo.jcl.JclUtils;
+import io.mypojo.jcl.utils.JclUtils;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;

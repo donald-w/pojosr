@@ -16,7 +16,7 @@
 
 package io.mypojo.jcl.proxy;
 
-import io.mypojo.jcl.JclUtils;
+import io.mypojo.jcl.utils.JclUtils;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;

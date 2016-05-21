@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package io.mypojo.jcl;
+package io.mypojo.jcl.utils;
 
+import io.mypojo.jcl.Configuration;
+import io.mypojo.jcl.JarClassLoader;
 import io.mypojo.jcl.exception.JclException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

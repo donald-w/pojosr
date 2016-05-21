@@ -16,8 +16,6 @@
 
 package io.mypojo.jcl.exception;
 
-import io.mypojo.jcl.ResourceType;
-
 /**
  * @author Kamran Zafar
  */
