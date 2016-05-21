@@ -44,15 +44,13 @@ public class JarClassLoader extends AbstractClassLoader {
     /**
      * Class cache
      */
-    protected final Map<String, Class> classes;
-    protected final ClasspathResources classpathResources;
+    protected final Map<String, Class> classes = synchronizedMap(new HashMap<String, Class>());
+    protected final IClasspathResources classpathResources = new ClasspathResources();
     private final ProxyClassLoader localLoader = new LocalLoader();
     private char classNameReplacementChar;
 
     public JarClassLoader() {
-        classpathResources = new ClasspathResources();
-        classes = synchronizedMap(new HashMap<String, Class>());
-        initialize();
+        addLoader(localLoader);
     }
 
     /**
@@ -69,13 +67,6 @@ public class JarClassLoader extends AbstractClassLoader {
     public JarClassLoader(List sources) {
         this();
         addAll(sources);
-    }
-
-    /**
-     * Some initialisations
-     */
-    public void initialize() {
-        addLoader(localLoader);
     }
 
     /**

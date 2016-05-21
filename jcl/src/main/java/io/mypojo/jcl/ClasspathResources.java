@@ -39,16 +39,14 @@ import java.util.jar.Manifest;
  *
  * @author Kamran Zafar
  */
-public class ClasspathResources {
+public class ClasspathResources implements IClasspathResources {
 
     private static final Logger logger = LoggerFactory.getLogger(ClasspathResources.class);
     private final Map<String, JclJarEntry> jarEntryContents = new HashMap<>();
-    protected boolean collisionAllowed;
-    private boolean ignoreMissingResources;
+    protected boolean collisionAllowed = Configuration.suppressCollisionException();
+    private boolean ignoreMissingResources = Configuration.suppressMissingResourceException();
 
     public ClasspathResources() {
-        collisionAllowed = Configuration.suppressCollisionException();
-        ignoreMissingResources = Configuration.suppressMissingResourceException();
     }
 
     /**
