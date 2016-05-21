@@ -20,10 +20,13 @@ import io.mypojo.framework.launch.ClasspathScanner;
 import io.mypojo.framework.launch.PojoServiceRegistry;
 import io.mypojo.framework.launch.PojoServiceRegistryFactory;
 import io.mypojo.jcl.JarClassLoader;
+import org.junit.Assert;
+import org.junit.Test;
 import org.osgi.framework.Bundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
@@ -34,13 +37,19 @@ import java.util.ServiceLoader;
 public class FeaturesTest {
     private static Logger logger = LoggerFactory.getLogger(FeaturesTest.class);
 
-    public static void main(String[] args) throws Exception {
+    private static final String bundle1Jar = "./target/features-repo/io/mypojo/test/test-artifacts/bundle1/0.0.4-SNAPSHOT/bundle1-0.0.4-SNAPSHOT.jar";
+    private static final String bundle2Jar = "./target/features-repo/io/mypojo/test/test-artifacts/bundle2/0.0.4-SNAPSHOT/bundle2-0.0.4-SNAPSHOT.jar";
+
+    @Test
+    public void testMultiBundleStart() throws Exception {
 
         JarClassLoader jc = new JarClassLoader();
 
-        jc.add("./target/features-repo/io/mypojo/test/test-artifacts/bundle1/0.0.4-SNAPSHOT/bundle1-0.0.4-SNAPSHOT.jar");
-        jc.add("./target/features-repo/io/mypojo/test/test-artifacts/bundle2/0.0.4-SNAPSHOT/bundle2-0.0.4-SNAPSHOT.jar");
-//        jc.add("./target/features-repo/io/mypojo/test/bundles/bundle3/0.0.4-SNAPSHOT/bundle3-0.0.4-SNAPSHOT.jar");
+        Assert.assertTrue(new File(bundle1Jar).exists());
+        Assert.assertTrue(new File(bundle2Jar).exists());
+
+        jc.add(bundle1Jar);
+        jc.add(bundle2Jar);
 
         Map config = new HashMap();
         config.put(PojoServiceRegistryFactory.BUNDLE_DESCRIPTORS, new ClasspathScanner().scanForBundles(jc));

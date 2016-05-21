@@ -62,7 +62,9 @@ public class ClasspathScanner {
             Map<String, String> headers = ManifestUtil.getHeaders(manifestURL);
 
             if ((filter == null) || filter.match(new MapToDictionary(headers))) {
-                bundles.add(new BundleDescriptor(loader, getParentURL(manifestURL), headers));
+                if (headers.containsKey("Bundle-ManifestVersion")) {
+                    bundles.add(new BundleDescriptor(loader, getParentURL(manifestURL), headers));
+                }
             }
         }
         logger.info("Found {} bundles", bundles.size());
