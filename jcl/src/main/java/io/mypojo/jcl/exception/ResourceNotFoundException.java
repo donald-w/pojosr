@@ -37,37 +37,22 @@ public class ResourceNotFoundException extends JclException {
         super();
     }
 
-    /**
-     * @param message
-     */
     public ResourceNotFoundException(String message) {
         super(message);
     }
 
-    /**
-     * @param resource
-     * @param message
-     */
     public ResourceNotFoundException(String resource, String message) {
         super(message);
         resourceName = resource;
         determineResourceType(resource);
     }
 
-    /**
-     * @param e
-     * @param resource
-     * @param message
-     */
     public ResourceNotFoundException(Throwable e, String resource, String message) {
         super(message, e);
         resourceName = resource;
         determineResourceType(resource);
     }
 
-    /**
-     * @param resourceName
-     */
     private void determineResourceType(String resourceName) {
         if (resourceName.toLowerCase().endsWith("." + ResourceType.CLASS.name().toLowerCase()))
             resourceType = ResourceType.CLASS;
@@ -86,9 +71,6 @@ public class ResourceNotFoundException extends JclException {
         return resourceName;
     }
 
-    /**
-     * @param resourceName
-     */
     public void setResourceName(String resourceName) {
         this.resourceName = resourceName;
     }
@@ -100,9 +82,6 @@ public class ResourceNotFoundException extends JclException {
         return resourceType;
     }
 
-    /**
-     * @param resourceType
-     */
     public void setResourceType(ResourceType resourceType) {
         this.resourceType = resourceType;
     }
