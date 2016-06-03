@@ -342,8 +342,7 @@ public class ClasspathResources implements IClasspathResources {
         try (
                 BufferedInputStream bis = new BufferedInputStream(jarStream);
                 JarInputStream jis = new JarInputStream(bis)
-        )
-            {
+        ) {
 
             JarEntry jarEntry;
             while ((jarEntry = jis.getNextJarEntry()) != null) {

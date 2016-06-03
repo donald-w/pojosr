@@ -177,7 +177,7 @@ public class PojoSR implements PojoServiceRegistry {
                         internals.m_bundles, desc.getClassLoader(), internals.bundleConfig);
 
 
-                 internals.m_symbolicNameToBundle.put(bundle.getSymbolicName(), bundle);
+                internals.m_symbolicNameToBundle.put(bundle.getSymbolicName(), bundle);
             }
         }
 
