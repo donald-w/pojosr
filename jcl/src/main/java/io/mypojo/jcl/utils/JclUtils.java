@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package io.mypojo.jcl;
+package io.mypojo.jcl.utils;
 
 import io.mypojo.jcl.exception.JclException;
 import io.mypojo.jcl.proxy.ProxyProviderFactory;
-import io.mypojo.jcl.utils.ObjectCloner;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

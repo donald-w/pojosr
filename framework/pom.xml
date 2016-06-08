@@ -112,13 +112,21 @@
                     <instructions>
                         <Bundle-SymbolicName>io.mypojo.framework</Bundle-SymbolicName>
                         <Bundle-Name>Pojo Service Registry</Bundle-Name>
-                        <Bundle-Vendor>Karl Pauls</Bundle-Vendor>
-                        <Private-Package>org.osgi.framework.*, org.osgi.service.url, org.osgi.service.packageadmin,
-                            org.osgi.service.startlevel, org.osgi.util.tracker, io.mypojo.framework.*
+                        <Bundle-Vendor>Donald W</Bundle-Vendor>
+                        <Private-Package>
+                            org.osgi.framework.*,
+                            org.osgi.service.url,
+                            org.osgi.service.packageadmin,
+                            org.osgi.service.startlevel,
+                            org.osgi.util.tracker,
+                            io.mypojo.framework.*
                         </Private-Package>
                         <Import-Package>!*</Import-Package>
                         <Include-Resource>
-                            META-INF/LICENSE=LICENSE,META-INF/NOTICE=NOTICE,META-INF/DEPENDENCIES=DEPENDENCIES,{src/main/resources/}
+                            META-INF/LICENSE=LICENSE,
+                            META-INF/NOTICE=NOTICE,
+                            META-INF/DEPENDENCIES=DEPENDENCIES,
+                            {src/main/resources/}
                         </Include-Resource>
                         <Main-Class>io.mypojo.framework.PojoSR</Main-Class>
                     </instructions>

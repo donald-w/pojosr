@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package io.mypojo.jcl;
+package io.mypojo.jcl.proxyclassloader;
+
+import io.mypojo.jcl.AbstractClassLoader;
 
 import java.io.InputStream;
 import java.net.URL;

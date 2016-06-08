@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.mypojo.jcl;
+package io.mypojo.jcl.proxyclassloader;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -34,36 +34,15 @@ public abstract class ProxyClassLoader implements Comparable<ProxyClassLoader> {
 
     /**
      * Set loading order
-     *
-     * @param order
      */
     public void setOrder(int order) {
         this.order = order;
     }
 
-    /**
-     * Loads the class
-     *
-     * @param className
-     * @param resolveIt
-     * @return class
-     */
     public abstract Class loadClass(String className, boolean resolveIt);
 
-    /**
-     * Loads the resource
-     *
-     * @param name
-     * @return InputStream
-     */
     public abstract InputStream loadResource(String name);
 
-    /**
-     * Finds the resource
-     *
-     * @param name
-     * @return InputStream
-     */
     public abstract URL findResource(String name);
 
     public boolean isEnabled() {

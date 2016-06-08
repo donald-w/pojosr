@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.mypojo.jcl;
+package io.mypojo.jcl.exception;
 
 /**
  * Enumeration for different resource types

@@ -14,27 +14,27 @@
  * limitations under the License.
  */
 
-package io.mypojo.jcl;
+package io.mypojo.jcl.resources;
 
-public class JclJarEntry {
+import java.io.InputStream;
+import java.net.URL;
+import java.util.Map;
 
-    private String baseUrl;
-    private byte[] resourceBytes;
+/**
+ * @author donald-w
+ */
+public interface IClasspathResources {
+    void loadResource(String resourceName);
 
-    public String getBaseUrl() {
-        return baseUrl;
-    }
+    void loadResource(URL url);
 
-    public void setBaseUrl(String argBaseUrl) {
-        baseUrl = argBaseUrl;
-    }
+    void loadJar(String o, InputStream jarStream);
 
-    public byte[] getResourceBytes() {
-        return resourceBytes;
-    }
+    byte[] getResource(String className);
 
-    public void setResourceBytes(byte[] argResourceBytes) {
-        resourceBytes = argResourceBytes;
-    }
+    URL getResourceURL(String name);
 
+    Map<String, byte[]> getResources();
+
+    void unload(String s);
 }

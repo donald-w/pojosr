@@ -16,10 +16,10 @@
 
 package io.mypojo.jcl.context;
 
-import io.mypojo.jcl.AbstractClassLoader;
 import io.mypojo.jcl.JarClassLoader;
-import io.mypojo.jcl.ProxyClassLoader;
 import io.mypojo.jcl.exception.JclContextException;
+import io.mypojo.jcl.proxyclassloader.OsgiBootLoader;
+import io.mypojo.jcl.proxyclassloader.ProxyClassLoader;
 import io.mypojo.jcl.utils.PathResolver;
 import org.objenesis.Objenesis;
 import org.objenesis.ObjenesisStd;
@@ -221,17 +221,17 @@ public class XmlContextLoader implements JclContextLoader {
         NodeList oe = node.getChildNodes();
         for (int i = 0; i < oe.getLength(); i++) {
             Node noe = oe.item(i);
-            if (noe.getNodeName().equals(ELEMENT_ORDER) && !(loader instanceof AbstractClassLoader.OsgiBootLoader)) {
+            if (noe.getNodeName().equals(ELEMENT_ORDER) && !(loader instanceof OsgiBootLoader)) {
                 loader.setOrder(Integer.parseInt(noe.getTextContent()));
             } else if (noe.getNodeName().equals(ELEMENT_ENABLED)) {
                 loader.setEnabled(Boolean.parseBoolean(noe.getTextContent()));
             } else if (noe.getNodeName().equals(ELEMENT_STRICT)
-                    && loader instanceof AbstractClassLoader.OsgiBootLoader) {
-                ((AbstractClassLoader.OsgiBootLoader) loader).setStrictLoading(Boolean.parseBoolean(noe
+                    && loader instanceof OsgiBootLoader) {
+                ((OsgiBootLoader) loader).setStrictLoading(Boolean.parseBoolean(noe
                         .getTextContent()));
             } else if (noe.getNodeName().equals(ELEMENT_BOOT_DELEGATION)
-                    && loader instanceof AbstractClassLoader.OsgiBootLoader) {
-                ((AbstractClassLoader.OsgiBootLoader) loader).setBootDelagation(noe.getTextContent().split(","));
+                    && loader instanceof OsgiBootLoader) {
+                ((OsgiBootLoader) loader).setBootDelagation(noe.getTextContent().split(","));
             }
         }
 

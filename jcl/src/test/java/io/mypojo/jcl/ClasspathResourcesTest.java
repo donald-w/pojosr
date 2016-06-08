@@ -16,6 +16,7 @@
 
 package io.mypojo.jcl;
 
+import io.mypojo.jcl.resources.ClasspathResources;
 import org.junit.Test;
 
 import java.io.IOException;

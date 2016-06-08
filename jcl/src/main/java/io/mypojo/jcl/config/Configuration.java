@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-package io.mypojo.jcl;
+package io.mypojo.jcl.config;
+
+import io.mypojo.jcl.proxyclassloader.*;
 
 /**
  * General configuration using System properties
@@ -65,26 +67,26 @@ public class Configuration {
     }
 
     public static boolean isSystemLoaderEnabled() {
-        return isLoaderEnabled(AbstractClassLoader.SystemLoader.class);
+        return isLoaderEnabled(SystemLoader.class);
     }
 
     public static boolean isParentLoaderEnabled() {
-        return isLoaderEnabled(AbstractClassLoader.ParentLoader.class);
+        return isLoaderEnabled(ParentLoader.class);
     }
 
     public static boolean isCurrentLoaderEnabled() {
-        return isLoaderEnabled(AbstractClassLoader.CurrentLoader.class);
+        return isLoaderEnabled(CurrentLoader.class);
     }
 
     public static boolean isLocalLoaderEnabled() {
-        return isLoaderEnabled(JarClassLoader.LocalLoader.class);
+        return isLoaderEnabled(LocalLoader.class);
     }
 
     public static boolean isThreadContextLoaderEnabled() {
-        if (System.getProperty(AbstractClassLoader.ThreadContextLoader.class.getName()) == null)
+        if (System.getProperty(ThreadContextLoader.class.getName()) == null)
             return false;
 
-        return isLoaderEnabled(AbstractClassLoader.ThreadContextLoader.class);
+        return isLoaderEnabled(ThreadContextLoader.class);
     }
 
     public static boolean isOsgiBootDelegationEnabled() {

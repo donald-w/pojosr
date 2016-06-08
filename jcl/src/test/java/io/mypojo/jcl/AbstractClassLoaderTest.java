@@ -16,6 +16,7 @@
 
 package io.mypojo.jcl;
 
+import io.mypojo.jcl.config.Configuration;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;

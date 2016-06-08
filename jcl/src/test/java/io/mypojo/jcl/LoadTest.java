@@ -21,7 +21,9 @@ import io.mypojo.jcl.context.JclContextLoader;
 import io.mypojo.jcl.context.XmlContextLoader;
 import io.mypojo.jcl.exception.JclContextException;
 import io.mypojo.jcl.proxy.CglibProxyProvider;
+import io.mypojo.jcl.proxyclassloader.OsgiBootLoader;
 import io.mypojo.jcl.test.TestInterface;
+import io.mypojo.jcl.utils.JclObjectFactory;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 import org.junit.Test;
@@ -38,11 +40,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static io.mypojo.jcl.JclObjectFactory.getInstance;
-import static io.mypojo.jcl.JclUtils.*;
 import static io.mypojo.jcl.context.JclContext.destroy;
 import static io.mypojo.jcl.context.JclContext.get;
 import static io.mypojo.jcl.proxy.ProxyProviderFactory.setDefaultProxyProvider;
+import static io.mypojo.jcl.utils.JclObjectFactory.getInstance;
+import static io.mypojo.jcl.utils.JclUtils.*;
 
 @SuppressWarnings("all")
 @RunWith(JUnit4.class)
@@ -245,7 +247,7 @@ public class LoadTest extends TestCase {
     public void testOsgiBootLoading() throws ClassNotFoundException {
         JarClassLoader jc = new JarClassLoader(new String[]{"./target/test-jcl.jar"});
 
-        AbstractClassLoader.OsgiBootLoader obl = (AbstractClassLoader.OsgiBootLoader) jc.getOsgiBootLoader();
+        OsgiBootLoader obl = (OsgiBootLoader) jc.getOsgiBootLoader();
         obl.setEnabled(true);
         obl.setStrictLoading(true);
 

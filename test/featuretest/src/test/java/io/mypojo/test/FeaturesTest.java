@@ -35,14 +35,13 @@ import java.util.ServiceLoader;
  * @author donald-w
  */
 public class FeaturesTest {
-    private static Logger logger = LoggerFactory.getLogger(FeaturesTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(FeaturesTest.class);
 
     private static final String bundle1Jar = "./target/features-repo/io/mypojo/test/test-artifacts/bundle1/0.0.4-SNAPSHOT/bundle1-0.0.4-SNAPSHOT.jar";
     private static final String bundle2Jar = "./target/features-repo/io/mypojo/test/test-artifacts/bundle2/0.0.4-SNAPSHOT/bundle2-0.0.4-SNAPSHOT.jar";
 
     @Test
     public void testMultiBundleStart() throws Exception {
-
         JarClassLoader jc = new JarClassLoader();
 
         Assert.assertTrue(new File(bundle1Jar).exists());

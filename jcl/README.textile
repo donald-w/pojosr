@@ -321,7 +321,7 @@ JCL v2 by default looks for classes in five places in order, local JCL class loa
   jcl.getThreadLoader().setOrder(4); // if not found look in thread context class loader
   jcl.getCurrentLoader().setOrder(5); // if not found look in current class loader
 
-  // A custom class loader that extends io.mypojo.jcl.ProxyClassLoader
+  // A custom class loader that extends io.mypojo.jcl.proxyclassloader.ProxyClassLoader
   MyLoader loader=new MyLoader();
   loader.setOrder(6);
 
