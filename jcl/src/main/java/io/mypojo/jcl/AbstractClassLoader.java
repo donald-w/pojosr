@@ -16,18 +16,12 @@
 
 package io.mypojo.jcl;
 
-import io.mypojo.jcl.exception.JclException;
-import io.mypojo.jcl.exception.ResourceNotFoundException;
-import io.mypojo.jcl.utils.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import io.mypojo.jcl.proxyclassloader.*;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Abstract class loader that can load classes from different resources
@@ -45,11 +39,11 @@ public abstract class AbstractClassLoader extends ClassLoader {
      */
     protected final List<ProxyClassLoader> loaders = Collections.synchronizedList(new ArrayList<ProxyClassLoader>());
 
-    private final ProxyClassLoader systemLoader = new SystemLoader();
-    private final ProxyClassLoader parentLoader = new ParentLoader();
+    private final ProxyClassLoader systemLoader = new SystemLoader(this);
+    private final ProxyClassLoader parentLoader = new ParentLoader(this);
     private final ProxyClassLoader currentLoader = new CurrentLoader();
     private final ProxyClassLoader threadLoader = new ThreadContextLoader();
-    private final ProxyClassLoader osgiBootLoader = new OsgiBootLoader();
+    private final ProxyClassLoader osgiBootLoader = new OsgiBootLoader(this);
 
     /**
      * Build a new instance of AbstractClassLoader.java.
@@ -202,6 +196,11 @@ public abstract class AbstractClassLoader extends ClassLoader {
         return urlVector.elements();
     }
 
+    public final Class<?> internalFindSystemClass(String name)
+            throws ClassNotFoundException {
+        return findSystemClass(name);
+    }
+
     /**
      * Overrides the getResourceAsStream method to load non-class resources from
      * other sources, JarClassLoader is the only subclass in this project that
@@ -257,338 +256,4 @@ public abstract class AbstractClassLoader extends ClassLoader {
         return osgiBootLoader;
     }
 
-    /**
-     * System class loader
-     */
-    class SystemLoader extends ProxyClassLoader {
-
-        private final Logger logger = LoggerFactory.getLogger(SystemLoader.class);
-
-        public SystemLoader() {
-            order = 50;
-            enabled = Configuration.isSystemLoaderEnabled();
-        }
-
-        @Override
-        public Class loadClass(String className, boolean resolveIt) {
-            Class result;
-
-            try {
-                result = findSystemClass(className);
-            } catch (ClassNotFoundException e) {
-                return null;
-            }
-
-            if (logger.isDebugEnabled())
-                logger.debug("Returning system class " + className);
-
-            return result;
-        }
-
-        @Override
-        public InputStream loadResource(String name) {
-            InputStream is = getSystemResourceAsStream(name);
-
-            if (is != null) {
-                if (logger.isDebugEnabled())
-                    logger.debug("Returning system resource " + name);
-
-                return is;
-            }
-
-            return null;
-        }
-
-        @Override
-        public URL findResource(String name) {
-            URL url = getSystemResource(name);
-
-            if (url != null) {
-                if (logger.isDebugEnabled())
-                    logger.debug("Returning system resource " + name);
-
-                return url;
-            }
-
-            return null;
-        }
-    }
-
-    /**
-     * Parent class loader
-     */
-    class ParentLoader extends ProxyClassLoader {
-        private final Logger logger = LoggerFactory.getLogger(ParentLoader.class.getName());
-
-        public ParentLoader() {
-            order = 30;
-            enabled = Configuration.isParentLoaderEnabled();
-        }
-
-        @Override
-        public Class loadClass(String className, boolean resolveIt) {
-            Class result;
-
-            try {
-                result = getParent().loadClass(className);
-            } catch (ClassNotFoundException e) {
-                return null;
-            }
-
-            if (logger.isDebugEnabled())
-                logger.debug("Returning class " + className + " loaded with parent classloader");
-
-            return result;
-        }
-
-        @Override
-        public InputStream loadResource(String name) {
-            InputStream is = getParent().getResourceAsStream(name);
-
-            if (is != null) {
-                if (logger.isDebugEnabled())
-                    logger.debug("Returning resource " + name + " loaded with parent classloader");
-
-                return is;
-            }
-            return null;
-        }
-
-
-        @Override
-        public URL findResource(String name) {
-            URL url = getParent().getResource(name);
-
-            if (url != null) {
-                if (logger.isDebugEnabled())
-                    logger.debug("Returning resource " + name + " loaded with parent classloader");
-
-                return url;
-            }
-            return null;
-        }
-    }
-
-    /**
-     * Current class loader
-     */
-    class CurrentLoader extends ProxyClassLoader {
-        private final Logger logger = LoggerFactory.getLogger(CurrentLoader.class.getName());
-
-        public CurrentLoader() {
-            order = 20;
-            enabled = Configuration.isCurrentLoaderEnabled();
-        }
-
-        @Override
-        public Class loadClass(String className, boolean resolveIt) {
-            Class result;
-
-            try {
-                result = getClass().getClassLoader().loadClass(className);
-            } catch (ClassNotFoundException e) {
-                return null;
-            }
-
-            if (logger.isDebugEnabled())
-                logger.debug("Returning class " + className + " loaded with current classloader");
-
-            return result;
-        }
-
-        @Override
-        public InputStream loadResource(String name) {
-            InputStream is = getClass().getClassLoader().getResourceAsStream(name);
-
-            if (is != null) {
-                if (logger.isDebugEnabled())
-                    logger.debug("Returning resource " + name + " loaded with current classloader");
-
-                return is;
-            }
-
-            return null;
-        }
-
-
-        @Override
-        public URL findResource(String name) {
-            URL url = getClass().getClassLoader().getResource(name);
-
-            if (url != null) {
-                if (logger.isDebugEnabled())
-                    logger.debug("Returning resource " + name + " loaded with current classloader");
-
-                return url;
-            }
-
-            return null;
-        }
-    }
-
-    /**
-     * Current class loader
-     */
-    class ThreadContextLoader extends ProxyClassLoader {
-        private final Logger logger = LoggerFactory.getLogger(ThreadContextLoader.class.getName());
-
-        public ThreadContextLoader() {
-            order = 40;
-            enabled = Configuration.isThreadContextLoaderEnabled();
-        }
-
-        @Override
-        public Class loadClass(String className, boolean resolveIt) {
-            Class result;
-            try {
-                result = Thread.currentThread().getContextClassLoader().loadClass(className);
-            } catch (ClassNotFoundException e) {
-                return null;
-            }
-
-            if (logger.isDebugEnabled())
-                logger.debug("Returning class " + className + " loaded with thread context classloader");
-
-            return result;
-        }
-
-        @Override
-        public InputStream loadResource(String name) {
-            InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
-
-            if (is != null) {
-                if (logger.isDebugEnabled())
-                    logger.debug("Returning resource " + name + " loaded with thread context classloader");
-
-                return is;
-            }
-
-            return null;
-        }
-
-        @Override
-        public URL findResource(String name) {
-            URL url = Thread.currentThread().getContextClassLoader().getResource(name);
-
-            if (url != null) {
-                if (logger.isDebugEnabled())
-                    logger.debug("Returning resource " + name + " loaded with thread context classloader");
-
-                return url;
-            }
-
-            return null;
-        }
-
-    }
-
-    /**
-     * Osgi boot loader
-     */
-    public final class OsgiBootLoader extends ProxyClassLoader {
-        private static final String JAVA_PACKAGE = "java.";
-        private final Logger logger = LoggerFactory.getLogger(OsgiBootLoader.class.getName());
-        private boolean strictLoading;
-        private String[] bootDelagation;
-
-        public OsgiBootLoader() {
-            enabled = Configuration.isOsgiBootDelegationEnabled();
-            strictLoading = Configuration.isOsgiBootDelegationStrict();
-            bootDelagation = Configuration.getOsgiBootDelegation();
-            order = 0;
-        }
-
-        @Override
-        public Class loadClass(String className, boolean resolveIt) {
-            Class clazz = null;
-
-            if (enabled && isPartOfOsgiBootDelegation(className)) {
-                clazz = getParentLoader().loadClass(className, resolveIt);
-
-                if (clazz == null && strictLoading) {
-                    throw new JclException(new ClassNotFoundException("JCL OSGi Boot Delegation: Class " + className + " not found."));
-                }
-
-                if (logger.isDebugEnabled())
-                    logger.debug("Class " + className + " loaded via OSGi boot delegation.");
-            }
-
-            return clazz;
-        }
-
-        @Override
-        public InputStream loadResource(String name) {
-            InputStream is = null;
-
-            if (enabled && isPartOfOsgiBootDelegation(name)) {
-                is = getParentLoader().loadResource(name);
-
-                if (is == null && strictLoading) {
-                    throw new ResourceNotFoundException("JCL OSGi Boot Delegation: Resource " + name + " not found.");
-                }
-
-                if (logger.isDebugEnabled())
-                    logger.debug("Resource " + name + " loaded via OSGi boot delegation.");
-            }
-
-            return is;
-        }
-
-        @Override
-        public URL findResource(String name) {
-            URL url = null;
-
-            if (enabled && isPartOfOsgiBootDelegation(name)) {
-                url = getParentLoader().findResource(name);
-
-                if (url == null && strictLoading) {
-                    throw new ResourceNotFoundException("JCL OSGi Boot Delegation: Resource " + name + " not found.");
-                }
-
-                if (logger.isDebugEnabled())
-                    logger.debug("Resource " + name + " loaded via OSGi boot delegation.");
-            }
-
-            return url;
-        }
-
-        /**
-         * Check if the class/resource is part of OSGi boot delegation
-         */
-        private boolean isPartOfOsgiBootDelegation(String resourceName) {
-            if (resourceName.startsWith(JAVA_PACKAGE))
-                return true;
-
-            String[] bootPkgs = bootDelagation;
-
-            if (bootPkgs != null) {
-                for (String bc : bootPkgs) {
-                    Pattern pat = Pattern.compile(Utils.wildcardToRegex(bc), Pattern.CASE_INSENSITIVE);
-
-                    Matcher matcher = pat.matcher(resourceName);
-                    if (matcher.find()) {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        public boolean isStrictLoading() {
-            return strictLoading;
-        }
-
-        public void setStrictLoading(boolean strictLoading) {
-            this.strictLoading = strictLoading;
-        }
-
-        public String[] getBootDelagation() {
-            return bootDelagation;
-        }
-
-        public void setBootDelagation(String[] bootDelagation) {
-            this.bootDelagation = bootDelagation;
-        }
-    }
 }

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package io.mypojo.jcl;
+package io.mypojo.jcl.resources;
 
+import io.mypojo.jcl.config.Configuration;
 import io.mypojo.jcl.exception.JclException;
 import io.mypojo.jcl.exception.ResourceNotFoundException;
 import org.slf4j.Logger;

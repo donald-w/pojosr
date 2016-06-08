@@ -21,6 +21,7 @@ import io.mypojo.jcl.context.JclContextLoader;
 import io.mypojo.jcl.context.XmlContextLoader;
 import io.mypojo.jcl.exception.JclContextException;
 import io.mypojo.jcl.proxy.CglibProxyProvider;
+import io.mypojo.jcl.proxyclassloader.OsgiBootLoader;
 import io.mypojo.jcl.test.TestInterface;
 import io.mypojo.jcl.utils.JclObjectFactory;
 import junit.framework.AssertionFailedError;
@@ -246,7 +247,7 @@ public class LoadTest extends TestCase {
     public void testOsgiBootLoading() throws ClassNotFoundException {
         JarClassLoader jc = new JarClassLoader(new String[]{"./target/test-jcl.jar"});
 
-        AbstractClassLoader.OsgiBootLoader obl = (AbstractClassLoader.OsgiBootLoader) jc.getOsgiBootLoader();
+        OsgiBootLoader obl = (OsgiBootLoader) jc.getOsgiBootLoader();
         obl.setEnabled(true);
         obl.setStrictLoading(true);
 

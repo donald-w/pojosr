@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package io.mypojo.jcl;
+package io.mypojo.jcl.resources;
 
 import java.io.InputStream;
 import java.net.URL;

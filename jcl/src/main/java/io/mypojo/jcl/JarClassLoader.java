@@ -18,17 +18,19 @@ package io.mypojo.jcl;
 
 import io.mypojo.jcl.exception.JclException;
 import io.mypojo.jcl.exception.ResourceNotFoundException;
+import io.mypojo.jcl.proxyclassloader.LocalLoader;
+import io.mypojo.jcl.proxyclassloader.ProxyClassLoader;
+import io.mypojo.jcl.resources.ClasspathResources;
+import io.mypojo.jcl.resources.IClasspathResources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static io.mypojo.jcl.Configuration.isLocalLoaderEnabled;
 import static java.util.Collections.synchronizedMap;
 import static java.util.Collections.unmodifiableMap;
 
@@ -46,7 +48,7 @@ public class JarClassLoader extends AbstractClassLoader {
      */
     protected final Map<String, Class> classes = synchronizedMap(new HashMap<String, Class>());
     protected final IClasspathResources classpathResources = new ClasspathResources();
-    private final ProxyClassLoader localLoader = new LocalLoader();
+    private final ProxyClassLoader localLoader = new LocalLoader(this);
     private char classNameReplacementChar;
 
     public JarClassLoader() {
@@ -87,6 +89,14 @@ public class JarClassLoader extends AbstractClassLoader {
         }
     }
 
+    public Map<String, Class> getClasses() {
+        return classes;
+    }
+
+    public IClasspathResources getClasspathResources() {
+        return classpathResources;
+    }
+
     /**
      * Loads local/remote source
      */
@@ -123,11 +133,31 @@ public class JarClassLoader extends AbstractClassLoader {
         classpathResources.loadResource(url);
     }
 
+    public Class<?> internalDefineClass(String name, byte[] b, int off, int len)
+            throws ClassFormatError {
+        return defineClass(name, b, off, len);
+    }
+
+    public Package internalDefinePackage(String name, String specTitle,
+                                         String specVersion, String specVendor,
+                                         String implTitle, String implVersion,
+                                         String implVendor, URL sealBase)
+            throws IllegalArgumentException {
+        return definePackage(name, specTitle,
+                specVersion, specVendor,
+                implTitle, implVersion,
+                implVendor, sealBase);
+    }
+
+    public void internalResolveClass(Class<?> c) {
+        resolveClass(c);
+    }
+
     /**
      * Reads the class bytes from different local and remote resources using
      * ClasspathResources
      */
-    protected byte[] loadClassBytes(String className) {
+    public byte[] loadClassBytes(String className) {
         className = formatClassName(className);
 
         return classpathResources.getResource(className);
@@ -211,83 +241,4 @@ public class JarClassLoader extends AbstractClassLoader {
         return unmodifiableMap(classes);
     }
 
-    /**
-     * Local class loader
-     */
-    class LocalLoader extends ProxyClassLoader {
-
-        private final Logger logger = LoggerFactory.getLogger(LocalLoader.class);
-
-        public LocalLoader() {
-            order = 10;
-            enabled = isLocalLoaderEnabled();
-        }
-
-        @Override
-        public Class loadClass(String className, boolean resolveIt) {
-            Class result = null;
-            byte[] classBytes;
-
-            result = classes.get(className);
-            if (result != null) {
-                if (logger.isDebugEnabled())
-                    logger.debug("Returning local loaded class [" + className + "] from cache");
-                return result;
-            }
-
-            classBytes = loadClassBytes(className);
-            if (classBytes == null) {
-                return null;
-            }
-
-            result = defineClass(className, classBytes, 0, classBytes.length);
-
-            if (result == null) {
-                return null;
-            }
-
-            /*
-             * Preserve package name.
-             */
-            if (result.getPackage() == null) {
-                int lastDotIndex = className.lastIndexOf('.');
-                String packageName = (lastDotIndex >= 0) ? className.substring(0, lastDotIndex) : "";
-                definePackage(packageName, null, null, null, null, null, null, null);
-            }
-
-            if (resolveIt)
-                resolveClass(result);
-
-            classes.put(className, result);
-            if (logger.isDebugEnabled())
-                logger.debug("Return new local loaded class " + className);
-            return result;
-        }
-
-        @Override
-        public InputStream loadResource(String name) {
-            byte[] arr = classpathResources.getResource(name);
-            if (arr != null) {
-                if (logger.isDebugEnabled())
-                    logger.debug("Returning newly loaded resource " + name);
-
-                return new ByteArrayInputStream(arr);
-            }
-
-            return null;
-        }
-
-        @Override
-        public URL findResource(String name) {
-            URL url = classpathResources.getResourceURL(name);
-            if (url != null) {
-                if (logger.isDebugEnabled())
-                    logger.debug("Returning newly loaded resource " + name);
-
-                return url;
-            }
-
-            return null;
-        }
-    }
 }

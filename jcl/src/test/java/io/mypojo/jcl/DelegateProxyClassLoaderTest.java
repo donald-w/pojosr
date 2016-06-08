@@ -16,6 +16,7 @@
 
 package io.mypojo.jcl;
 
+import io.mypojo.jcl.proxyclassloader.DelegateProxyClassLoader;
 import io.mypojo.jcl.sample.Test1;
 import org.junit.Test;
 

@@ -16,7 +16,7 @@
 
 package io.mypojo.jcl.test;
 
-import io.mypojo.jcl.ProxyClassLoader;
+import io.mypojo.jcl.proxyclassloader.ProxyClassLoader;
 
 import java.io.InputStream;
 import java.net.URL;
