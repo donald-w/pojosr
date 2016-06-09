@@ -16,7 +16,7 @@
 
 package io.mypojo.jcl.proxyclassloader;
 
-import io.mypojo.jcl.AbstractClassLoader;
+import io.mypojo.jcl.JarClassLoader;
 import io.mypojo.jcl.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +29,9 @@ import java.net.URL;
  */
 public class ParentLoader extends ProxyClassLoader {
     private final Logger logger = LoggerFactory.getLogger(ParentLoader.class.getName());
-    private AbstractClassLoader abstractClassLoader;
+    private JarClassLoader abstractClassLoader;
 
-    public ParentLoader(AbstractClassLoader abstractClassLoader) {
+    public ParentLoader(JarClassLoader abstractClassLoader) {
         this.abstractClassLoader = abstractClassLoader;
         order = 30;
         enabled = Configuration.isParentLoaderEnabled();

@@ -16,7 +16,7 @@
 
 package io.mypojo.jcl.proxyclassloader;
 
-import io.mypojo.jcl.AbstractClassLoader;
+import io.mypojo.jcl.JarClassLoader;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -29,7 +29,7 @@ import java.net.URL;
  */
 public class DelegateProxyClassLoader extends ProxyClassLoader {
 
-    private final AbstractClassLoader delegate;
+    private final JarClassLoader delegate;
 
     /**
      * Build a new instance of DelegateProxyClassLoader.java.
@@ -37,7 +37,7 @@ public class DelegateProxyClassLoader extends ProxyClassLoader {
      * @param delegate instance of AbstractClassLoader where to delegate
      * @throws NullPointerException if delegate is null
      */
-    public DelegateProxyClassLoader(AbstractClassLoader delegate) throws NullPointerException {
+    public DelegateProxyClassLoader(JarClassLoader delegate) throws NullPointerException {
         super();
         if (delegate == null)
             throw new NullPointerException("delegate can't be null");
@@ -65,7 +65,7 @@ public class DelegateProxyClassLoader extends ProxyClassLoader {
         return delegate.getResource(name);
     }
 
-    public AbstractClassLoader getDelegate() {
+    public JarClassLoader getDelegate() {
         return delegate;
     }
 }

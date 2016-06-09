@@ -31,7 +31,7 @@ public class AbstractClassLoaderTest {
 
     @Test
     public void checkInitializationOfDefaultProxyClassLoader() {
-        AbstractClassLoader classLoader = new AbstractClassLoader() {
+        JarClassLoader classLoader = new JarClassLoader() {
         };
 
         assertNotNull("SystemLoader should not be null", classLoader.getSystemLoader());
@@ -50,7 +50,7 @@ public class AbstractClassLoaderTest {
 
     @Test
     public void checkDefaultEnabledProxy() {
-        AbstractClassLoader classLoader = new AbstractClassLoader() {
+        JarClassLoader classLoader = new JarClassLoader() {
         };
 
         assertEquals(Configuration.isCurrentLoaderEnabled(), classLoader.getCurrentLoader().isEnabled());

@@ -16,7 +16,7 @@
 
 package io.mypojo.jcl.proxyclassloader;
 
-import io.mypojo.jcl.AbstractClassLoader;
+import io.mypojo.jcl.JarClassLoader;
 import io.mypojo.jcl.config.Configuration;
 import io.mypojo.jcl.exception.JclException;
 import io.mypojo.jcl.exception.ResourceNotFoundException;
@@ -35,11 +35,11 @@ import java.util.regex.Pattern;
 public final class OsgiBootLoader extends ProxyClassLoader {
     private static final String JAVA_PACKAGE = "java.";
     private final Logger logger = LoggerFactory.getLogger(OsgiBootLoader.class.getName());
-    private AbstractClassLoader abstractClassLoader;
+    private JarClassLoader abstractClassLoader;
     private boolean strictLoading;
     private String[] bootDelagation;
 
-    public OsgiBootLoader(AbstractClassLoader abstractClassLoader) {
+    public OsgiBootLoader(JarClassLoader abstractClassLoader) {
         this.abstractClassLoader = abstractClassLoader;
         enabled = Configuration.isOsgiBootDelegationEnabled();
         strictLoading = Configuration.isOsgiBootDelegationStrict();
